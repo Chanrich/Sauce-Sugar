@@ -1,0 +1,556 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		69C9315A1F502006007696BA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C931591F502006007696BA /* main.m */; };
+		69C9315D1F502006007696BA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C9315C1F502006007696BA /* AppDelegate.m */; };
+		69C931601F502006007696BA /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C9315F1F502006007696BA /* ViewController.m */; };
+		69C931631F502006007696BA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69C931611F502006007696BA /* Main.storyboard */; };
+		69C931661F502006007696BA /* Sauce_Sugar.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 69C931641F502006007696BA /* Sauce_Sugar.xcdatamodeld */; };
+		69C931681F502006007696BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 69C931671F502006007696BA /* Assets.xcassets */; };
+		69C9316B1F502006007696BA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69C931691F502006007696BA /* LaunchScreen.storyboard */; };
+		69C931761F502006007696BA /* Sauce_SugarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C931751F502006007696BA /* Sauce_SugarTests.m */; };
+		69C931811F502006007696BA /* Sauce_SugarUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C931801F502006007696BA /* Sauce_SugarUITests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		69C931721F502006007696BA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 69C9314D1F502006007696BA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 69C931541F502006007696BA;
+			remoteInfo = "Sauce&Sugar";
+		};
+		69C9317D1F502006007696BA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 69C9314D1F502006007696BA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 69C931541F502006007696BA;
+			remoteInfo = "Sauce&Sugar";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		69C931551F502006007696BA /* Sauce&Sugar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sauce&Sugar.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		69C931591F502006007696BA /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		69C9315B1F502006007696BA /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		69C9315C1F502006007696BA /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		69C9315E1F502006007696BA /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		69C9315F1F502006007696BA /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		69C931621F502006007696BA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		69C931651F502006007696BA /* Sauce_Sugar.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Sauce_Sugar.xcdatamodel; sourceTree = "<group>"; };
+		69C931671F502006007696BA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		69C9316A1F502006007696BA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		69C9316C1F502006007696BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		69C931711F502006007696BA /* Sauce&SugarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Sauce&SugarTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		69C931751F502006007696BA /* Sauce_SugarTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Sauce_SugarTests.m; sourceTree = "<group>"; };
+		69C931771F502006007696BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		69C9317C1F502006007696BA /* Sauce&SugarUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Sauce&SugarUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		69C931801F502006007696BA /* Sauce_SugarUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Sauce_SugarUITests.m; sourceTree = "<group>"; };
+		69C931821F502006007696BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		69C931521F502006007696BA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		69C9316E1F502006007696BA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		69C931791F502006007696BA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		69C9314C1F502006007696BA = {
+			isa = PBXGroup;
+			children = (
+				69C931571F502006007696BA /* Sauce&Sugar */,
+				69C931741F502006007696BA /* Sauce&SugarTests */,
+				69C9317F1F502006007696BA /* Sauce&SugarUITests */,
+				69C931561F502006007696BA /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		69C931561F502006007696BA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				69C931551F502006007696BA /* Sauce&Sugar.app */,
+				69C931711F502006007696BA /* Sauce&SugarTests.xctest */,
+				69C9317C1F502006007696BA /* Sauce&SugarUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		69C931571F502006007696BA /* Sauce&Sugar */ = {
+			isa = PBXGroup;
+			children = (
+				69C9315B1F502006007696BA /* AppDelegate.h */,
+				69C9315C1F502006007696BA /* AppDelegate.m */,
+				69C9315E1F502006007696BA /* ViewController.h */,
+				69C9315F1F502006007696BA /* ViewController.m */,
+				69C931611F502006007696BA /* Main.storyboard */,
+				69C931671F502006007696BA /* Assets.xcassets */,
+				69C931691F502006007696BA /* LaunchScreen.storyboard */,
+				69C9316C1F502006007696BA /* Info.plist */,
+				69C931641F502006007696BA /* Sauce_Sugar.xcdatamodeld */,
+				69C931581F502006007696BA /* Supporting Files */,
+			);
+			path = "Sauce&Sugar";
+			sourceTree = "<group>";
+		};
+		69C931581F502006007696BA /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				69C931591F502006007696BA /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		69C931741F502006007696BA /* Sauce&SugarTests */ = {
+			isa = PBXGroup;
+			children = (
+				69C931751F502006007696BA /* Sauce_SugarTests.m */,
+				69C931771F502006007696BA /* Info.plist */,
+			);
+			path = "Sauce&SugarTests";
+			sourceTree = "<group>";
+		};
+		69C9317F1F502006007696BA /* Sauce&SugarUITests */ = {
+			isa = PBXGroup;
+			children = (
+				69C931801F502006007696BA /* Sauce_SugarUITests.m */,
+				69C931821F502006007696BA /* Info.plist */,
+			);
+			path = "Sauce&SugarUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		69C931541F502006007696BA /* Sauce&Sugar */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 69C931851F502006007696BA /* Build configuration list for PBXNativeTarget "Sauce&Sugar" */;
+			buildPhases = (
+				69C931511F502006007696BA /* Sources */,
+				69C931521F502006007696BA /* Frameworks */,
+				69C931531F502006007696BA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Sauce&Sugar";
+			productName = "Sauce&Sugar";
+			productReference = 69C931551F502006007696BA /* Sauce&Sugar.app */;
+			productType = "com.apple.product-type.application";
+		};
+		69C931701F502006007696BA /* Sauce&SugarTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 69C931881F502006007696BA /* Build configuration list for PBXNativeTarget "Sauce&SugarTests" */;
+			buildPhases = (
+				69C9316D1F502006007696BA /* Sources */,
+				69C9316E1F502006007696BA /* Frameworks */,
+				69C9316F1F502006007696BA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				69C931731F502006007696BA /* PBXTargetDependency */,
+			);
+			name = "Sauce&SugarTests";
+			productName = "Sauce&SugarTests";
+			productReference = 69C931711F502006007696BA /* Sauce&SugarTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		69C9317B1F502006007696BA /* Sauce&SugarUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 69C9318B1F502006007696BA /* Build configuration list for PBXNativeTarget "Sauce&SugarUITests" */;
+			buildPhases = (
+				69C931781F502006007696BA /* Sources */,
+				69C931791F502006007696BA /* Frameworks */,
+				69C9317A1F502006007696BA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				69C9317E1F502006007696BA /* PBXTargetDependency */,
+			);
+			name = "Sauce&SugarUITests";
+			productName = "Sauce&SugarUITests";
+			productReference = 69C9317C1F502006007696BA /* Sauce&SugarUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		69C9314D1F502006007696BA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = "Sauce&Sugar";
+				TargetAttributes = {
+					69C931541F502006007696BA = {
+						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = EY77V5Z9AN;
+						ProvisioningStyle = Automatic;
+					};
+					69C931701F502006007696BA = {
+						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = EY77V5Z9AN;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 69C931541F502006007696BA;
+					};
+					69C9317B1F502006007696BA = {
+						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = EY77V5Z9AN;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 69C931541F502006007696BA;
+					};
+				};
+			};
+			buildConfigurationList = 69C931501F502006007696BA /* Build configuration list for PBXProject "Sauce&Sugar" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 69C9314C1F502006007696BA;
+			productRefGroup = 69C931561F502006007696BA /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				69C931541F502006007696BA /* Sauce&Sugar */,
+				69C931701F502006007696BA /* Sauce&SugarTests */,
+				69C9317B1F502006007696BA /* Sauce&SugarUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		69C931531F502006007696BA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				69C9316B1F502006007696BA /* LaunchScreen.storyboard in Resources */,
+				69C931681F502006007696BA /* Assets.xcassets in Resources */,
+				69C931631F502006007696BA /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		69C9316F1F502006007696BA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		69C9317A1F502006007696BA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		69C931511F502006007696BA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				69C931601F502006007696BA /* ViewController.m in Sources */,
+				69C9315D1F502006007696BA /* AppDelegate.m in Sources */,
+				69C931661F502006007696BA /* Sauce_Sugar.xcdatamodeld in Sources */,
+				69C9315A1F502006007696BA /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		69C9316D1F502006007696BA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				69C931761F502006007696BA /* Sauce_SugarTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		69C931781F502006007696BA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				69C931811F502006007696BA /* Sauce_SugarUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		69C931731F502006007696BA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 69C931541F502006007696BA /* Sauce&Sugar */;
+			targetProxy = 69C931721F502006007696BA /* PBXContainerItemProxy */;
+		};
+		69C9317E1F502006007696BA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 69C931541F502006007696BA /* Sauce&Sugar */;
+			targetProxy = 69C9317D1F502006007696BA /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		69C931611F502006007696BA /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				69C931621F502006007696BA /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		69C931691F502006007696BA /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				69C9316A1F502006007696BA /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		69C931831F502006007696BA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		69C931841F502006007696BA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		69C931861F502006007696BA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = EY77V5Z9AN;
+				INFOPLIST_FILE = "Sauce&Sugar/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "SS.Sauce-Sugar";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		69C931871F502006007696BA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = EY77V5Z9AN;
+				INFOPLIST_FILE = "Sauce&Sugar/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "SS.Sauce-Sugar";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		69C931891F502006007696BA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = EY77V5Z9AN;
+				INFOPLIST_FILE = "Sauce&SugarTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "SS.Sauce-SugarTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Sauce&Sugar.app/Sauce&Sugar";
+			};
+			name = Debug;
+		};
+		69C9318A1F502006007696BA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = EY77V5Z9AN;
+				INFOPLIST_FILE = "Sauce&SugarTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "SS.Sauce-SugarTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Sauce&Sugar.app/Sauce&Sugar";
+			};
+			name = Release;
+		};
+		69C9318C1F502006007696BA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = EY77V5Z9AN;
+				INFOPLIST_FILE = "Sauce&SugarUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "SS.Sauce-SugarUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = "Sauce&Sugar";
+			};
+			name = Debug;
+		};
+		69C9318D1F502006007696BA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = EY77V5Z9AN;
+				INFOPLIST_FILE = "Sauce&SugarUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "SS.Sauce-SugarUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = "Sauce&Sugar";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		69C931501F502006007696BA /* Build configuration list for PBXProject "Sauce&Sugar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				69C931831F502006007696BA /* Debug */,
+				69C931841F502006007696BA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		69C931851F502006007696BA /* Build configuration list for PBXNativeTarget "Sauce&Sugar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				69C931861F502006007696BA /* Debug */,
+				69C931871F502006007696BA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		69C931881F502006007696BA /* Build configuration list for PBXNativeTarget "Sauce&SugarTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				69C931891F502006007696BA /* Debug */,
+				69C9318A1F502006007696BA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		69C9318B1F502006007696BA /* Build configuration list for PBXNativeTarget "Sauce&SugarUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				69C9318C1F502006007696BA /* Debug */,
+				69C9318D1F502006007696BA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		69C931641F502006007696BA /* Sauce_Sugar.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				69C931651F502006007696BA /* Sauce_Sugar.xcdatamodel */,
+			);
+			currentVersion = 69C931651F502006007696BA /* Sauce_Sugar.xcdatamodel */;
+			path = Sauce_Sugar.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 69C9314D1F502006007696BA /* Project object */;
+}
