@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		69A07FF31F5AA20400651946 /* MicrosoftAzureMobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69A07FF21F5AA20400651946 /* MicrosoftAzureMobile.framework */; };
+		69A07FF51F5AA2A300651946 /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69A07FF41F5AA2A300651946 /* SafariServices.framework */; };
+		69A07FF71F5AA2B100651946 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69A07FF61F5AA2B100651946 /* WebKit.framework */; };
+		69A07FF91F5D2D9800651946 /* AZSClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69A07FF81F5D2D9800651946 /* AZSClient.framework */; };
+		69A07FFB1F5D2E0200651946 /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 69A07FFA1F5D2E0200651946 /* libxml2.2.tbd */; };
+		69A07FFE1F5D359000651946 /* AzureBlobStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 69A07FFD1F5D359000651946 /* AzureBlobStorage.m */; };
+		69A080011F5D35E900651946 /* sdds.m in Sources */ = {isa = PBXBuildFile; fileRef = 69A080001F5D35E900651946 /* sdds.m */; };
+		69A080041F5E2AEE00651946 /* IMAG3191.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 69A080031F5E2AEE00651946 /* IMAG3191.jpg */; };
+		69A080061F5E2AFC00651946 /* IMAG3285.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 69A080051F5E2AFC00651946 /* IMAG3285.jpg */; };
+		69A080081F5E2B2600651946 /* IMAG3522.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 69A080071F5E2B2600651946 /* IMAG3522.jpg */; };
 		69C9315A1F502006007696BA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C931591F502006007696BA /* main.m */; };
 		69C9315D1F502006007696BA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C9315C1F502006007696BA /* AppDelegate.m */; };
 		69C931601F502006007696BA /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C9315F1F502006007696BA /* ViewController.m */; };
@@ -16,6 +26,12 @@
 		69C9316B1F502006007696BA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69C931691F502006007696BA /* LaunchScreen.storyboard */; };
 		69C931761F502006007696BA /* Sauce_SugarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C931751F502006007696BA /* Sauce_SugarTests.m */; };
 		69C931811F502006007696BA /* Sauce_SugarUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C931801F502006007696BA /* Sauce_SugarUITests.m */; };
+		69C931A21F53721F007696BA /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C931A11F53721F007696BA /* MapViewController.m */; };
+		69C931A51F53725C007696BA /* Location.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C931A41F53725C007696BA /* Location.m */; };
+		69C931A81F537272007696BA /* LocationDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C931A71F537272007696BA /* LocationDataController.m */; };
+		69C931AA1F5374E9007696BA /* abc.png in Resources */ = {isa = PBXBuildFile; fileRef = 69C931A91F5374E9007696BA /* abc.png */; };
+		69C931AD1F53788A007696BA /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69C931AC1F53788A007696BA /* MapKit.framework */; };
+		69C931B01F57E764007696BA /* AddToDatabase_ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C931AF1F57E764007696BA /* AddToDatabase_ViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +52,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		69A07FF21F5AA20400651946 /* MicrosoftAzureMobile.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MicrosoftAzureMobile.framework; path = "Sauce&Sugar/MicrosoftAzureMobile.framework"; sourceTree = "<group>"; };
+		69A07FF41F5AA2A300651946 /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
+		69A07FF61F5AA2B100651946 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		69A07FF81F5D2D9800651946 /* AZSClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AZSClient.framework; sourceTree = "<group>"; };
+		69A07FFA1F5D2E0200651946 /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
+		69A07FFD1F5D359000651946 /* AzureBlobStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AzureBlobStorage.m; sourceTree = "<group>"; };
+		69A07FFF1F5D35E900651946 /* sdds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdds.h; sourceTree = "<group>"; };
+		69A080001F5D35E900651946 /* sdds.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = sdds.m; sourceTree = "<group>"; };
+		69A080031F5E2AEE00651946 /* IMAG3191.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = IMAG3191.jpg; sourceTree = "<group>"; };
+		69A080051F5E2AFC00651946 /* IMAG3285.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = IMAG3285.jpg; sourceTree = "<group>"; };
+		69A080071F5E2B2600651946 /* IMAG3522.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = IMAG3522.jpg; sourceTree = "<group>"; };
 		69C931551F502006007696BA /* Sauce&Sugar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sauce&Sugar.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		69C931591F502006007696BA /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		69C9315B1F502006007696BA /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -53,6 +80,16 @@
 		69C9317C1F502006007696BA /* Sauce&SugarUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Sauce&SugarUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		69C931801F502006007696BA /* Sauce_SugarUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Sauce_SugarUITests.m; sourceTree = "<group>"; };
 		69C931821F502006007696BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		69C931A01F53721F007696BA /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
+		69C931A11F53721F007696BA /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
+		69C931A31F53725C007696BA /* Location.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Location.h; sourceTree = "<group>"; };
+		69C931A41F53725C007696BA /* Location.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Location.m; sourceTree = "<group>"; };
+		69C931A61F537272007696BA /* LocationDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationDataController.h; sourceTree = "<group>"; };
+		69C931A71F537272007696BA /* LocationDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationDataController.m; sourceTree = "<group>"; };
+		69C931A91F5374E9007696BA /* abc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = abc.png; sourceTree = "<group>"; };
+		69C931AC1F53788A007696BA /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		69C931AE1F57E764007696BA /* AddToDatabase_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddToDatabase_ViewController.h; sourceTree = "<group>"; };
+		69C931AF1F57E764007696BA /* AddToDatabase_ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddToDatabase_ViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +97,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				69A07FFB1F5D2E0200651946 /* libxml2.2.tbd in Frameworks */,
+				69A07FF71F5AA2B100651946 /* WebKit.framework in Frameworks */,
+				69A07FF51F5AA2A300651946 /* SafariServices.framework in Frameworks */,
+				69A07FF31F5AA20400651946 /* MicrosoftAzureMobile.framework in Frameworks */,
+				69A07FF91F5D2D9800651946 /* AZSClient.framework in Frameworks */,
+				69C931AD1F53788A007696BA /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,6 +123,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		69A07FFC1F5D353E00651946 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				69A07FFD1F5D359000651946 /* AzureBlobStorage.m */,
+				69A07FFF1F5D35E900651946 /* sdds.h */,
+				69A080001F5D35E900651946 /* sdds.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		69A080021F5E2AD900651946 /* ImagesResource */ = {
+			isa = PBXGroup;
+			children = (
+				69A080031F5E2AEE00651946 /* IMAG3191.jpg */,
+				69A080051F5E2AFC00651946 /* IMAG3285.jpg */,
+				69A080071F5E2B2600651946 /* IMAG3522.jpg */,
+			);
+			name = ImagesResource;
+			sourceTree = "<group>";
+		};
 		69C9314C1F502006007696BA = {
 			isa = PBXGroup;
 			children = (
@@ -87,6 +150,7 @@
 				69C931741F502006007696BA /* Sauce&SugarTests */,
 				69C9317F1F502006007696BA /* Sauce&SugarUITests */,
 				69C931561F502006007696BA /* Products */,
+				69C931AB1F53788A007696BA /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -103,6 +167,8 @@
 		69C931571F502006007696BA /* Sauce&Sugar */ = {
 			isa = PBXGroup;
 			children = (
+				69A080021F5E2AD900651946 /* ImagesResource */,
+				69A07FFC1F5D353E00651946 /* Model */,
 				69C9315B1F502006007696BA /* AppDelegate.h */,
 				69C9315C1F502006007696BA /* AppDelegate.m */,
 				69C9315E1F502006007696BA /* ViewController.h */,
@@ -113,6 +179,15 @@
 				69C9316C1F502006007696BA /* Info.plist */,
 				69C931641F502006007696BA /* Sauce_Sugar.xcdatamodeld */,
 				69C931581F502006007696BA /* Supporting Files */,
+				69C931A01F53721F007696BA /* MapViewController.h */,
+				69C931A11F53721F007696BA /* MapViewController.m */,
+				69C931A31F53725C007696BA /* Location.h */,
+				69C931A41F53725C007696BA /* Location.m */,
+				69C931A61F537272007696BA /* LocationDataController.h */,
+				69C931A71F537272007696BA /* LocationDataController.m */,
+				69C931AE1F57E764007696BA /* AddToDatabase_ViewController.h */,
+				69C931AF1F57E764007696BA /* AddToDatabase_ViewController.m */,
+				69C931A91F5374E9007696BA /* abc.png */,
 			);
 			path = "Sauce&Sugar";
 			sourceTree = "<group>";
@@ -141,6 +216,19 @@
 				69C931821F502006007696BA /* Info.plist */,
 			);
 			path = "Sauce&SugarUITests";
+			sourceTree = "<group>";
+		};
+		69C931AB1F53788A007696BA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				69A07FFA1F5D2E0200651946 /* libxml2.2.tbd */,
+				69A07FF81F5D2D9800651946 /* AZSClient.framework */,
+				69A07FF61F5AA2B100651946 /* WebKit.framework */,
+				69A07FF41F5AA2A300651946 /* SafariServices.framework */,
+				69A07FF21F5AA20400651946 /* MicrosoftAzureMobile.framework */,
+				69C931AC1F53788A007696BA /* MapKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -210,7 +298,6 @@
 				TargetAttributes = {
 					69C931541F502006007696BA = {
 						CreatedOnToolsVersion = 8.3.3;
-						DevelopmentTeam = EY77V5Z9AN;
 						ProvisioningStyle = Automatic;
 					};
 					69C931701F502006007696BA = {
@@ -252,6 +339,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				69A080041F5E2AEE00651946 /* IMAG3191.jpg in Resources */,
+				69A080061F5E2AFC00651946 /* IMAG3285.jpg in Resources */,
+				69A080081F5E2B2600651946 /* IMAG3522.jpg in Resources */,
+				69C931AA1F5374E9007696BA /* abc.png in Resources */,
 				69C9316B1F502006007696BA /* LaunchScreen.storyboard in Resources */,
 				69C931681F502006007696BA /* Assets.xcassets in Resources */,
 				69C931631F502006007696BA /* Main.storyboard in Resources */,
@@ -279,7 +370,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				69C931B01F57E764007696BA /* AddToDatabase_ViewController.m in Sources */,
+				69C931A81F537272007696BA /* LocationDataController.m in Sources */,
 				69C931601F502006007696BA /* ViewController.m in Sources */,
+				69C931A21F53721F007696BA /* MapViewController.m in Sources */,
+				69A07FFE1F5D359000651946 /* AzureBlobStorage.m in Sources */,
+				69A080011F5D35E900651946 /* sdds.m in Sources */,
+				69C931A51F53725C007696BA /* Location.m in Sources */,
 				69C9315D1F502006007696BA /* AppDelegate.m in Sources */,
 				69C931661F502006007696BA /* Sauce_Sugar.xcdatamodeld in Sources */,
 				69C9315A1F502006007696BA /* main.m in Sources */,
@@ -431,7 +528,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = EY77V5Z9AN;
+				DEVELOPMENT_TEAM = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Sauce&Sugar",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = "Sauce&Sugar/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "SS.Sauce-Sugar";
@@ -443,7 +545,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = EY77V5Z9AN;
+				DEVELOPMENT_TEAM = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Sauce&Sugar",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = "Sauce&Sugar/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "SS.Sauce-Sugar";
@@ -520,6 +627,7 @@
 				69C931871F502006007696BA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		69C931881F502006007696BA /* Build configuration list for PBXNativeTarget "Sauce&SugarTests" */ = {
 			isa = XCConfigurationList;
@@ -528,6 +636,7 @@
 				69C9318A1F502006007696BA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		69C9318B1F502006007696BA /* Build configuration list for PBXNativeTarget "Sauce&SugarUITests" */ = {
 			isa = XCConfigurationList;
@@ -536,6 +645,7 @@
 				69C9318D1F502006007696BA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
