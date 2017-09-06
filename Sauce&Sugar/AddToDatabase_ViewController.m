@@ -67,6 +67,7 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
     [self createBlobContainer:@"rchan"];
 }
 
+// Create a container with containerName
 - (void) createBlobContainer:(NSString*)containerName{
     NSError *AZSAccountError;
     AZSCloudStorageAccount *account = [AZSCloudStorageAccount accountFromConnectionString:@"DefaultEndpointsProtocol=https;AccountName=imagestorageblobs;AccountKey=d8e1NrdP49wzHvxaPtLa41uO3mX/fXPWPMSBa4MPGSe4/+5E7zavNBsvMuqSoN1HynKuyYumoyNLkCpgaowJOQ==" error:&AZSAccountError];
@@ -95,6 +96,7 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
     }];
 }
 
+// Grab image from blobName inside blobCotainer and a UIImageView to this image
 - (void)getImagefromblob:(NSString*)blobName blobContainer:(AZSCloudBlobContainer*)blobContainer{
     // Create a blob
     AZSCloudBlockBlob *blockblob = [blobContainer blockBlobReferenceFromName:blobName];
@@ -106,6 +108,7 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
         } else {
             NSLog(@"Download successful");
             UIImage *imagefromdata = [UIImage imageWithData:downloadedData];
+            // Set UIImageView to downloaded image
             [self.MainImageView setImage:imagefromdata];
         }
         
