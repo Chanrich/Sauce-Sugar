@@ -293,11 +293,15 @@
 		69C9314D1F502006007696BA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				KnownAssetTags = (
+					New,
+				);
 				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = "Sauce&Sugar";
 				TargetAttributes = {
 					69C931541F502006007696BA = {
 						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = EY77V5Z9AN;
 						ProvisioningStyle = Automatic;
 					};
 					69C931701F502006007696BA = {
@@ -528,7 +532,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = EY77V5Z9AN;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Sauce&Sugar",
@@ -546,7 +550,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = EY77V5Z9AN;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Sauce&Sugar",

@@ -20,10 +20,10 @@
     // Do any additional setup after loading the view, typically from a nib.
 }
 - (void)viewDidAppear:(BOOL)animated{
-    LocationDataController *model = [[LocationDataController alloc] init];
-    Location *poi = [model getPointOfInterest];
-    self.addressLabel.text = poi.address;
-    [self.photoImageView setImage:[UIImage imageNamed:poi.photofilename]];
+//    LocationDataController *model = [[LocationDataController alloc] init];
+//    Location *poi = [model getPointOfInterest];
+//    self.addressLabel.text = poi.address;
+    //[self.photoImageView setImage:[UIImage imageNamed:poi.photofilename]];
 }
 
 
@@ -46,8 +46,10 @@
     } else {
         NSLog(@"Camera detected");
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
         picker.delegate = self;
+        picker.allowsEditing = YES;
+        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        
         [self presentViewController:picker animated:YES completion:NULL];
     }
     
@@ -59,7 +61,15 @@
     self.photoImageView.image = chosenImage;
     
     [picker dismissViewControllerAnimated:YES completion:NULL];
+    
+    // Start a view to add information to database
+    UIStoryboard *rcStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    AddToDatabase_ViewController *vc = [rcStoryBoard instantiateViewControllerWithIdentifier:@"AddToDataBaseViewController"];
+    vc.rcImageHolder = info[UIImagePickerControllerEditedImage];
+    [self presentViewController:vc animated:YES completion:NULL];
+    
 }
+
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
