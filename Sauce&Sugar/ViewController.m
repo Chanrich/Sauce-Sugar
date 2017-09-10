@@ -18,12 +18,24 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    // Set content mode to scale image proportionally
+    //_AddButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    [self.AddButton setContentMode:UIViewContentModeScaleAspectFit];
 }
 - (void)viewDidAppear:(BOOL)animated{
 //    LocationDataController *model = [[LocationDataController alloc] init];
 //    Location *poi = [model getPointOfInterest];
 //    self.addressLabel.text = poi.address;
     //[self.photoImageView setImage:[UIImage imageNamed:poi.photofilename]];
+    
+    // Give button a custom gradient
+//    CAGradientLayer *gradient = [CAGradientLayer layer];
+//    gradient.frame = self.AddButton.bounds;
+//    gradient.colors =  [NSArray arrayWithObjects:(id)([UIColor colorWithRed:0.33 green:0.596 blue:1.00 alpha:1.00].CGColor),(id)([UIColor colorWithRed:0.33 green:0.83 blue:1.00 alpha:1.00].CGColor) , nil];
+//    gradient.startPoint = CGPointMake(0.5, 0);
+//    gradient.endPoint = CGPointMake(0.5, 1);
+//    [self.AddButton.layer insertSublayer:gradient atIndex:0];
 }
 
 
@@ -59,14 +71,17 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info{
     UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
     self.photoImageView.image = chosenImage;
-    
     [picker dismissViewControllerAnimated:YES completion:NULL];
-    
     // Start a view to add information to database
     UIStoryboard *rcStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     AddToDatabase_ViewController *vc = [rcStoryBoard instantiateViewControllerWithIdentifier:@"AddToDataBaseViewController"];
     vc.rcImageHolder = info[UIImagePickerControllerEditedImage];
-    [self presentViewController:vc animated:YES completion:NULL];
+    // Change entry animation
+    vc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    [self showViewController:vc sender:NULL];
+    //[self presentViewController:vc animated:YES completion:NULL];
+    
+    
     
 }
 

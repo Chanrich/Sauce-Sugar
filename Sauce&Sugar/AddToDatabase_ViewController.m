@@ -23,6 +23,8 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self.MainImageView setImage:_rcImageHolder];
+    [self.UploadButtonNavibar setTarget:self];
+    [self.UploadButtonNavibar setAction:@selector(executeUpload:)];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -39,6 +41,10 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
     // Pass the selected object to the new view controller.
 }
 */
+
+- (void) executeUpload: (id)sender{
+    NSLog(@"Upload button pressed");
+}
 
 - (IBAction)ButtonTouchedUpInside_Add:(id)sender {
     // Button touch up inside event has been triggered.
@@ -92,7 +98,7 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
                 NSLog(@"Container created");
             }
             
-            [self getImagefromblob:@"image1" blobContainer:blobContainer];
+            //[self getImagefromblob:@"image1" blobContainer:blobContainer];
         }
     }];
 }
@@ -115,7 +121,6 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
         
     }];
 }
-
 
 @end
 

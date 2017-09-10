@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "AddToDatabase_ViewController.h"
+#import "MainMenuButton.h"
 @interface ViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 @property (strong, nonatomic) IBOutlet UILabel *addressLabel;
+@property (strong, nonatomic) IBOutlet UIButton *AddButton;
 @property (strong, nonatomic) IBOutlet UIImageView *photoImageView;
 - (IBAction)TouchUp_CameraButton:(id)sender;
 // The picker does not dismiss itself; the client dismisses it in these callbacks.

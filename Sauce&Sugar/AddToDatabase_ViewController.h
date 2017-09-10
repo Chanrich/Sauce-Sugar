@@ -14,10 +14,12 @@
 @property (strong, nonatomic) IBOutlet UITextField *TextField_Comment;
 @property (strong, nonatomic) IBOutlet UIButton *Button_AddDatabase;
 @property (strong, nonatomic) IBOutlet UIImageView *MainImageView;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *DoneBarButton;
 
 // A property to hold image being passed in from presenting view controller
 @property (strong, nonatomic) UIImage *rcImageHolder;
 - (IBAction)ButtonTouchedUpInside_Add:(id)sender;
 - (void) createBlobContainer:(NSString*)containerName;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *UploadButtonNavibar;
 - (void) getImagefromblob:(NSString*)blobName blobContainer:(AZSCloudBlobContainer*)blobContainer;
 @end
