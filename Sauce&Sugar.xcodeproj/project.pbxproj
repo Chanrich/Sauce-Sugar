@@ -34,6 +34,8 @@
 		69C931AA1F5374E9007696BA /* abc.png in Resources */ = {isa = PBXBuildFile; fileRef = 69C931A91F5374E9007696BA /* abc.png */; };
 		69C931AD1F53788A007696BA /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69C931AC1F53788A007696BA /* MapKit.framework */; };
 		69C931B01F57E764007696BA /* AddToDatabase_ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C931AF1F57E764007696BA /* AddToDatabase_ViewController.m */; };
+		69DE29071F74CA8200B0527E /* rcAzureDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 69DE29061F74CA8200B0527E /* rcAzureDataTable.m */; };
+		69DE290A1F7865D700B0527E /* AddUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69DE29091F7865D700B0527E /* AddUserViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,6 +97,10 @@
 		69C931AC1F53788A007696BA /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		69C931AE1F57E764007696BA /* AddToDatabase_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddToDatabase_ViewController.h; sourceTree = "<group>"; };
 		69C931AF1F57E764007696BA /* AddToDatabase_ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddToDatabase_ViewController.m; sourceTree = "<group>"; };
+		69DE29051F74CA8200B0527E /* rcAzureDataTable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rcAzureDataTable.h; sourceTree = "<group>"; };
+		69DE29061F74CA8200B0527E /* rcAzureDataTable.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = rcAzureDataTable.m; sourceTree = "<group>"; };
+		69DE29081F7865D700B0527E /* AddUserViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddUserViewController.h; sourceTree = "<group>"; };
+		69DE29091F7865D700B0527E /* AddUserViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddUserViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +142,8 @@
 				69A080001F5D35E900651946 /* sdds.m */,
 				69A0800B1F63EB0600651946 /* MainMenuButton.h */,
 				69A0800C1F63EB0600651946 /* MainMenuButton.m */,
+				69DE29051F74CA8200B0527E /* rcAzureDataTable.h */,
+				69DE29061F74CA8200B0527E /* rcAzureDataTable.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -143,6 +151,7 @@
 		69A080021F5E2AD900651946 /* ImagesResource */ = {
 			isa = PBXGroup;
 			children = (
+				69C931A91F5374E9007696BA /* abc.png */,
 				69A080091F62981D00651946 /* CameraBackground.jpg */,
 				69A080031F5E2AEE00651946 /* IMAG3191.jpg */,
 				69A080051F5E2AFC00651946 /* IMAG3285.jpg */,
@@ -175,14 +184,13 @@
 		69C931571F502006007696BA /* Sauce&Sugar */ = {
 			isa = PBXGroup;
 			children = (
+				69DE290C1F7866F900B0527E /* ViewController */,
 				69A080021F5E2AD900651946 /* ImagesResource */,
 				69A07FFC1F5D353E00651946 /* Model */,
 				69C9315B1F502006007696BA /* AppDelegate.h */,
 				69C9315C1F502006007696BA /* AppDelegate.m */,
-				69C9315E1F502006007696BA /* ViewController.h */,
-				69C9315F1F502006007696BA /* ViewController.m */,
-				69C931611F502006007696BA /* Main.storyboard */,
 				69C931671F502006007696BA /* Assets.xcassets */,
+				69C931611F502006007696BA /* Main.storyboard */,
 				69C931691F502006007696BA /* LaunchScreen.storyboard */,
 				69C9316C1F502006007696BA /* Info.plist */,
 				69C931641F502006007696BA /* Sauce_Sugar.xcdatamodeld */,
@@ -193,9 +201,6 @@
 				69C931A41F53725C007696BA /* Location.m */,
 				69C931A61F537272007696BA /* LocationDataController.h */,
 				69C931A71F537272007696BA /* LocationDataController.m */,
-				69C931AE1F57E764007696BA /* AddToDatabase_ViewController.h */,
-				69C931AF1F57E764007696BA /* AddToDatabase_ViewController.m */,
-				69C931A91F5374E9007696BA /* abc.png */,
 			);
 			path = "Sauce&Sugar";
 			sourceTree = "<group>";
@@ -237,6 +242,19 @@
 				69C931AC1F53788A007696BA /* MapKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		69DE290C1F7866F900B0527E /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				69C9315E1F502006007696BA /* ViewController.h */,
+				69C9315F1F502006007696BA /* ViewController.m */,
+				69C931AE1F57E764007696BA /* AddToDatabase_ViewController.h */,
+				69C931AF1F57E764007696BA /* AddToDatabase_ViewController.m */,
+				69DE29081F7865D700B0527E /* AddUserViewController.h */,
+				69DE29091F7865D700B0527E /* AddUserViewController.m */,
+			);
+			name = ViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -304,7 +322,7 @@
 				KnownAssetTags = (
 					New,
 				);
-				LastUpgradeCheck = 0830;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = "Sauce&Sugar";
 				TargetAttributes = {
 					69C931541F502006007696BA = {
@@ -390,8 +408,10 @@
 				69C931A21F53721F007696BA /* MapViewController.m in Sources */,
 				69A07FFE1F5D359000651946 /* AzureBlobStorage.m in Sources */,
 				69A080011F5D35E900651946 /* sdds.m in Sources */,
+				69DE29071F74CA8200B0527E /* rcAzureDataTable.m in Sources */,
 				69C931A51F53725C007696BA /* Location.m in Sources */,
 				69C9315D1F502006007696BA /* AppDelegate.m in Sources */,
+				69DE290A1F7865D700B0527E /* AddUserViewController.m in Sources */,
 				69C931661F502006007696BA /* Sauce_Sugar.xcdatamodeld in Sources */,
 				69C9315A1F502006007696BA /* main.m in Sources */,
 			);
@@ -458,7 +478,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -466,7 +488,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -506,7 +532,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -514,7 +542,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;

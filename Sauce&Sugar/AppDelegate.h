@@ -18,9 +18,8 @@
 
 @property (readonly, strong) NSPersistentContainer *persistentContainer;
 
-// Add Microsoft client to connect to Azure
-@property (strong, nonatomic) MSClient *client;
-
+// Username placeholder
+@property NSString *currentUsername;
 
 - (void)saveContext;
 

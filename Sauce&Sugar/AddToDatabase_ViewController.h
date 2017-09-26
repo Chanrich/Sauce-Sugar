@@ -8,18 +8,33 @@
 
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
-@interface AddToDatabase_ViewController : UIViewController
+#import "rcAzureDataTable.h"
+
+@interface AddToDatabase_ViewController : UIViewController <UITextFieldDelegate, UITextViewDelegate>
+
+// Text collection
 @property (strong, nonatomic) IBOutlet UITextField *TextField_Name;
 @property (strong, nonatomic) IBOutlet UITextField *TextField_RestaurantName;
-@property (strong, nonatomic) IBOutlet UITextField *TextField_Comment;
+@property (strong, nonatomic) IBOutlet UITextView *TextView_Comment;
+
+// UI elements
 @property (strong, nonatomic) IBOutlet UIButton *Button_AddDatabase;
 @property (strong, nonatomic) IBOutlet UIImageView *MainImageView;
-@property (strong, nonatomic) IBOutlet UIBarButtonItem *DoneBarButton;
 
+// Navigation bar outlet
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *UploadButtonNavibar;
+
+// Action Add button pressed
+- (IBAction)ButtonTouchedUpInside_Add:(id)sender;
+
+
+// ============ Custom Properties ==============
 // A property to hold image being passed in from presenting view controller
 @property (strong, nonatomic) UIImage *rcImageHolder;
-- (IBAction)ButtonTouchedUpInside_Add:(id)sender;
+// Singleton instance of table data management
+@property (strong, nonatomic) rcAzureDataTable *rcDataConnection;
+// Store next unique sequence number
+@property NSInteger *rcUniqueNumber;
 - (void) createBlobContainer:(NSString*)containerName;
-@property (strong, nonatomic) IBOutlet UIBarButtonItem *UploadButtonNavibar;
 - (void) getImagefromblob:(NSString*)blobName blobContainer:(AZSCloudBlobContainer*)blobContainer;
 @end

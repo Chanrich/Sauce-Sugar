@@ -25,6 +25,28 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
     [self.MainImageView setImage:_rcImageHolder];
     [self.UploadButtonNavibar setTarget:self];
     [self.UploadButtonNavibar setAction:@selector(executeUpload:)];
+    
+    // Set delegate to self to hide keyboard after pressing return
+    [self.TextField_Name setDelegate:self];
+    [self.TextField_RestaurantName setDelegate:self];
+    [self.TextView_Comment setDelegate:self];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeybaord)];
+    [self.view addGestureRecognizer:tap];
+    
+    // Set current user
+    [(AppDelegate*)[[UIApplication sharedApplication] delegate] setCurrentUsername:@"rchan"];
+    // Initialize a singleton instance
+    self.rcDataConnection = [rcAzureDataTable sharedDataTable];
+    
+    // Request a unique serial number
+    [self.rcDataConnection getUniqueNumber_WithUsername:[(AppDelegate*)[[UIApplication sharedApplication] delegate] currentUsername] Callback:^(NSArray *callbackItem) {
+        for (NSDictionary *item in callbackItem){ //items are NSArray item
+            // Get data by its key
+            NSLog(@"Type of data returned:%@", [[item objectForKey:@"SequenceNumber"] class]);
+            NSLog(@"Retrieved number: %@", [item objectForKey:@"SequenceNumber"]);
+        }
+    }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -46,32 +68,20 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
     NSLog(@"Upload button pressed");
 }
 
+
 - (IBAction)ButtonTouchedUpInside_Add:(id)sender {
     // Button touch up inside event has been triggered.
-    // Add data into Azure database
-    MSClient *client = [(AppDelegate *)[[UIApplication sharedApplication] delegate] client];
-    NSDictionary *item = @{@"text": @"Very good Item"};
-    MSTable *itemTable = [client tableWithName:@"TodoItem"];
-    // Table name:Table_objectInfo
-    //    Object descriptions:
-    //    1.	Name of the food
-    //    2.	Name of the restaurant (if not yet exist, option to add restaurant appears)
-    //    3.	Photo
-    //    4.	Rating (Binary option: Good or bad)
-    //    5.	Comments
-    //    6.	Price range
-
-    [itemTable insert:item completion:^(NSDictionary *InsertedItem, NSError *error) {
-        if (error){
-            NSLog(@"error: %@", error);
-        } else {
-            NSLog(@"Item inserted: id:%@", [InsertedItem objectForKey:@"id"]);
-        }
-    }];
     
+    // Insert data into DataTable Class
+    [self.rcDataConnection prepareFoodData:self.TextField_Name.text resName:self.TextField_RestaurantName.text comment:self.TextView_Comment.text username:[(AppDelegate*)[[UIApplication sharedApplication] delegate] currentUsername]];
     
-    NSLog(@"Creating Container");
-    [self createBlobContainer:@"rchan"];
+    // Insert Data collection into table
+    // Table name:rcMainDataTable
+    [self.rcDataConnection InsertDataIntoTable:@"rcMainDataTable"];
+    
+    //NSLog(@"Creating Container");
+    // Create a blob container with the current username from the shared app delegate object
+    //[self createBlobContainer:[(AppDelegate*)[[UIApplication sharedApplication] delegate] currentUsername]];
 }
 
 // Create a container with containerName
@@ -79,28 +89,33 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
     NSError *AZSAccountError;
     AZSCloudStorageAccount *account = [AZSCloudStorageAccount accountFromConnectionString:@"DefaultEndpointsProtocol=https;AccountName=imagestorageblobs;AccountKey=d8e1NrdP49wzHvxaPtLa41uO3mX/fXPWPMSBa4MPGSe4/+5E7zavNBsvMuqSoN1HynKuyYumoyNLkCpgaowJOQ==" error:&AZSAccountError];
     if (AZSAccountError){
+        // Show error message then quit
         NSLog(@"Error when creating account");
+    } else {
+        // No Error
+        
+        // Create a blob client object
+        AZSCloudBlobClient *blobClient = [account getBlobClient];
+        
+        // Create a container
+        AZSCloudBlobContainer *blobContainer = [blobClient containerReferenceFromName:containerName];
+        
+        [blobContainer createContainerIfNotExistsWithAccessType:AZSContainerPublicAccessTypeContainer requestOptions:[blobClient defaultRequestOptions] operationContext:nil completionHandler:^(NSError * _Nullable error, BOOL exist) {
+            if (error){
+                NSLog(@"Error when creating container:\n %@", error);
+            } else {
+                if (exist){
+                    NSLog(@"Container existing");
+                } else {
+                    NSLog(@"Container created");
+                }
+                
+                //[self getImagefromblob:@"image1" blobContainer:blobContainer];
+            }
+        }];        
     }
     
-    // Create a blob client object
-    AZSCloudBlobClient *blobClient = [account getBlobClient];
-    
-    // Create a container
-    AZSCloudBlobContainer *blobContainer = [blobClient containerReferenceFromName:containerName];
-    
-    [blobContainer createContainerIfNotExistsWithAccessType:AZSContainerPublicAccessTypeContainer requestOptions:[blobClient defaultRequestOptions] operationContext:nil completionHandler:^(NSError * _Nullable error, BOOL exist) {
-        if (error){
-            NSLog(@"Error when creating container:\n %@", error);
-        } else {
-            if (exist){
-                NSLog(@"container is existing");
-            } else {
-                NSLog(@"Container created");
-            }
-            
-            //[self getImagefromblob:@"image1" blobContainer:blobContainer];
-        }
-    }];
+
 }
 
 // Grab image from blobName inside blobCotainer and a UIImageView to this image
@@ -120,6 +135,16 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
         }
         
     }];
+}
+
+// Dismiss keyboard when return pressed in textfields
+- (BOOL) textFieldShouldReturn:(UITextField *)textField{
+    [textField resignFirstResponder];
+    return NO;
+}
+
+- (void) dismissKeybaord{
+    [self.TextView_Comment resignFirstResponder];
 }
 
 @end

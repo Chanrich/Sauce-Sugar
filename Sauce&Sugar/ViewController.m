@@ -70,18 +70,70 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info{
     UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
-    self.photoImageView.image = chosenImage;
+    UIImage *compressedImage = [self resizeImage:chosenImage];
     [picker dismissViewControllerAnimated:YES completion:NULL];
     // Start a view to add information to database
     UIStoryboard *rcStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    // Get a reference to the view
     AddToDatabase_ViewController *vc = [rcStoryBoard instantiateViewControllerWithIdentifier:@"AddToDataBaseViewController"];
-    vc.rcImageHolder = info[UIImagePickerControllerEditedImage];
+    // Load image into the view's property
+    vc.rcImageHolder = compressedImage;
     // Change entry animation
-    vc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    vc.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     [self showViewController:vc sender:NULL];
     //[self presentViewController:vc animated:YES completion:NULL];
     
     
+    
+}
+
+// Credit to stack overflow user: user4261201
+-(UIImage *)resizeImage:(UIImage *)image
+{
+    float actualHeight = image.size.height;
+    float actualWidth = image.size.width;
+    float maxHeight = 300.0;
+    float maxWidth = 400.0;
+    float imgRatio = actualWidth/actualHeight;
+    float maxRatio = maxWidth/maxHeight;
+    float compressionQuality = 0.5;//50 percent compression
+    
+    if (actualHeight > maxHeight || actualWidth > maxWidth)
+    {
+        if(imgRatio < maxRatio)
+        {
+            //adjust width according to maxHeight
+            imgRatio = maxHeight / actualHeight;
+            actualWidth = imgRatio * actualWidth;
+            actualHeight = maxHeight;
+        }
+        else if(imgRatio > maxRatio)
+        {
+            //adjust height according to maxWidth
+            imgRatio = maxWidth / actualWidth;
+            actualHeight = imgRatio * actualHeight;
+            actualWidth = maxWidth;
+        }
+        else
+        {
+            actualHeight = maxHeight;
+            actualWidth = maxWidth;
+        }
+    }
+    
+    CGRect rect = CGRectMake(0.0, 0.0, actualWidth, actualHeight);
+    UIGraphicsBeginImageContext(rect.size);
+    [image drawInRect:rect];
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    NSData *originalImageData = UIImageJPEGRepresentation(image, 1);
+    NSData *imageData = UIImageJPEGRepresentation(img, compressionQuality);
+    UIGraphicsEndImageContext();
+    
+    // Debug, print out sizes
+    NSLog(@"Original image size: %lu", (unsigned long)[originalImageData length]);
+    NSLog(@"Compressed image size: %lu", (unsigned long)[imageData length]);
+    
+    return [UIImage imageWithData:imageData];
     
 }
 
