@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 #import "rcAzureDataTable.h"
+#import "rcAzureBlobContainer.h"
 
 @interface AddToDatabase_ViewController : UIViewController <UITextFieldDelegate, UITextViewDelegate>
 
@@ -34,7 +35,9 @@
 // Singleton instance of table data management
 @property (strong, nonatomic) rcAzureDataTable *rcDataConnection;
 // Store next unique sequence number
-@property NSInteger *rcUniqueNumber;
+@property NSNumber* rcUniqueNumber;
+
+// Custom Functions
 - (void) createBlobContainer:(NSString*)containerName;
 - (void) getImagefromblob:(NSString*)blobName blobContainer:(AZSCloudBlobContainer*)blobContainer;
 @end

@@ -36,6 +36,7 @@
 		69C931B01F57E764007696BA /* AddToDatabase_ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C931AF1F57E764007696BA /* AddToDatabase_ViewController.m */; };
 		69DE29071F74CA8200B0527E /* rcAzureDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 69DE29061F74CA8200B0527E /* rcAzureDataTable.m */; };
 		69DE290A1F7865D700B0527E /* AddUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69DE29091F7865D700B0527E /* AddUserViewController.m */; };
+		69E3EDBE1F7A2D4E00C0F787 /* rcAzureBlobContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 69E3EDBD1F7A2D4E00C0F787 /* rcAzureBlobContainer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -101,6 +102,8 @@
 		69DE29061F74CA8200B0527E /* rcAzureDataTable.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = rcAzureDataTable.m; sourceTree = "<group>"; };
 		69DE29081F7865D700B0527E /* AddUserViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddUserViewController.h; sourceTree = "<group>"; };
 		69DE29091F7865D700B0527E /* AddUserViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddUserViewController.m; sourceTree = "<group>"; };
+		69E3EDBC1F7A2D4E00C0F787 /* rcAzureBlobContainer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rcAzureBlobContainer.h; sourceTree = "<group>"; };
+		69E3EDBD1F7A2D4E00C0F787 /* rcAzureBlobContainer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = rcAzureBlobContainer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +147,8 @@
 				69A0800C1F63EB0600651946 /* MainMenuButton.m */,
 				69DE29051F74CA8200B0527E /* rcAzureDataTable.h */,
 				69DE29061F74CA8200B0527E /* rcAzureDataTable.m */,
+				69E3EDBC1F7A2D4E00C0F787 /* rcAzureBlobContainer.h */,
+				69E3EDBD1F7A2D4E00C0F787 /* rcAzureBlobContainer.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -412,6 +417,7 @@
 				69C931A51F53725C007696BA /* Location.m in Sources */,
 				69C9315D1F502006007696BA /* AppDelegate.m in Sources */,
 				69DE290A1F7865D700B0527E /* AddUserViewController.m in Sources */,
+				69E3EDBE1F7A2D4E00C0F787 /* rcAzureBlobContainer.m in Sources */,
 				69C931661F502006007696BA /* Sauce_Sugar.xcdatamodeld in Sources */,
 				69C9315A1F502006007696BA /* main.m in Sources */,
 			);

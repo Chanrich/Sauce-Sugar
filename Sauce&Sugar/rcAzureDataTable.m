@@ -34,7 +34,6 @@
 - (void) InsertDataIntoTable:(NSString*)tableName{
     // Return a MSTable instance with tableName
     MSTable *itemTable = [self.client tableWithName:tableName];
-    
 
     // Insert data into table
     [itemTable insert:self.rcDataDictionary completion:^(NSDictionary *InsertedItem, NSError *error) {
@@ -49,7 +48,7 @@
 }
 
 // Store data into the class
-- (void) prepareFoodData:(NSString*)foodname resName:(NSString*)resName comment:(NSString*)rcComment username:(NSString*)username{
+- (void) prepareFoodData:(NSString*)foodname resName:(NSString*)resName comment:(NSString*)rcComment username:(NSString*)username sequenceNumber:(NSNumber*)sequenceNumber{
     // Collect data into NSDictionary object.
     // NSDictioanry format: NSDictionary *dict = @{ key : value, key2 : value2}
     //    Object descriptions:
@@ -62,7 +61,8 @@
     self.rcDataDictionary = @{ @"fName" : foodname,
                                @"rName" : resName,
                                @"comments" : rcComment,
-                               @"userName" : username
+                               @"userName" : username,
+                               @"sequence" : sequenceNumber
                                };
 }
 
@@ -78,35 +78,76 @@
 }
 
 // getUniqueID_WithCallback will make the request and return the unique serial number in a NSArray* to the callback function. Caller will have to create a block to catch the return value
-- (void) getUniqueNumber_WithUsername:(NSString*)rcUsername  Callback:(void(^)(NSArray *callbackItem)) returnCallback {
+- (void) getUniqueNumber_WithUsername:(NSString*)rcUsername  Callback:(void(^)(NSDictionary *callbackItem)) returnCallback {
     // Return a MSTable instance with tableName
     MSTable *itemTable = [self.client tableWithName:@"rcUserDataInfo"];
     
     // Create a predicate to select the user
-    NSString *rcSelectUser = [NSString stringWithFormat:@"USERNAME == %@", rcUsername];
-    NSPredicate *rcPredicate = [NSPredicate predicateWithFormat:rcSelectUser];
+    NSString *rcSelectUser = [NSString stringWithFormat:@"USERNAME=%@", rcUsername];
     
-    // Read only the selected user
-    [itemTable readWithPredicate:rcPredicate completion:^(MSQueryResult * _Nullable result, NSError * _Nullable error) {
+    // Read using query
+    [itemTable readWithQueryString:rcSelectUser completion:^(MSQueryResult * _Nullable result, NSError * _Nullable error) {
         if (error){
             NSLog(@"Read error!");
             // Pass a null back to callback, callback should check this for error
             returnCallback(nil);
         } else {
-            // Pass the NSArray back to callback function
-            returnCallback(result.items);
+
+            // Debug
+            NSLog(@"Count of result.item array: %lu", [result.items count]);
             
-            NSLog(@"Check for items");
-            for (NSDictionary *item in result.items){ //items are NSArray item
-                // Get data by its key
-                NSLog(@"Not in return callback: \n\tRetrieved number: %@", [item objectForKey:@"SequenceNumber"]);
+            if ([result.items count] == 1){
+                // Pass the NSDictionary* back to callback function
+                returnCallback([result.items objectAtIndex:0]);
+                
+                // Delete after test
+//                for (NSDictionary *item in result.items){ //items are NSArray item
+//                    // Increment the retrieved sequence number by 1
+//                    NSNumber *newValue = [NSNumber numberWithInt:[[item objectForKey:@"SequenceNumber"] intValue] + 1];
+//
+//                    // Update the newly incremented number into the key
+//                    [item setValue:newValue forKey:@"SequenceNumber"];
+//
+//                    // Push it to Azure table
+//                    [itemTable update:item completion:^(NSDictionary * _Nullable item, NSError * _Nullable error) {
+//                        if (error){
+//                            NSLog(@"Error when updating dictionary");
+//                        } else {
+//                            NSLog(@"Successfully updated dictionary");
+//                        }
+//                    }];
+//                }
+            } else if ([result.items count] > 1){
+                // More than one entry is downloaded, something must be wrong as there shouldn't have two exact same user
+                NSLog(@"More than one user is selected, task aborting");
+            } else {
+                // Error
+                NSLog(@"No user is selected, task aborting");
             }
         }
     }];
     
-    // Update and increment the sequence number
-    
 
 }
 
+// Update an entry into the table, retrieve the information first and then update that entry
+- (void) incrementSequenceNumberWithDictionary:(NSDictionary*)myDict{
+    // Return a MSTable instance with tableName
+    MSTable *itemTable = [self.client tableWithName:@"rcUserDataInfo"];
+    
+    // Increment the retrieved sequence number by 1
+    NSNumber *newValue = [NSNumber numberWithInt:[[myDict objectForKey:@"SequenceNumber"] intValue] + 1];
+    
+    // Update the newly incremented number into the key
+    [myDict setValue:newValue forKey:@"SequenceNumber"];
+    
+    // Push it to Azure table
+    [itemTable update:myDict completion:^(NSDictionary * _Nullable item, NSError * _Nullable error) {
+        if (error){
+            NSLog(@"Error when updating dictionary");
+        } else {
+            NSLog(@"Successfully updated dictionary");
+        }
+    }];
+}
 @end

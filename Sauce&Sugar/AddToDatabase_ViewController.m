@@ -40,12 +40,12 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
     self.rcDataConnection = [rcAzureDataTable sharedDataTable];
     
     // Request a unique serial number
-    [self.rcDataConnection getUniqueNumber_WithUsername:[(AppDelegate*)[[UIApplication sharedApplication] delegate] currentUsername] Callback:^(NSArray *callbackItem) {
-        for (NSDictionary *item in callbackItem){ //items are NSArray item
-            // Get data by its key
-            NSLog(@"Type of data returned:%@", [[item objectForKey:@"SequenceNumber"] class]);
-            NSLog(@"Retrieved number: %@", [item objectForKey:@"SequenceNumber"]);
-        }
+    [self.rcDataConnection getUniqueNumber_WithUsername:[(AppDelegate*)[[UIApplication sharedApplication] delegate] currentUsername] Callback:^(NSDictionary *callbackItem) {
+        // Get data by its key
+        NSLog(@"Type of data returned:%@", [[callbackItem objectForKey:@"SequenceNumber"] class]);
+        NSLog(@"Retrieved unique number: %@", [callbackItem objectForKey:@"SequenceNumber"]);
+        // Copy the unique number
+        self.rcUniqueNumber = [NSNumber numberWithInt:[[callbackItem objectForKey:@"SequenceNumber"] intValue]] ;
     }];
 }
 
@@ -68,16 +68,25 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
     NSLog(@"Upload button pressed");
 }
 
-
+// Button touch up inside event has been triggered.
 - (IBAction)ButtonTouchedUpInside_Add:(id)sender {
-    // Button touch up inside event has been triggered.
+    // Grab username from singleton
+    NSString *myUsername = [(AppDelegate*)[[UIApplication sharedApplication] delegate] currentUsername];
+    
+    // Initialize BlobStorage instance
+    rcAzureBlobContainer* rcBlobstorage = [[rcAzureBlobContainer alloc] init];
+    
+    // Upload the image into blob storage
+    NSLog(@"Uploading Image...");
+    [rcBlobstorage createImageWithBlobContainer:myUsername BlobName:[self.rcUniqueNumber stringValue] ImageData:self.rcImageHolder];
+    NSLog(@"Image uploaded");
     
     // Insert data into DataTable Class
-    [self.rcDataConnection prepareFoodData:self.TextField_Name.text resName:self.TextField_RestaurantName.text comment:self.TextView_Comment.text username:[(AppDelegate*)[[UIApplication sharedApplication] delegate] currentUsername]];
+    [self.rcDataConnection prepareFoodData:self.TextField_Name.text resName:self.TextField_RestaurantName.text comment:self.TextView_Comment.text username:myUsername sequenceNumber:self.rcUniqueNumber];
     
-    // Insert Data collection into table
-    // Table name:rcMainDataTable
+    // Insert Data collection into table name:rcMainDataTable
     [self.rcDataConnection InsertDataIntoTable:@"rcMainDataTable"];
+    
     
     //NSLog(@"Creating Container");
     // Create a blob container with the current username from the shared app delegate object
