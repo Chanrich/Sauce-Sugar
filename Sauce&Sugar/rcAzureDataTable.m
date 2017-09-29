@@ -31,7 +31,7 @@
     return self;
 }
 
-- (void) InsertDataIntoTable:(NSString*)tableName{
+- (void) InsertDataIntoTable:(NSString*)tableName rcCallback:(void(^)(NSNumber *rcCompleteFlag))rcCallback{
     // Return a MSTable instance with tableName
     MSTable *itemTable = [self.client tableWithName:tableName];
 
@@ -39,10 +39,12 @@
     [itemTable insert:self.rcDataDictionary completion:^(NSDictionary *InsertedItem, NSError *error) {
         if (error){
             NSLog(@"error: %@", error);
-            
+            // Callback function should check the flag and issue a warning
+            rcCallback([NSNumber numberWithBool:NO]);
         } else {
             NSLog(@"Item inserted: id:%@", [InsertedItem objectForKey:@"id"]);
-            
+            // Callback function should check for flag before dismissing the view
+            rcCallback([NSNumber numberWithBool:YES]);
         }
     }];
 }
@@ -88,7 +90,7 @@
     // Read using query
     [itemTable readWithQueryString:rcSelectUser completion:^(MSQueryResult * _Nullable result, NSError * _Nullable error) {
         if (error){
-            NSLog(@"Read error!");
+            NSLog(@"Unique number read error!");
             // Pass a null back to callback, callback should check this for error
             returnCallback(nil);
         } else {

@@ -22,9 +22,6 @@
 @property (strong, nonatomic) IBOutlet UIButton *Button_AddDatabase;
 @property (strong, nonatomic) IBOutlet UIImageView *MainImageView;
 
-// Navigation bar outlet
-@property (strong, nonatomic) IBOutlet UIBarButtonItem *UploadButtonNavibar;
-
 // Action Add button pressed
 - (IBAction)ButtonTouchedUpInside_Add:(id)sender;
 
@@ -37,7 +34,10 @@
 // Store next unique sequence number
 @property NSNumber* rcUniqueNumber;
 
+// Task completion flags
+@property NSNumber* rcImageUploadCompleted;
+@property NSNumber* rcDataUploadCompleted;
+
 // Custom Functions
-- (void) createBlobContainer:(NSString*)containerName;
 - (void) getImagefromblob:(NSString*)blobName blobContainer:(AZSCloudBlobContainer*)blobContainer;
 @end

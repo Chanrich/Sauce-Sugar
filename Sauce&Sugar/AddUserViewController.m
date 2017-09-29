@@ -49,7 +49,7 @@
     
     NSLog(@"Inserting data into Azure table");
     // Insert data into table rcUserDataInfo
-    [self.rcDataConnection InsertDataIntoTable:@"rcUserDataInfo"];
+    [self.rcDataConnection InsertDataIntoTable:@"rcUserDataInfo" rcCallback:nil];
 }
 
 // Dismiss keyboard when return pressed in textfields

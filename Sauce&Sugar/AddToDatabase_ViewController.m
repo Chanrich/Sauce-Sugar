@@ -23,8 +23,9 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self.MainImageView setImage:_rcImageHolder];
-    [self.UploadButtonNavibar setTarget:self];
-    [self.UploadButtonNavibar setAction:@selector(executeUpload:)];
+    self.rcImageUploadCompleted = @NO;
+    self.rcDataUploadCompleted = @NO;
+    self.Button_AddDatabase.enabled = NO;
     
     // Set delegate to self to hide keyboard after pressing return
     [self.TextField_Name setDelegate:self];
@@ -46,6 +47,12 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
         NSLog(@"Retrieved unique number: %@", [callbackItem objectForKey:@"SequenceNumber"]);
         // Copy the unique number
         self.rcUniqueNumber = [NSNumber numberWithInt:[[callbackItem objectForKey:@"SequenceNumber"] intValue]] ;
+        
+        // Increment the sequence number
+        [self.rcDataConnection incrementSequenceNumberWithDictionary:callbackItem];
+        
+        // Enabled add button
+        self.Button_AddDatabase.enabled = YES;
     }];
 }
 
@@ -64,10 +71,6 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
 }
 */
 
-- (void) executeUpload: (id)sender{
-    NSLog(@"Upload button pressed");
-}
-
 // Button touch up inside event has been triggered.
 - (IBAction)ButtonTouchedUpInside_Add:(id)sender {
     // Grab username from singleton
@@ -78,53 +81,57 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
     
     // Upload the image into blob storage
     NSLog(@"Uploading Image...");
-    [rcBlobstorage createImageWithBlobContainer:myUsername BlobName:[self.rcUniqueNumber stringValue] ImageData:self.rcImageHolder];
+    [rcBlobstorage createImageWithBlobContainer:myUsername BlobName:[self.rcUniqueNumber stringValue] ImageData:self.rcImageHolder rcCallback:^(NSNumber *rcCompleteFlag) {
+        if ([rcCompleteFlag isEqualToNumber:[NSNumber numberWithBool:YES]]){
+            // Upload complete
+            NSLog(@"Insert image into blob storage successful");
+            self.rcImageUploadCompleted = [NSNumber numberWithBool:YES];
+            if ([self.rcDataUploadCompleted isEqualToNumber:@YES]){
+                NSLog(@"Upload is completed, dismissing add view");
+                // Return to main menu, pop view controller in main thread
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.navigationController popViewControllerAnimated:YES];
+                });
+            } else {
+                NSLog(@"Data table upload is not completed, waiting...");
+            }
+        } else {
+            // Upload failed
+            NSLog(@"Insert image into blob storage failed");
+            self.rcImageUploadCompleted = [NSNumber numberWithBool:NO];
+        }
+    }];
     NSLog(@"Image uploaded");
     
     // Insert data into DataTable Class
     [self.rcDataConnection prepareFoodData:self.TextField_Name.text resName:self.TextField_RestaurantName.text comment:self.TextView_Comment.text username:myUsername sequenceNumber:self.rcUniqueNumber];
     
     // Insert Data collection into table name:rcMainDataTable
-    [self.rcDataConnection InsertDataIntoTable:@"rcMainDataTable"];
-    
+    [self.rcDataConnection InsertDataIntoTable:@"rcMainDataTable" rcCallback:^(NSNumber *rcCompleteFlag) {
+        if ([rcCompleteFlag isEqualToNumber:[NSNumber numberWithBool:YES]]){
+            // Upload complete
+            NSLog(@"Insert data into table successful");
+            self.rcDataUploadCompleted = [NSNumber numberWithBool:YES];
+            if ([self.rcImageUploadCompleted isEqualToNumber:@YES]){
+                NSLog(@"Upload is completed, dismissing add view");
+                // Return to main menu, pop view controller in main thread
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.navigationController popViewControllerAnimated:YES];
+                });
+            } else {
+                NSLog(@"Image upload is not completed, waiting...");
+            }
+        } else {
+            // Upload failed, issue a warnning
+            NSLog(@"Insert data into table failed");
+            self.rcDataUploadCompleted = [NSNumber numberWithBool:NO];
+        }
+        
+    }];
     
     //NSLog(@"Creating Container");
     // Create a blob container with the current username from the shared app delegate object
     //[self createBlobContainer:[(AppDelegate*)[[UIApplication sharedApplication] delegate] currentUsername]];
-}
-
-// Create a container with containerName
-- (void) createBlobContainer:(NSString*)containerName{
-    NSError *AZSAccountError;
-    AZSCloudStorageAccount *account = [AZSCloudStorageAccount accountFromConnectionString:@"DefaultEndpointsProtocol=https;AccountName=imagestorageblobs;AccountKey=d8e1NrdP49wzHvxaPtLa41uO3mX/fXPWPMSBa4MPGSe4/+5E7zavNBsvMuqSoN1HynKuyYumoyNLkCpgaowJOQ==" error:&AZSAccountError];
-    if (AZSAccountError){
-        // Show error message then quit
-        NSLog(@"Error when creating account");
-    } else {
-        // No Error
-        
-        // Create a blob client object
-        AZSCloudBlobClient *blobClient = [account getBlobClient];
-        
-        // Create a container
-        AZSCloudBlobContainer *blobContainer = [blobClient containerReferenceFromName:containerName];
-        
-        [blobContainer createContainerIfNotExistsWithAccessType:AZSContainerPublicAccessTypeContainer requestOptions:[blobClient defaultRequestOptions] operationContext:nil completionHandler:^(NSError * _Nullable error, BOOL exist) {
-            if (error){
-                NSLog(@"Error when creating container:\n %@", error);
-            } else {
-                if (exist){
-                    NSLog(@"Container existing");
-                } else {
-                    NSLog(@"Container created");
-                }
-                
-                //[self getImagefromblob:@"image1" blobContainer:blobContainer];
-            }
-        }];        
-    }
-    
-
 }
 
 // Grab image from blobName inside blobCotainer and a UIImageView to this image

@@ -12,5 +12,5 @@
 
 
 // Custom function
-- (void) createImageWithBlobContainer:(NSString*)containerName BlobName:(NSString*)BlobName ImageData:(UIImage*)ImageData;
+- (void) createImageWithBlobContainer:(NSString*)containerName BlobName:(NSString*)BlobName ImageData:(UIImage*)ImageData rcCallback:(void(^)(NSNumber *rcCompleteFlag))rcCallback;
 @end

@@ -82,9 +82,6 @@
     vc.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     [self showViewController:vc sender:NULL];
     //[self presentViewController:vc animated:YES completion:NULL];
-    
-    
-    
 }
 
 // Credit to stack overflow user: user4261201

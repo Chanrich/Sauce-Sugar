@@ -11,7 +11,7 @@
 @implementation rcAzureBlobContainer
 
 // Create a container with containerName
-- (void) createImageWithBlobContainer:(NSString*)containerName BlobName:(NSString*)BlobName ImageData:(UIImage*)ImageData {
+- (void) createImageWithBlobContainer:(NSString*)containerName BlobName:(NSString*)BlobName ImageData:(UIImage*)ImageData rcCallback:(void(^)(NSNumber *rcCompleteFlag))rcCallback{
     NSError *AZSAccountError;
     AZSCloudStorageAccount *account = [AZSCloudStorageAccount accountFromConnectionString:@"DefaultEndpointsProtocol=https;AccountName=imagestorageblobs;AccountKey=d8e1NrdP49wzHvxaPtLa41uO3mX/fXPWPMSBa4MPGSe4/+5E7zavNBsvMuqSoN1HynKuyYumoyNLkCpgaowJOQ==" error:&AZSAccountError];
     if (AZSAccountError){
@@ -40,8 +40,12 @@
                 [imageblockblob uploadFromData:imgdata completionHandler:^(NSError *error) {
                     if (error){
                         NSLog(@"Error when uploading blob\n %@", error);
+                        // View controller should check for NO and issue a warning
+                        rcCallback([NSNumber numberWithBool:NO]);
                     } else {
                         NSLog(@"Successfully uploaded %@", BlobName);
+                        // View controller should check for YES to dismiss itself
+                        rcCallback([NSNumber numberWithBool:YES]);
                     }
                 }];
                             }

@@ -18,7 +18,7 @@
 
 // Define custom functions
 // Add a new entry into table
-- (void) InsertDataIntoTable:(NSString*)tableName;
+- (void) InsertDataIntoTable:(NSString*)tableName rcCallback:(void(^)(NSNumber *rcCompleteFlag))rcCallback;
 
 // Store data into the class
 - (void) prepareFoodData:(NSString*)foodname resName:(NSString*)resName comment:(NSString*)rcComment username:(NSString*)username sequenceNumber:(NSNumber*)sequenceNumber;
