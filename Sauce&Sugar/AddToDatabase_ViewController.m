@@ -104,7 +104,7 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
     NSLog(@"Image uploaded");
     
     // Insert data into DataTable Class
-    [self.rcDataConnection prepareFoodData:self.TextField_Name.text resName:self.TextField_RestaurantName.text comment:self.TextView_Comment.text username:myUsername sequenceNumber:self.rcUniqueNumber];
+    [self.rcDataConnection prepareFoodData:self.TextField_Name.text resName:self.TextField_RestaurantName.text comment:self.TextView_Comment.text username:myUsername sequenceNumber:self.rcUniqueNumber rcLike:self.rcLikeStatus];
     
     // Insert Data collection into table name:rcMainDataTable
     [self.rcDataConnection InsertDataIntoTable:@"rcMainDataTable" rcCallback:^(NSNumber *rcCompleteFlag) {
@@ -113,12 +113,14 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
             NSLog(@"Insert data into table successful");
             self.rcDataUploadCompleted = [NSNumber numberWithBool:YES];
             if ([self.rcImageUploadCompleted isEqualToNumber:@YES]){
+                // Debug
                 NSLog(@"Upload is completed, dismissing add view");
                 // Return to main menu, pop view controller in main thread
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self.navigationController popViewControllerAnimated:YES];
                 });
             } else {
+                // Debug
                 NSLog(@"Image upload is not completed, waiting...");
             }
         } else {
@@ -128,10 +130,6 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
         }
         
     }];
-    
-    //NSLog(@"Creating Container");
-    // Create a blob container with the current username from the shared app delegate object
-    //[self createBlobContainer:[(AppDelegate*)[[UIApplication sharedApplication] delegate] currentUsername]];
 }
 
 // Grab image from blobName inside blobCotainer and a UIImageView to this image
@@ -163,6 +161,21 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
     [self.TextView_Comment resignFirstResponder];
 }
 
+- (IBAction)TouchUpInside_LikeButton:(id)sender {
+    // Highlight Like button
+    self.Button_Like.highlighted = YES;
+    self.Button_NoLike.highlighted = NO;
+    // Set flag
+    self.rcLikeStatus = @YES;
+}
+
+- (IBAction)TouchUpInside_NoLikeButton:(id)sender {
+    // Highlight NoLike button
+    self.Button_Like.highlighted = NO;
+    self.Button_NoLike.highlighted = YES;
+    // Set flag
+    self.rcLikeStatus = @NO;
+}
 @end
 
 // BlobName has to be all lowercase, letters or numbers

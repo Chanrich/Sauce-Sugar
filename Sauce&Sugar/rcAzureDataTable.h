@@ -21,7 +21,7 @@
 - (void) InsertDataIntoTable:(NSString*)tableName rcCallback:(void(^)(NSNumber *rcCompleteFlag))rcCallback;
 
 // Store data into the class
-- (void) prepareFoodData:(NSString*)foodname resName:(NSString*)resName comment:(NSString*)rcComment username:(NSString*)username sequenceNumber:(NSNumber*)sequenceNumber;
+- (void) prepareFoodData:(NSString*)foodname resName:(NSString*)resName comment:(NSString*)rcComment username:(NSString*)username sequenceNumber:(NSNumber*)sequenceNumber rcLike:(NSNumber*)rcLike;
 
 // Prepare userdata
 - (void) prepareUserData:(NSString*)username;
@@ -31,6 +31,10 @@
 
 // getUniqueID_WithCallback will make the request and return the unique serial number in a NSArray* to the callback function. Caller will have to create a block to catch the return value
 - (void) getUniqueNumber_WithUsername:(NSString*)rcUsername  Callback:(void(^)(NSDictionary *callbackItem)) returnCallback;
+
+// Request all entries from a single user, return a NSArray of dictionaries in callback
+- (void) getDatafromUser:(NSString*)rcUsername Callback:(void(^)(NSArray *callbackItem)) returnCallback;
+
 // Override init to initialize client
 - (id) init;
 

@@ -21,6 +21,8 @@
 // UI elements
 @property (strong, nonatomic) IBOutlet UIButton *Button_AddDatabase;
 @property (strong, nonatomic) IBOutlet UIImageView *MainImageView;
+@property (weak, nonatomic) IBOutlet UIButton *Button_Like;
+@property (weak, nonatomic) IBOutlet UIButton *Button_NoLike;
 
 // Action Add button pressed
 - (IBAction)ButtonTouchedUpInside_Add:(id)sender;
@@ -33,6 +35,14 @@
 @property (strong, nonatomic) rcAzureDataTable *rcDataConnection;
 // Store next unique sequence number
 @property NSNumber* rcUniqueNumber;
+// Store like status
+@property NSNumber *rcLikeStatus;
+
+
+// Rating Buttons events
+- (IBAction)TouchUpInside_LikeButton:(id)sender;
+- (IBAction)TouchUpInside_NoLikeButton:(id)sender;
+
 
 // Task completion flags
 @property NSNumber* rcImageUploadCompleted;

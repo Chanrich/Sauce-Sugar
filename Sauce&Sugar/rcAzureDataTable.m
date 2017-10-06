@@ -50,7 +50,7 @@
 }
 
 // Store data into the class
-- (void) prepareFoodData:(NSString*)foodname resName:(NSString*)resName comment:(NSString*)rcComment username:(NSString*)username sequenceNumber:(NSNumber*)sequenceNumber{
+- (void) prepareFoodData:(NSString*)foodname resName:(NSString*)resName comment:(NSString*)rcComment username:(NSString*)username sequenceNumber:(NSNumber*)sequenceNumber rcLike:(NSNumber*)rcLike{
     // Collect data into NSDictionary object.
     // NSDictioanry format: NSDictionary *dict = @{ key : value, key2 : value2}
     //    Object descriptions:
@@ -64,7 +64,8 @@
                                @"rName" : resName,
                                @"comments" : rcComment,
                                @"userName" : username,
-                               @"sequence" : sequenceNumber
+                               @"sequence" : sequenceNumber,
+                               @"like" : rcLike
                                };
 }
 
@@ -96,29 +97,12 @@
         } else {
 
             // Debug
-            NSLog(@"Count of result.item array: %lu", [result.items count]);
+            NSNumber *temp = [NSNumber numberWithUnsignedLong:[result.items count]];
+            NSLog(@"Count of result.item array: %@", temp);
             
             if ([result.items count] == 1){
                 // Pass the NSDictionary* back to callback function
                 returnCallback([result.items objectAtIndex:0]);
-                
-                // Delete after test
-//                for (NSDictionary *item in result.items){ //items are NSArray item
-//                    // Increment the retrieved sequence number by 1
-//                    NSNumber *newValue = [NSNumber numberWithInt:[[item objectForKey:@"SequenceNumber"] intValue] + 1];
-//
-//                    // Update the newly incremented number into the key
-//                    [item setValue:newValue forKey:@"SequenceNumber"];
-//
-//                    // Push it to Azure table
-//                    [itemTable update:item completion:^(NSDictionary * _Nullable item, NSError * _Nullable error) {
-//                        if (error){
-//                            NSLog(@"Error when updating dictionary");
-//                        } else {
-//                            NSLog(@"Successfully updated dictionary");
-//                        }
-//                    }];
-//                }
             } else if ([result.items count] > 1){
                 // More than one entry is downloaded, something must be wrong as there shouldn't have two exact same user
                 NSLog(@"More than one user is selected, task aborting");
@@ -128,8 +112,37 @@
             }
         }
     }];
-    
+}
 
+// Request all entries from a single user, return a NSArray of dictionaries in callback
+- (void) getDatafromUser:(NSString*)rcUsername Callback:(void(^)(NSArray *callbackItem)) returnCallback{
+    // Return a MSTable instance with tableName
+    MSTable *itemTable = [self.client tableWithName:@"rcMainDataTable"];
+    
+    // Create a predicate to select the user
+    NSString *rcSelectUser = [NSString stringWithFormat:@"USERNAME=%@", rcUsername];
+    
+    // Read using query
+    [itemTable readWithQueryString:rcSelectUser completion:^(MSQueryResult * _Nullable result, NSError * _Nullable error) {
+        if (error){
+            NSLog(@"Data download error!");
+            // Pass a null back to callback, callback should check this for error
+            returnCallback(nil);
+        } else {
+            // Debug
+            NSNumber *temp = [NSNumber numberWithUnsignedLong:[result.items count]];
+            NSLog(@"Count of result.item array: %@", temp);
+
+            if ([result.items count] > 0){
+                NSLog(@"Returning data to callback function");
+                // Pass the NSDictionary* back to callback function
+                returnCallback(result.items);
+            } else {
+                // Error
+                NSLog(@"No user is selected, task aborting");
+            }
+        }
+    }];
 }
 
 // Update an entry into the table, retrieve the information first and then update that entry

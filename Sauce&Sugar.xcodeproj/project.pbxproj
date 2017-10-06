@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6938F8A21F84AA130079C555 /* ShowItemsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6938F8A11F84AA120079C555 /* ShowItemsTableViewController.m */; };
+		6938F8A51F877AAE0079C555 /* rcShowItemsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6938F8A41F877AAE0079C555 /* rcShowItemsTableViewCell.m */; };
 		69A07FF31F5AA20400651946 /* MicrosoftAzureMobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69A07FF21F5AA20400651946 /* MicrosoftAzureMobile.framework */; };
 		69A07FF51F5AA2A300651946 /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69A07FF41F5AA2A300651946 /* SafariServices.framework */; };
 		69A07FF71F5AA2B100651946 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69A07FF61F5AA2B100651946 /* WebKit.framework */; };
@@ -57,6 +59,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6938F8A01F84AA120079C555 /* ShowItemsTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShowItemsTableViewController.h; sourceTree = "<group>"; };
+		6938F8A11F84AA120079C555 /* ShowItemsTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShowItemsTableViewController.m; sourceTree = "<group>"; };
+		6938F8A31F877AAE0079C555 /* rcShowItemsTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rcShowItemsTableViewCell.h; sourceTree = "<group>"; };
+		6938F8A41F877AAE0079C555 /* rcShowItemsTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = rcShowItemsTableViewCell.m; sourceTree = "<group>"; };
 		69A07FF21F5AA20400651946 /* MicrosoftAzureMobile.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MicrosoftAzureMobile.framework; path = "Sauce&Sugar/MicrosoftAzureMobile.framework"; sourceTree = "<group>"; };
 		69A07FF41F5AA2A300651946 /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
 		69A07FF61F5AA2B100651946 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
@@ -149,6 +155,8 @@
 				69DE29061F74CA8200B0527E /* rcAzureDataTable.m */,
 				69E3EDBC1F7A2D4E00C0F787 /* rcAzureBlobContainer.h */,
 				69E3EDBD1F7A2D4E00C0F787 /* rcAzureBlobContainer.m */,
+				6938F8A31F877AAE0079C555 /* rcShowItemsTableViewCell.h */,
+				6938F8A41F877AAE0079C555 /* rcShowItemsTableViewCell.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -258,6 +266,8 @@
 				69C931AF1F57E764007696BA /* AddToDatabase_ViewController.m */,
 				69DE29081F7865D700B0527E /* AddUserViewController.h */,
 				69DE29091F7865D700B0527E /* AddUserViewController.m */,
+				6938F8A01F84AA120079C555 /* ShowItemsTableViewController.h */,
+				6938F8A11F84AA120079C555 /* ShowItemsTableViewController.m */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -406,6 +416,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6938F8A51F877AAE0079C555 /* rcShowItemsTableViewCell.m in Sources */,
 				69C931B01F57E764007696BA /* AddToDatabase_ViewController.m in Sources */,
 				69A0800D1F63EB0600651946 /* MainMenuButton.m in Sources */,
 				69C931A81F537272007696BA /* LocationDataController.m in Sources */,
@@ -414,6 +425,7 @@
 				69A07FFE1F5D359000651946 /* AzureBlobStorage.m in Sources */,
 				69A080011F5D35E900651946 /* sdds.m in Sources */,
 				69DE29071F74CA8200B0527E /* rcAzureDataTable.m in Sources */,
+				6938F8A21F84AA130079C555 /* ShowItemsTableViewController.m in Sources */,
 				69C931A51F53725C007696BA /* Location.m in Sources */,
 				69C9315D1F502006007696BA /* AppDelegate.m in Sources */,
 				69DE290A1F7865D700B0527E /* AddUserViewController.m in Sources */,
