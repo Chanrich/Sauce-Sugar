@@ -16,18 +16,53 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    // get current username
+    NSString *currentUser = [(AppDelegate*)[[UIApplication sharedApplication] delegate] currentUsername];
     // stop tableview from loading by setting delegate and datasource to null
     self.rcTableView.delegate = nil;
     self.rcTableView.dataSource = nil;
     
     // Initialize a singleton instance
     self.rcDataConnection = [rcAzureDataTable sharedDataTable];
+    self.rcBlobContainer = [rcAzureBlobContainer sharedStorageContainer];
+    
+    // Initialize cell mutable array
+    self.rcCellMutableArray = [[NSMutableArray alloc] init];
+    
+    // Connect blob container
+    [self.rcBlobContainer connectToContainerWithName:currentUser];
     
     // Get current user's data from the cloub
-    [self.rcDataConnection getDatafromUser:[(AppDelegate*)[[UIApplication sharedApplication] delegate] currentUsername] Callback:^(NSArray *callbackItem) {
+    [self.rcDataConnection getDatafromUser:currentUser Callback:^(NSArray *callbackItem) {
         NSLog(@"Array Data received, storing data self.userDataInfo_NSArray");
         // Store the array as class property
         self.userDataInfo_NSArray = callbackItem;
+        
+        // Fast enumerate through returned array
+        for (NSDictionary* returnDict in callbackItem){
+            // Premade the cell that are going to be displayed in tableview
+            rcShowItemsTableViewCell *rcCell = [self.rcTableView dequeueReusableCellWithIdentifier:@"rcShowItemCell"];
+            
+            // Set cell properties
+            rcCell.rcMainCellLabel.text = [returnDict objectForKey:@"fName"];
+            rcCell.rcSecondCellLabel.text = [returnDict objectForKey:@"rName"];
+            
+            // Get sequence number
+            NSString *sequenceNum = [[returnDict objectForKey:@"sequence"] stringValue];
+            // Request one image stored inside dictionary key "sequence"
+            [self.rcBlobContainer getImagefromBlobFromUser:currentUser sequenceNumber:sequenceNum rcCallback:^(UIImage *rcReturnedImage) {
+                // Get the returned UIImage into the cell in main thread
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSLog(@"SN %@ Image setting complete", sequenceNum);
+                    rcCell.rcCellRightImage.image = rcReturnedImage;
+                });
+                
+            }];
+            // Add cell to the end of the array
+            [self.rcCellMutableArray addObject:rcCell];
+            NSLog(@"added an item to cell mutable array, size: %lu", (unsigned long)[self.rcCellMutableArray count]);
+        }
+        
         
         // After data finished downloading, enable tableview to reload by setting its delegate and datasource to self
         self.rcTableView.delegate = self;
@@ -67,25 +102,11 @@
     return [self.userDataInfo_NSArray count];
 }
 
+// This method is called each time row re-appear on the screen!
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    rcShowItemsTableViewCell *rcCell = [tableView dequeueReusableCellWithIdentifier:@"rcShowItemCell"];
-    //UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"rcShowItemCell"];
-    NSDictionary *currentDict = [self.userDataInfo_NSArray objectAtIndex:indexPath.row];
-    NSLog(@"indexPath.row: %ld", (long)indexPath.row);
-    NSLog(@"table received dictionary size:%lu", [self.userDataInfo_NSArray count]);
-//    if (rcCell == nil) {
-//        rcCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"rcShowItemCell"];
-//    }
-    for (NSString *key in [currentDict allKeys]){
-        NSLog(@"key: %@", key);
-        NSLog(@"object: %@", [currentDict objectForKey:key]);
-    }
-    rcCell.rcMainCellLabel.text = [currentDict objectForKey:@"fName"];
-    rcCell.rcSecondCellLabel.text = [currentDict objectForKey:@"rName"];
-    //cell.textLabel.text = [currentDict objectForKey:@"fName"];
-    
-    // use cell.textLabel.text = NSString
-    // image use cell.imageView.image = UIImage
+    // Debug
+    NSLog(@"cellForRowAtIndexPath started with row: %ld", (long)indexPath.row);
+    rcShowItemsTableViewCell *rcCell = [self.rcCellMutableArray objectAtIndex:indexPath.row];
     return rcCell;
 }
 

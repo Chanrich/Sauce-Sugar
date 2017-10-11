@@ -93,7 +93,7 @@
     float maxWidth = 400.0;
     float imgRatio = actualWidth/actualHeight;
     float maxRatio = maxWidth/maxHeight;
-    float compressionQuality = 0.5;//50 percent compression
+    float compressionQuality = 0.7; // Compression factor
     
     if (actualHeight > maxHeight || actualWidth > maxWidth)
     {

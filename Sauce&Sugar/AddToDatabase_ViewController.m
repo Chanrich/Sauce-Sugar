@@ -35,8 +35,7 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeybaord)];
     [self.view addGestureRecognizer:tap];
     
-    // Set current user
-    [(AppDelegate*)[[UIApplication sharedApplication] delegate] setCurrentUsername:@"rchan"];
+
     // Initialize a singleton instance
     self.rcDataConnection = [rcAzureDataTable sharedDataTable];
     
@@ -77,8 +76,11 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
     NSString *myUsername = [(AppDelegate*)[[UIApplication sharedApplication] delegate] currentUsername];
     
     // Initialize BlobStorage instance
-    rcAzureBlobContainer* rcBlobstorage = [[rcAzureBlobContainer alloc] init];
+    rcAzureBlobContainer* rcBlobstorage = [rcAzureBlobContainer sharedStorageContainer];
     
+    // Connect to container
+    [rcBlobstorage connectToContainerWithName:myUsername];
+
     // Upload the image into blob storage
     NSLog(@"Uploading Image...");
     [rcBlobstorage createImageWithBlobContainer:myUsername BlobName:[self.rcUniqueNumber stringValue] ImageData:self.rcImageHolder rcCallback:^(NSNumber *rcCompleteFlag) {

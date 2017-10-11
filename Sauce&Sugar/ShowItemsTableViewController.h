@@ -21,7 +21,11 @@
 // Singleton instance of table data management
 @property (strong, nonatomic) rcAzureDataTable *rcDataConnection;
 
+// Singleton instance of Blob Container
+@property (strong, nonatomic) rcAzureBlobContainer *rcBlobContainer;
+
 // A array to store all data downloaded
 @property NSArray *userDataInfo_NSArray;
+@property NSMutableArray<rcShowItemsTableViewCell*> *rcCellMutableArray;
 
 @end

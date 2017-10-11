@@ -18,6 +18,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
+    // Set current user
+    self.currentUsername = @"rchan";
+    
     return YES;
 }
 
