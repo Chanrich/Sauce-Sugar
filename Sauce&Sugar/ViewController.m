@@ -9,7 +9,13 @@
 #import "ViewController.h"
 #import "LocationDataController.h"
 #import "Location.h"
-@interface ViewController ()
+
+#define SLIDEMENU_WIDTH 275
+#define SLIDE_DURATION 0.2
+#define CORNER_RADIUS 4
+#define SLIDEOUT_VIEW_TAG 2
+@interface ViewController () <SlideOutMenuViewControllerDelegate>
+@property (nonatomic,assign) BOOL showingMenu;
 
 @end
 
@@ -22,6 +28,14 @@
     // Set content mode to scale image proportionally
     //_AddButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.AddButton setContentMode:UIViewContentModeScaleAspectFit];
+
+    self.navigationItem.title = @"Home";
+    
+    // Listen for button click event in slideout menu to return panel to original position
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slideSuperViewToOriginal) name:@"slideSuperViewBack" object:nil];
+    
+    // Listen for ADD button click event slide out menu
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startCamera) name:@"addNewItem" object:nil];
 }
 - (void)viewDidAppear:(BOOL)animated{
 //    LocationDataController *model = [[LocationDataController alloc] init];
@@ -44,9 +58,13 @@
     // Dispose of any resources that can be recreated.
 }
 
-
+// Bring up the camera and then add to database view
 - (IBAction)TouchUp_CameraButton:(id)sender {
-    
+    [self startCamera];
+}
+
+// Bring up the camera and then add to database view
+- (void) startCamera{
     // If camera module is not available, show message
     if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]){
         NSLog(@"Camera not available");
@@ -59,17 +77,15 @@
         NSLog(@"Camera detected");
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
         picker.delegate = self;
-        picker.allowsEditing = YES;
+        picker.allowsEditing = NO;
         picker.sourceType = UIImagePickerControllerSourceTypeCamera;
         
         [self presentViewController:picker animated:YES completion:NULL];
     }
-    
-    
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info{
-    UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
+    UIImage *chosenImage = info[UIImagePickerControllerOriginalImage];
     UIImage *compressedImage = [self resizeImage:chosenImage];
     [picker dismissViewControllerAnimated:YES completion:NULL];
     // Start a view to add information to database
@@ -137,4 +153,112 @@
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
+
+- (IBAction)MenuTouchUpInside:(id)sender {
+    UIButton *rcButton = sender;
+    switch (rcButton.tag) {
+        case 0:
+            // Slide menu back to original position
+            [self slideSuperViewToOriginal];
+            break;
+            
+        case 1:
+            // Slide menu out
+            [self slideSuperViewToRight];
+            break;
+        default:
+            break;
+    }
+}
+
+- (IBAction)slidePanelBackFullscreenButtonTouchUpInside:(id)sender {
+    // Slide panel back in place
+    [self slideSuperViewToOriginal];
+}
+
+// Animate a slide out menu option to the right of the super view
+- (void) slideSuperViewToRight{
+    UIView *childView = [self getSlideOutMenuView];
+    [self.tabBarController.view.superview sendSubviewToBack:childView];
+    [UIView animateWithDuration:SLIDE_DURATION delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+        self.tabBarController.view.frame = CGRectMake(SLIDEMENU_WIDTH, 0, self.tabBarController.view.frame.size.width, self.tabBarController.view.frame.size.height);
+        
+    } completion:^(BOOL finished) {
+        if (finished){
+            // Tag 0 = Menu is slided out
+            self.SlideMenuButton.tag = 0;
+            
+            // Enable fullscreen button on superview to return original position
+            self.slideBackButton.enabled = YES;
+        }
+    }];
+}
+
+// Animate super view back to original position
+- (void) slideSuperViewToOriginal{
+    [UIView animateWithDuration:SLIDE_DURATION delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+        self.tabBarController.view.frame = CGRectMake(0, 0, self.tabBarController.view.frame.size.width, self.tabBarController.view.frame.size.height);
+        
+    } completion:^(BOOL finished) {
+        if (finished){
+            [self.rcSlideOutMenuView.view removeFromSuperview];
+            self.rcSlideOutMenuView = nil;
+            // Set flag to false
+            self.showingMenu = NO;
+            // Tag 1 = Menu is in its original position
+            self.SlideMenuButton.tag = 1;
+            
+            // Reset shadow to default
+            [self setShadowForSlideOutMenu:NO offset:0];
+            
+            // Disable fullscreen button for sliding original panel back
+            self.slideBackButton.enabled = NO;
+        }
+    }];
+}
+
+- (UIView *) getSlideOutMenuView{
+    if (_rcSlideOutMenuView == nil){
+        // Get storyboard
+        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        // Get the view controller from storyboard
+        self.rcSlideOutMenuView = (SlideOutMenuViewController*)[sb instantiateViewControllerWithIdentifier:@"SlideOutMenuID"];
+        self.rcSlideOutMenuView.view.tag = SLIDEOUT_VIEW_TAG;
+        self.rcSlideOutMenuView.delegate = self;
+        
+        // Add slide out menu view to the fullscreen tabBarController
+        [self.tabBarController.view.superview addSubview:self.rcSlideOutMenuView.view];
+        
+        
+        [self.tabBarController addChildViewController:self.rcSlideOutMenuView];
+        [self.rcSlideOutMenuView didMoveToParentViewController:self.tabBarController];
+        
+        self.rcSlideOutMenuView.view.frame = CGRectMake(0, 0, self.view.frame.size.width , self.view.frame.size.height);
+        
+        
+    }
+    self.showingMenu = YES;
+    
+    // Set shadow
+    [self setShadowForSlideOutMenu:YES offset:-2];
+    
+    UIView *returnView = self.rcSlideOutMenuView.view;
+    
+    return returnView;
+}
+
+- (void) setShadowForSlideOutMenu:(BOOL)flag offset:(double)offset{
+    if (flag){
+        [self.tabBarController.view.layer setCornerRadius:CORNER_RADIUS];
+        [self.tabBarController.view.layer setShadowColor: [UIColor blackColor].CGColor];
+        [self.tabBarController.view.layer setShadowOpacity:0.8];
+        [self.tabBarController.view.layer setShadowOffset:CGSizeMake(offset, offset)];
+    } else {
+        [self.tabBarController.view.layer setCornerRadius:0];
+        // Return to default value
+        [self.tabBarController.view.layer setShadowOffset:CGSizeMake(0.0  , -3.0)];
+    }
+    
+}
+
 @end

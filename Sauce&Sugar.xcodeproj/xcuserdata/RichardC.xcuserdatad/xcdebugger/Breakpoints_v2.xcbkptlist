@@ -10,12 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Sauce&amp;Sugar/AddToDatabase_ViewController.m"
-            timestampString = "529395227.743457"
+            timestampString = "530485218.076138"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "148"
-            endingLineNumber = "148"
-            landmarkName = "-getImagefromblob:blobContainer:"
+            startingLineNumber = "146"
+            endingLineNumber = "146"
+            landmarkName = "-updateDictionaryAndExit"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

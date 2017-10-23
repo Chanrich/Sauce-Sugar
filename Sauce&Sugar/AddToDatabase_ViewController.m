@@ -41,14 +41,14 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
     
     // Request a unique serial number
     [self.rcDataConnection getUniqueNumber_WithUsername:[(AppDelegate*)[[UIApplication sharedApplication] delegate] currentUsername] Callback:^(NSDictionary *callbackItem) {
+        // Get a handle of the dictionary data passed back
+        self.rcDownloadedDictionary = callbackItem;
+        
         // Get data by its key
         NSLog(@"Type of data returned:%@", [[callbackItem objectForKey:@"SequenceNumber"] class]);
         NSLog(@"Retrieved unique number: %@", [callbackItem objectForKey:@"SequenceNumber"]);
         // Copy the unique number
         self.rcUniqueNumber = [NSNumber numberWithInt:[[callbackItem objectForKey:@"SequenceNumber"] intValue]] ;
-        
-        // Increment the sequence number
-        [self.rcDataConnection incrementSequenceNumberWithDictionary:callbackItem];
         
         // Enabled add button
         self.Button_AddDatabase.enabled = YES;
@@ -72,6 +72,10 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
 
 // Button touch up inside event has been triggered.
 - (IBAction)ButtonTouchedUpInside_Add:(id)sender {
+    // Clear button text to reveal indicator, and start animating activity indicator
+    [self.Button_AddDatabase setTitle:@"" forState:UIControlStateNormal];
+    [self.rcActivityIndicator startAnimating];
+    
     // Grab username from singleton
     NSString *myUsername = [(AppDelegate*)[[UIApplication sharedApplication] delegate] currentUsername];
     
@@ -84,23 +88,21 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
     // Upload the image into blob storage
     NSLog(@"Uploading Image...");
     [rcBlobstorage createImageWithBlobContainer:myUsername BlobName:[self.rcUniqueNumber stringValue] ImageData:self.rcImageHolder rcCallback:^(NSNumber *rcCompleteFlag) {
-        if ([rcCompleteFlag isEqualToNumber:[NSNumber numberWithBool:YES]]){
+        if ([rcCompleteFlag isEqualToNumber:@YES]){
             // Upload complete
             NSLog(@"Insert image into blob storage successful");
-            self.rcImageUploadCompleted = [NSNumber numberWithBool:YES];
+            self.rcImageUploadCompleted = @YES;
+            
             if ([self.rcDataUploadCompleted isEqualToNumber:@YES]){
-                NSLog(@"Upload is completed, dismissing add view");
-                // Return to main menu, pop view controller in main thread
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.navigationController popViewControllerAnimated:YES];
-                });
+                // Increment index and pop current view
+                [self updateDictionaryAndExit];
             } else {
                 NSLog(@"Data table upload is not completed, waiting...");
             }
         } else {
             // Upload failed
             NSLog(@"Insert image into blob storage failed");
-            self.rcImageUploadCompleted = [NSNumber numberWithBool:NO];
+            self.rcImageUploadCompleted = @NO;
         }
     }];
     NSLog(@"Image uploaded");
@@ -110,17 +112,13 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
     
     // Insert Data collection into table name:rcMainDataTable
     [self.rcDataConnection InsertDataIntoTable:@"rcMainDataTable" rcCallback:^(NSNumber *rcCompleteFlag) {
-        if ([rcCompleteFlag isEqualToNumber:[NSNumber numberWithBool:YES]]){
+        if ([rcCompleteFlag isEqualToNumber:@YES]){
             // Upload complete
             NSLog(@"Insert data into table successful");
-            self.rcDataUploadCompleted = [NSNumber numberWithBool:YES];
+            self.rcDataUploadCompleted = @YES;
             if ([self.rcImageUploadCompleted isEqualToNumber:@YES]){
-                // Debug
-                NSLog(@"Upload is completed, dismissing add view");
-                // Return to main menu, pop view controller in main thread
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.navigationController popViewControllerAnimated:YES];
-                });
+                // Increment index and pop current view
+                [self updateDictionaryAndExit];
             } else {
                 // Debug
                 NSLog(@"Image upload is not completed, waiting...");
@@ -128,13 +126,13 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
         } else {
             // Upload failed, issue a warnning
             NSLog(@"Insert data into table failed");
-            self.rcDataUploadCompleted = [NSNumber numberWithBool:NO];
+            self.rcDataUploadCompleted = @NO;
         }
         
     }];
 }
 
-// Grab image from blobName inside blobCotainer and a UIImageView to this image
+// Download image from blobName inside blobCotainer and set UIImageView to this image
 - (void)getImagefromblob:(NSString*)blobName blobContainer:(AZSCloudBlobContainer*)blobContainer{
     // Create a blob
     AZSCloudBlockBlob *blockblob = [blobContainer blockBlobReferenceFromName:blobName];
@@ -153,14 +151,33 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
     }];
 }
 
+- (void) updateDictionaryAndExit{
+    // Debug
+    NSLog(@"Upload is completed, increment sequence number and dismissing add view");
+    
+    // Increment the sequence number
+    [self.rcDataConnection incrementSequenceNumberWithDictionary:self.rcDownloadedDictionary];
+    
+    // Return to main menu, pop view controller in main thread
+    dispatch_async(dispatch_get_main_queue(), ^{
+        // Leave this view
+        [self.navigationController popViewControllerAnimated:YES];
+        
+    });
+}
+
 // Dismiss keyboard when return pressed in textfields
 - (BOOL) textFieldShouldReturn:(UITextField *)textField{
     [textField resignFirstResponder];
     return NO;
 }
 
+// Hide keyboard when a single tap occured
 - (void) dismissKeybaord{
+    // Hide keyboard for comment box
     [self.TextView_Comment resignFirstResponder];
+    // Hide keyboard for restaurant textbox
+    [self.TextField_RestaurantName resignFirstResponder];
 }
 
 - (IBAction)TouchUpInside_LikeButton:(id)sender {
@@ -179,32 +196,3 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
     self.rcLikeStatus = @NO;
 }
 @end
-
-// BlobName has to be all lowercase, letters or numbers
-void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer *blobContainer){
-    UIImage *myimage1 = [UIImage imageNamed:imageName];
-    NSData *imgdata = UIImagePNGRepresentation(myimage1);
-    AZSCloudBlockBlob *imageblockblob = [blobContainer blockBlobReferenceFromName:blobName];
-    [imageblockblob uploadFromData:imgdata completionHandler:^(NSError *error) {
-        if (error){
-            NSLog(@"Error when uploading blob\n %@", error);
-        } else {
-            NSLog(@"Successfully uploaded %@", imageName);
-        }
-    }];
-}
-
-// Add a text string to a blob
-void AddTextBlob(NSString *text, NSString *blobName, AZSCloudBlobContainer *blobContainer){
-    // Create the blob
-    AZSCloudBlockBlob *blockblob = [blobContainer blockBlobReferenceFromName:blobName];
-    
-    //Upload blob
-    [blockblob uploadFromText:text completionHandler:^(NSError * _Nullable error) {
-        if (error){
-            NSLog(@"Error when uploading blob\n %@", error);
-        } else {
-            NSLog(@"Successfully uploaded: %@", text);
-        }
-    }];
-}

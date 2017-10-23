@@ -19,6 +19,7 @@
 		69A080081F5E2B2600651946 /* IMAG3522.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 69A080071F5E2B2600651946 /* IMAG3522.jpg */; };
 		69A0800A1F62981D00651946 /* CameraBackground.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 69A080091F62981D00651946 /* CameraBackground.jpg */; };
 		69A0800D1F63EB0600651946 /* MainMenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 69A0800C1F63EB0600651946 /* MainMenuButton.m */; };
+		69C54F811F9AE13900C4005F /* SlideOutMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C54F801F9AE13900C4005F /* SlideOutMenuViewController.m */; };
 		69C9315A1F502006007696BA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C931591F502006007696BA /* main.m */; };
 		69C9315D1F502006007696BA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C9315C1F502006007696BA /* AppDelegate.m */; };
 		69C931601F502006007696BA /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C9315F1F502006007696BA /* ViewController.m */; };
@@ -72,8 +73,10 @@
 		69A080091F62981D00651946 /* CameraBackground.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = CameraBackground.jpg; sourceTree = "<group>"; };
 		69A0800B1F63EB0600651946 /* MainMenuButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenuButton.h; sourceTree = "<group>"; };
 		69A0800C1F63EB0600651946 /* MainMenuButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainMenuButton.m; sourceTree = "<group>"; };
-		69C54F7B1F8C8E3F00C4005F /* ss_icon3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ss_icon3x.png; sourceTree = "<group>"; };
-		69C54F7C1F8C8E3F00C4005F /* ss_icon2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ss_icon2x.png; sourceTree = "<group>"; };
+		69C54F7D1F8F3FCF00C4005F /* ss_icon3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ss_icon3x.png; sourceTree = "<group>"; };
+		69C54F7E1F8F3FCF00C4005F /* ss_icon2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ss_icon2x.png; sourceTree = "<group>"; };
+		69C54F7F1F9AE13900C4005F /* SlideOutMenuViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SlideOutMenuViewController.h; sourceTree = "<group>"; };
+		69C54F801F9AE13900C4005F /* SlideOutMenuViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SlideOutMenuViewController.m; sourceTree = "<group>"; };
 		69C931551F502006007696BA /* Sauce&Sugar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sauce&Sugar.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		69C931591F502006007696BA /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		69C9315B1F502006007696BA /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -158,8 +161,8 @@
 		69A080021F5E2AD900651946 /* ImagesResource */ = {
 			isa = PBXGroup;
 			children = (
-				69C54F7C1F8C8E3F00C4005F /* ss_icon2x.png */,
-				69C54F7B1F8C8E3F00C4005F /* ss_icon3x.png */,
+				69C54F7E1F8F3FCF00C4005F /* ss_icon2x.png */,
+				69C54F7D1F8F3FCF00C4005F /* ss_icon3x.png */,
 				69C931A91F5374E9007696BA /* abc.png */,
 				69A080091F62981D00651946 /* CameraBackground.jpg */,
 				69A080031F5E2AEE00651946 /* IMAG3191.jpg */,
@@ -264,6 +267,8 @@
 				69DE29091F7865D700B0527E /* AddUserViewController.m */,
 				6938F8A01F84AA120079C555 /* ShowItemsTableViewController.h */,
 				6938F8A11F84AA120079C555 /* ShowItemsTableViewController.m */,
+				69C54F7F1F9AE13900C4005F /* SlideOutMenuViewController.h */,
+				69C54F801F9AE13900C4005F /* SlideOutMenuViewController.m */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -417,6 +422,7 @@
 				69A0800D1F63EB0600651946 /* MainMenuButton.m in Sources */,
 				69C931A81F537272007696BA /* LocationDataController.m in Sources */,
 				69C931601F502006007696BA /* ViewController.m in Sources */,
+				69C54F811F9AE13900C4005F /* SlideOutMenuViewController.m in Sources */,
 				69C931A21F53721F007696BA /* MapViewController.m in Sources */,
 				69DE29071F74CA8200B0527E /* rcAzureDataTable.m in Sources */,
 				6938F8A21F84AA130079C555 /* ShowItemsTableViewController.m in Sources */,

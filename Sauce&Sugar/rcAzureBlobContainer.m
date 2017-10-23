@@ -33,12 +33,12 @@
             // Show error message
             NSLog(@"Error when creating account");
             // Set flag
-            self.connectionEstablishedFlag = @YES;
+            self.connectionEstablishedFlag = @NO;
         } else {
             // Show log message
             NSLog(@"Azure Cloud Storage account initialized");
             // Set flag
-            self.connectionEstablishedFlag = @NO;
+            self.connectionEstablishedFlag = @YES;
         }
         
     }
@@ -47,8 +47,8 @@
 
 // Connect to a container with username. This function will setup rcBlobClient and rcBlobContainer
 - (void) connectToContainerWithName:(NSString*)username{
-    if (self.connectionEstablishedFlag &&
-        [self.containerCreatedFlag integerValue] == 0){
+    if ([self.connectionEstablishedFlag boolValue] &&
+        [self.containerCreatedFlag boolValue] == 0){
         // Debug
         NSLog(@"Connecting to container: %@", username);
         
@@ -69,6 +69,7 @@
             NSLog(@"Error occured while connecting to container");
         }
     } else {
+        NSLog(@"Container is already existing...");
         // Set flag
         self.containerCreatedFlag = @NO;
     }
@@ -77,7 +78,7 @@
 // Create a container with containerName
 - (void) createImageWithBlobContainer:(NSString*)containerName BlobName:(NSString*)BlobName ImageData:(UIImage*)ImageData rcCallback:(void(^)(NSNumber *rcCompleteFlag))rcCallback{
 
-    if (self.connectionEstablishedFlag){
+    if ([self.connectionEstablishedFlag boolValue] == 0){
         // Show error message then quit
         NSLog(@"Error when creating account");
     } else {
@@ -100,7 +101,7 @@
                         // View controller should check for NO and issue a warning
                         rcCallback([NSNumber numberWithBool:NO]);
                     } else {
-                        NSLog(@"Successfully uploaded %@", BlobName);
+                        NSLog(@"Successfully uploaded image %@", BlobName);
                         // View controller should check for YES to dismiss itself
                         rcCallback([NSNumber numberWithBool:YES]);
                     }
@@ -122,7 +123,7 @@
     // Perform blob download
     [blockblob downloadToDataWithCompletionHandler:^(NSError * _Nullable error, NSData * _Nullable downloadedData) {
         if (error){
-            NSLog(@"Error when downloading image at sequence number : %@ \n%@", sequenceNumber, error);
+            NSLog(@"Error when downloading image at sequence number : %@", sequenceNumber);
         } else {
             NSLog(@"Download successful, SN: %@", sequenceNumber);
             // Transform from NSData to UIImage type

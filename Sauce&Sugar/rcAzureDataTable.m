@@ -101,7 +101,7 @@
             NSLog(@"Count of result.item array: %@", temp);
             
             if ([result.items count] == 1){
-                // Pass the NSDictionary* back to callback function
+                // Pass the NSDictionary* stored in NSArray back to callback function
                 returnCallback([result.items objectAtIndex:0]);
             } else if ([result.items count] > 1){
                 // More than one entry is downloaded, something must be wrong as there shouldn't have two exact same user

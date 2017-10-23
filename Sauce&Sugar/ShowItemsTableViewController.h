@@ -26,6 +26,7 @@
 
 // A array to store all data downloaded
 @property NSArray *userDataInfo_NSArray;
+@property UIView *overlayUIView;
 @property NSMutableArray<rcShowItemsTableViewCell*> *rcCellMutableArray;
 
 @end

@@ -16,6 +16,28 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    // Set up overlay UIView
+    self.overlayUIView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    self.overlayUIView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.3];
+    
+    // Display an activity indicator to alert user that download is in progress
+    UIActivityIndicatorView *rcSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:(UIActivityIndicatorViewStyle)UIActivityIndicatorViewStyleWhiteLarge];
+    
+    // Setup spinner
+    [rcSpinner setFrame:self.view.frame];
+    [rcSpinner.layer setBackgroundColor:[[UIColor colorWithWhite:0.0 alpha:0.3] CGColor]];
+    //rcSpinner.center = CGPointMake([[UIScreen mainScreen] bounds].size.width / 2.0f, [[UIScreen mainScreen] bounds].size.height/ 2.0f);
+    rcSpinner.center = self.overlayUIView.center;
+    rcSpinner.hidesWhenStopped = YES;
+    
+    // Add subview
+    [self.overlayUIView addSubview:rcSpinner];
+    
+    // Add spinner subview and start spinner
+    //[self.view addSubview:rcSpinner];
+    [rcSpinner startAnimating];
+    [self.navigationController.view addSubview:self.overlayUIView];
+    
     // get current username
     NSString *currentUser = [(AppDelegate*)[[UIApplication sharedApplication] delegate] currentUsername];
     // stop tableview from loading by setting delegate and datasource to null
@@ -55,6 +77,10 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     NSLog(@"SN %@ Image setting complete", sequenceNum);
                     rcCell.rcCellRightImage.image = rcReturnedImage;
+                    
+                    // Stop the spinner from spinning
+                    [rcSpinner stopAnimating];
+                    [self.overlayUIView removeFromSuperview];
                 });
                 
             }];
@@ -62,7 +88,6 @@
             [self.rcCellMutableArray addObject:rcCell];
             NSLog(@"added an item to cell mutable array, size: %lu", (unsigned long)[self.rcCellMutableArray count]);
         }
-        
         
         // After data finished downloading, enable tableview to reload by setting its delegate and datasource to self
         self.rcTableView.delegate = self;

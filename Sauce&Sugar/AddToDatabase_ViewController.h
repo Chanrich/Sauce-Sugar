@@ -19,6 +19,7 @@
 @property (strong, nonatomic) IBOutlet UITextView *TextView_Comment;
 
 // UI elements
+@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *rcActivityIndicator;
 @property (strong, nonatomic) IBOutlet UIButton *Button_AddDatabase;
 @property (strong, nonatomic) IBOutlet UIImageView *MainImageView;
 @property (weak, nonatomic) IBOutlet UIButton *Button_Like;
@@ -37,7 +38,8 @@
 @property NSNumber* rcUniqueNumber;
 // Store like status
 @property NSNumber *rcLikeStatus;
-
+// Store returned dictionary
+@property NSDictionary *rcDownloadedDictionary;
 
 // Rating Buttons events
 - (IBAction)TouchUpInside_LikeButton:(id)sender;
