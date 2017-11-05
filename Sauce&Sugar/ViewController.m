@@ -89,7 +89,7 @@
     UIImage *compressedImage = [self resizeImage:chosenImage];
     [picker dismissViewControllerAnimated:YES completion:NULL];
     // Start a view to add information to database
-    UIStoryboard *rcStoryBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UIStoryboard *rcStoryBoard = [UIStoryboard storyboardWithName:@"insertToDatabase" bundle:nil];
     // Get a reference to the view
     AddToDatabase_ViewController *vc = [rcStoryBoard instantiateViewControllerWithIdentifier:@"AddToDataBaseViewController"];
     // Load image into the view's property
@@ -220,7 +220,7 @@
 - (UIView *) getSlideOutMenuView{
     if (_rcSlideOutMenuView == nil){
         // Get storyboard
-        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        UIStoryboard *sb = [UIStoryboard storyboardWithName:@"slideMenu" bundle:nil];
         // Get the view controller from storyboard
         self.rcSlideOutMenuView = (SlideOutMenuViewController*)[sb instantiateViewControllerWithIdentifier:@"SlideOutMenuID"];
         self.rcSlideOutMenuView.view.tag = SLIDEOUT_VIEW_TAG;
@@ -229,10 +229,9 @@
         // Add slide out menu view to the fullscreen tabBarController
         [self.tabBarController.view.superview addSubview:self.rcSlideOutMenuView.view];
         
-        
-        [self.tabBarController addChildViewController:self.rcSlideOutMenuView];
         [self.rcSlideOutMenuView didMoveToParentViewController:self.tabBarController];
         
+        // Set location of the slide out view to origin and size to fullscreen
         self.rcSlideOutMenuView.view.frame = CGRectMake(0, 0, self.view.frame.size.width , self.view.frame.size.height);
         
         

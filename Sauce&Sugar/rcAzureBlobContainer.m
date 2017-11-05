@@ -40,6 +40,8 @@
             // Set flag
             self.connectionEstablishedFlag = @YES;
         }
+        // Set container created flag to false
+        self.containerCreatedFlag = @NO;
         
     }
     return self;
@@ -47,16 +49,16 @@
 
 // Connect to a container with username. This function will setup rcBlobClient and rcBlobContainer
 - (void) connectToContainerWithName:(NSString*)username{
-    if ([self.connectionEstablishedFlag boolValue] &&
-        [self.containerCreatedFlag boolValue] == 0){
+    if (([self.connectionEstablishedFlag boolValue] == 1) &&
+        ([self.containerCreatedFlag boolValue] == 0)){
         // Debug
         NSLog(@"Connecting to container: %@", username);
         
         // Create a blob client object
         self.rcBlobClient = [self.account getBlobClient];
         
-        // Create a container
-        self.rcBlobContainer = [self.rcBlobClient containerReferenceFromName:username];
+        // Create a container, container name must be lower case
+        self.rcBlobContainer = [self.rcBlobClient containerReferenceFromName:[username lowercaseString]];
         
         if (self.rcBlobClient != nil &&
             self.rcBlobContainer != nil){
@@ -75,15 +77,14 @@
     }
 }
 
-// Create a container with containerName
-- (void) createImageWithBlobContainer:(NSString*)containerName BlobName:(NSString*)BlobName ImageData:(UIImage*)ImageData rcCallback:(void(^)(NSNumber *rcCompleteFlag))rcCallback{
-
+// Create a container with callback
+- (void) createImageWithBlobContainerSetCallback:(void(^)(NSNumber *rcCompleteFlag))rcCallback{
+    // Make sure blob connection is established
     if ([self.connectionEstablishedFlag boolValue] == 0){
         // Show error message then quit
-        NSLog(@"Error when creating account");
+        NSLog(@"Error when establishing connection");
     } else {
         // No Error
-        
         [self.rcBlobContainer createContainerIfNotExistsWithAccessType:AZSContainerPublicAccessTypeContainer requestOptions:[self.rcBlobClient defaultRequestOptions] operationContext:nil completionHandler:^(NSError * _Nullable error, BOOL exist) {
             if (error){
                 NSLog(@"Error when creating container:\n %@", error);
@@ -93,24 +94,27 @@
                 } else {
                     NSLog(@"Container created");
                 }
-                NSData *imgdata = UIImagePNGRepresentation(ImageData);
-                AZSCloudBlockBlob *imageblockblob = [self.rcBlobContainer blockBlobReferenceFromName:BlobName];
+                //Convert UI image to NSData
+                NSData *imgdata = UIImagePNGRepresentation(self.rcImageHolder);
+
+                // Create a blob reference
+                AZSCloudBlockBlob *imageblockblob = [self.rcBlobContainer          blockBlobReferenceFromName:self.uniqueSequenceNumber];
+                
+                // Upload data to Azure Blob Storage
                 [imageblockblob uploadFromData:imgdata completionHandler:^(NSError *error) {
                     if (error){
                         NSLog(@"Error when uploading blob\n %@", error);
                         // View controller should check for NO and issue a warning
                         rcCallback([NSNumber numberWithBool:NO]);
                     } else {
-                        NSLog(@"Successfully uploaded image %@", BlobName);
+                        NSLog(@"Successfully uploaded image");
                         // View controller should check for YES to dismiss itself
                         rcCallback([NSNumber numberWithBool:YES]);
                     }
                 }];
-                            }
+            }
         }];
     }
-    
-    
 }
 
 // Download single image with name sequenceNumber from a User and return the image in the callback function as a UIImage
@@ -136,5 +140,13 @@
     }];
 }
 
+
+- (void)insertUniqueSequenceNumber:(NSString *)seqnum {
+    self.uniqueSequenceNumber = [NSString stringWithString:seqnum];
+}
+
+- (void)insertImage:(UIImage *)img { 
+    self.rcImageHolder = img;
+}
 
 @end

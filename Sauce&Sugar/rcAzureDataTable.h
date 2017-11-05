@@ -12,33 +12,55 @@
 
 // Declare data object that will be stored into the table
 @property (strong, nonatomic) MSTable *rcMSTable;
-@property (strong, nonatomic) NSDictionary *rcDataDictionary;
+@property (strong, nonatomic) NSMutableDictionary *rcDataDictionary;
+@property (strong, nonatomic) NSMutableDictionary *rcDataDictionaryForUserTable;
 // Add Microsoft client to connect to Azure
 @property (strong, nonatomic) MSClient *client;
 
-// Define custom functions
-// Add a new entry into table
+/* =========================== Usage Description ===========================
+ This is a singleton module for connection to Azure mobile app services
+ 1. User should call getUniqueNumber_WithUsername to obtain a unique sequence number that will be used as image index for blob storage. The index will match up to an item in blob
+ 
+ 2. Call insert method to store data into internal dictionary first
+      The table should store 4 kinds of data:
+      a. restaurant name
+      b. foodType
+      c. sequenceNumber
+      d. username
+ 3. Store data into rcMainDataTable, call function InsertDataIntoTable to upload stored dictionary data to Azure
+ ============================================================    */
+
+
+// ========= Data upload / download =========
+// Upload data into specified table:
+// 1. rcMainDataTable : Contain all data related information
+// 2. rcUserDataInfo : Contain all user related information
 - (void) InsertDataIntoTable:(NSString*)tableName rcCallback:(void(^)(NSNumber *rcCompleteFlag))rcCallback;
-
-// Store data into the class
-- (void) prepareFoodData:(NSString*)foodname resName:(NSString*)resName comment:(NSString*)rcComment username:(NSString*)username sequenceNumber:(NSNumber*)sequenceNumber rcLike:(NSNumber*)rcLike;
-
-// Prepare userdata
-- (void) prepareUserData:(NSString*)username;
-
-// Update an entry into the table, retrieve the information first and then update that entry//
-- (void) incrementSequenceNumberWithDictionary:(NSDictionary*)myDict;
-
-// getUniqueID_WithCallback will make the request and return the unique serial number in a NSArray* to the callback function. Caller will have to create a block to catch the return value
-- (void) getUniqueNumber_WithUsername:(NSString*)rcUsername  Callback:(void(^)(NSDictionary *callbackItem)) returnCallback;
-
 // Request all entries from a single user, return a NSArray of dictionaries in callback
 - (void) getDatafromUser:(NSString*)rcUsername Callback:(void(^)(NSArray *callbackItem)) returnCallback;
+// =============================================
+
+// ======= Insert Data Functions  ==========
+
+- (void) insertSequenceNumber:(NSString*)sequenceNumber username:(NSString*)username;
+- (void) insertTypeData:(NSString*)foodType;
+- (void) insertResNameData:(NSString*)resName;
+
+// Setup userdata to prepare for insertion to table rcUserDataInfo
+// Still need to call upload method
+- (void) prepareUserData:(NSString*)username;
+// =============================================
+
+// ======= Sequence Number Functions  ==========
+// getUniqueID_WithCallback will make the request and return the unique serial number in a NSArray* to the callback function. Caller will have to create a block to catch the return value
+- (void) getUniqueNumber_WithUsername:(NSString*)rcUsername  Callback:(void(^)(NSDictionary *callbackItem)) returnCallback;
+// Update an entry into the table, retrieve the information first and then update that entry//
+- (void) incrementSequenceNumberWithDictionary:(NSDictionary*)myDict Callback:(void(^)(NSNumber* completeFlag)) returnCallback;
+// ==============================================
+
 
 // Override init to initialize client
 - (id) init;
 
 + (instancetype) sharedDataTable;
-
-
 @end

@@ -7,7 +7,7 @@
 //
 
 #import "rcAzureDataTable.h"
-
+#define MAX_REQUIREMENT 4
 @implementation rcAzureDataTable
 
 // Create a singleton
@@ -27,6 +27,9 @@
         // Setup Microsoft Azure Connection
         NSLog(@"Init started: MSClient initialized");
         self.client = [MSClient clientWithApplicationURLString:@"https://saucensugarmobileapp.azurewebsites.net"];
+        // Initialize mutable dictionary to store data entries
+        self.rcDataDictionary = [[NSMutableDictionary alloc] init];
+        self.rcDataDictionaryForUserTable = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -49,35 +52,17 @@
     }];
 }
 
-// Store data into the class
-- (void) prepareFoodData:(NSString*)foodname resName:(NSString*)resName comment:(NSString*)rcComment username:(NSString*)username sequenceNumber:(NSNumber*)sequenceNumber rcLike:(NSNumber*)rcLike{
-    // Collect data into NSDictionary object.
-    // NSDictioanry format: NSDictionary *dict = @{ key : value, key2 : value2}
-    //    Object descriptions:
-    //    1.    Name of the food
-    //    2.    Name of the restaurant (if not yet exist, option to add restaurant appears)
-    //    3.    Photo
-    //    4.    Rating (Binary option: Good or bad)
-    //    5.    Comments
-    //    6.    Price range
-    self.rcDataDictionary = @{ @"fName" : foodname,
-                               @"rName" : resName,
-                               @"comments" : rcComment,
-                               @"userName" : username,
-                               @"sequence" : sequenceNumber,
-                               @"like" : rcLike
-                               };
-}
-
-// Prepare userdata
+// Create a new user and set its seqNum
 - (void) prepareUserData:(NSString*)username{
     // Prepare object for integer since NSDictioanry only accepts object
     NSNumber *seqNum = [NSNumber numberWithInt:0];
+
+    // Clear mutable dictionary
+    [self.rcDataDictionaryForUserTable removeAllObjects];
     
-    // For now, only prepare username
-    self.rcDataDictionary = @{ @"Username" : username,
-                               @"SEQUENCENUMBER" : seqNum
-                               };
+    // Insert data
+    [self.rcDataDictionaryForUserTable setObject:username forKey:@"USERNAME"];
+    [self.rcDataDictionaryForUserTable setObject:seqNum forKey:@"SequenceNumber"];
 }
 
 // getUniqueID_WithCallback will make the request and return the unique serial number in a NSArray* to the callback function. Caller will have to create a block to catch the return value
@@ -91,15 +76,8 @@
     // Read using query
     [itemTable readWithQueryString:rcSelectUser completion:^(MSQueryResult * _Nullable result, NSError * _Nullable error) {
         if (error){
-            NSLog(@"Unique number read error!");
-            // Pass a null back to callback, callback should check this for error
-            returnCallback(nil);
+            NSLog(@"Cannot get unique sequence number from server... Abort!");
         } else {
-
-            // Debug
-            NSNumber *temp = [NSNumber numberWithUnsignedLong:[result.items count]];
-            NSLog(@"Count of result.item array: %@", temp);
-            
             if ([result.items count] == 1){
                 // Pass the NSDictionary* stored in NSArray back to callback function
                 returnCallback([result.items objectAtIndex:0]);
@@ -146,7 +124,7 @@
 }
 
 // Update an entry into the table, retrieve the information first and then update that entry
-- (void) incrementSequenceNumberWithDictionary:(NSDictionary*)myDict{
+- (void) incrementSequenceNumberWithDictionary:(NSDictionary*)myDict Callback:(void(^)(NSNumber* completeFlag)) returnCallback{
     // Return a MSTable instance with tableName
     MSTable *itemTable = [self.client tableWithName:@"rcUserDataInfo"];
     
@@ -160,9 +138,36 @@
     [itemTable update:myDict completion:^(NSDictionary * _Nullable item, NSError * _Nullable error) {
         if (error){
             NSLog(@"Error when updating dictionary");
+            returnCallback(@NO);
         } else {
             NSLog(@"Successfully updated dictionary");
+            returnCallback(@YES);
         }
     }];
 }
+
+
+// Collect data into NSDictionary object.
+// NSDictioanry format: NSDictionary *dict = @{ key : value, key2 : value2}
+//    Object descriptions:
+//    1.    Name of the restaurant (if not yet exist, option to add restaurant appears)
+//    2.    Username
+//    3.    Photo
+
+- (void)insertResNameData:(NSString *)resName {
+    // Insert restaurant name into mutable dictionary
+    [self.rcDataDictionary setObject:resName forKey:@"rName"];
+}
+
+- (void)insertTypeData:(NSString *)foodType { 
+    // Insert food type into mutable dictionary
+    [self.rcDataDictionary setObject:foodType forKey:@"foodType"];
+}
+
+- (void)insertSequenceNumber:(NSString *)sequenceNumber username:(NSString *)username { 
+    // Insert username and sequence number (image reference) into mutable dictionary
+    [self.rcDataDictionary setObject:username forKey:@"userName"];
+    [self.rcDataDictionary setObject:sequenceNumber forKey:@"sequence"];
+}
+
 @end
