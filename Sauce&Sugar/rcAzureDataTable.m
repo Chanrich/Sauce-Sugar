@@ -92,16 +92,22 @@
     }];
 }
 
-// Request all entries from a single user, return a NSArray of dictionaries in callback
+// Make a query request for a single user, returns a NSArray of dictionaries in callback
 - (void) getDatafromUser:(NSString*)rcUsername Callback:(void(^)(NSArray *callbackItem)) returnCallback{
     // Return a MSTable instance with tableName
     MSTable *itemTable = [self.client tableWithName:@"rcMainDataTable"];
     
-    // Create a predicate to select the user
-    NSString *rcSelectUser = [NSString stringWithFormat:@"USERNAME=%@", rcUsername];
+    // Create a filter for
+    // 1. Username
+    // 2. Foodtype
+    NSPredicate *dataFilter = [NSPredicate predicateWithFormat:
+                               @"(USERNAME=%@)AND(foodType!=NULL)", rcUsername];
     
-    // Read using query
-    [itemTable readWithQueryString:rcSelectUser completion:^(MSQueryResult * _Nullable result, NSError * _Nullable error) {
+    // Prepare a MSQuery object with filter dataFilter
+    MSQuery *rcQuery = [itemTable queryWithPredicate:dataFilter];
+    
+    // Perform a read on the MSquery object, the read will return maximum 50 entries
+    [rcQuery readWithCompletion:^(MSQueryResult * _Nullable result, NSError * _Nullable error) {
         if (error){
             NSLog(@"Data download error!");
             // Pass a null back to callback, callback should check this for error
@@ -110,7 +116,7 @@
             // Debug
             NSNumber *temp = [NSNumber numberWithUnsignedLong:[result.items count]];
             NSLog(@"Count of result.item array: %@", temp);
-
+            
             if ([result.items count] > 0){
                 NSLog(@"Returning data to callback function");
                 // Pass the NSDictionary* back to callback function
@@ -121,6 +127,7 @@
             }
         }
     }];
+
 }
 
 // Update an entry into the table, retrieve the information first and then update that entry

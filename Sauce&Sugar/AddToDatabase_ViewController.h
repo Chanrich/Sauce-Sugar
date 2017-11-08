@@ -11,15 +11,17 @@
 #import "rcAzureDataTable.h"
 #import "rcAzureBlobContainer.h"
 #import "LoadingScreenViewController.h"
+#import "UIView+UIView_ViewAnimations.h"
 
 @interface AddToDatabase_ViewController : UIViewController <UITextFieldDelegate>
 
+
+// ============== UI Outlets  ===============
 // Text collection
 @property (strong, nonatomic) IBOutlet UITextField *TextField_RestaurantName;
-
 // UI elements
 @property (strong, nonatomic) IBOutlet UIImageView *MainImageView;
-
+// ==========================================
 
 // ============ Custom Properties ==============
 // A property to hold image being passed in from presenting view controller

@@ -29,6 +29,15 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    // Set all textfield and image view to transparent so they can be faded in later
+    [self.TextField_RestaurantName setAlpha:0];
+    [self.MainImageView setAlpha:0];
+    
+    // Perform animation to fade in restaurant textfield first
+    [self.TextField_RestaurantName viewFadeInWithCompletion:^(BOOL rcFinished) {
+        // Then fade in image view
+        [self.MainImageView viewFadeInWithCompletion:nil];
+    }];
     
     // get current username
     self.currentUsername = [(AppDelegate*)[[UIApplication sharedApplication] delegate] currentUsername];
@@ -107,5 +116,10 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
     [self.TextField_RestaurantName resignFirstResponder];
 }
 
+// Hide keyboard when return is pressed
+- (BOOL) textFieldShouldReturn:(UITextField *)textField{
+    [textField resignFirstResponder];
+    return YES;
+}
 
 @end

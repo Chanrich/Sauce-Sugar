@@ -60,13 +60,17 @@
         // Store the array as class property
         self.userDataInfo_NSArray = callbackItem;
         
+        // Check for first read
+        static BOOL ImageIsReturned;
+        ImageIsReturned = NO;
         // Fast enumerate through returned array
         for (NSDictionary* returnDict in callbackItem){
             // Premade the cell that are going to be displayed in tableview
             rcShowItemsTableViewCell *rcCell = [self.rcTableView dequeueReusableCellWithIdentifier:@"rcShowItemCell"];
             
+
             // Set cell properties
-            rcCell.rcMainCellLabel.text = [returnDict objectForKey:@"fName"];
+            rcCell.rcMainCellLabel.text = [returnDict objectForKey:@"rName"];
             rcCell.rcSecondCellLabel.text = [returnDict objectForKey:@"rName"];
             
             // Get sequence number
@@ -75,12 +79,19 @@
             [self.rcBlobContainer getImagefromBlobFromUser:currentUser sequenceNumber:sequenceNum rcCallback:^(UIImage *rcReturnedImage) {
                 // Get the returned UIImage into the cell in main thread
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    NSLog(@"SN %@ Image setting complete", sequenceNum);
+                    // Display image in current cell
                     rcCell.rcCellRightImage.image = rcReturnedImage;
+                    NSLog(@"SN:%@ Image setting complete", sequenceNum);
                     
-                    // Stop the spinner from spinning
-                    [rcSpinner stopAnimating];
-                    [self.overlayUIView removeFromSuperview];
+                    
+                    if (ImageIsReturned == NO){
+                        // Stop the spinner from spinning
+                        [rcSpinner stopAnimating];
+                        [self.overlayUIView removeFromSuperview];
+                        // Set flag to Yes
+                        ImageIsReturned = YES;
+                    }
+
                 });
                 
             }];

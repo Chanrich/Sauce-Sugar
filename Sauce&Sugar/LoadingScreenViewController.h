@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "rcAzureDataTable.h"
 #import "rcAzureBlobContainer.h"
+#import "UIView+UIView_ViewAnimations.h"
 @interface LoadingScreenViewController : UIViewController
 
 // ============ Custom Properties ==============
@@ -27,5 +28,6 @@
 @property (strong, nonatomic) IBOutlet UILabel *statusLabel;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *statusIndicator;
 @property (strong, nonatomic) IBOutlet UIProgressView *progressBar;
+@property (strong, nonatomic) IBOutlet UIImageView *checkedImage;
 
 @end

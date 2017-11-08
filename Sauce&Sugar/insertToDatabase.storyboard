@@ -202,21 +202,26 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="color" red="0.5796595982142857" green="0.58197544642857146" blue="0.81210937500000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </activityIndicatorView>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Ubd-9U-beB">
+                                <rect key="frame" x="63" y="479" width="247" height="2"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </progressView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="GreenCheck.png" translatesAutoresizingMaskIntoConstraints="NO" id="wxN-kn-rjs">
+                                <rect key="frame" x="112" y="275" width="150" height="150"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g6L-fY-qbc">
-                                <rect key="frame" x="63" y="246" width="248" height="21"/>
+                                <rect key="frame" x="63" y="202" width="248" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Ubd-9U-beB">
-                                <rect key="frame" x="64" y="429" width="247" height="2"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </progressView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </view>
                     <connections>
+                        <outlet property="checkedImage" destination="wxN-kn-rjs" id="xm6-ew-JTZ"/>
                         <outlet property="progressBar" destination="Ubd-9U-beB" id="U5c-BQ-s9U"/>
                         <outlet property="statusIndicator" destination="wQv-bU-KJR" id="Cyw-e8-Uhb"/>
                         <outlet property="statusLabel" destination="g6L-fY-qbc" id="C2k-rF-gLK"/>
@@ -227,4 +232,7 @@
             <point key="canvasLocation" x="3573.5999999999999" y="912.5937031484259"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="GreenCheck.png" width="1139" height="1139"/>
+    </resources>
 </document>

@@ -34,7 +34,6 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     // indexPath.row is the currently selected row, use it to access menu items
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     NSString* typeName;
     switch (indexPath.row) {

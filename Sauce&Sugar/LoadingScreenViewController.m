@@ -26,6 +26,10 @@
     
     // get current username
     self.currentUsername = [(AppDelegate*)[[UIApplication sharedApplication] delegate] currentUsername];
+    // Hide navigation controller's back button
+    self.navigationItem.hidesBackButton = YES;
+    // Hide green check image
+    [self.checkedImage setAlpha:0];
     
     // Get singleton files
     // Initialize a singleton instance for Azure Blob
@@ -95,19 +99,26 @@
                                 // Sequence number update completed, push updates to UI view elements and then call uploadCompleted function
                                 dispatch_async(dispatch_get_main_queue(), ^{
                                     // Fade out status indicator
-                                    [UIView animateWithDuration:0.4 animations:^{
-                                        self.statusIndicator.alpha = 0;
-                                    }];
+                                    [self.statusIndicator viewFadeOutWithCompletion:nil];
+                                    
+                                    // Fade in green check image
+                                    [self.checkedImage viewFadeInWithCompletion:nil];
                                     // Update UI elements
                                     [self.progressBar setProgress:1.0 animated:YES];
                                     self.statusLabel.text = @"Done";
                                     [self.statusIndicator stopAnimating];
+                                    
+                                    // Wait for few seconds and then return to main menu
+                                    [self performSelector:@selector(returnToMainMenu) withObject:nil afterDelay:2];
                                 });
                             } else {
                                 // Sequence number update failed
                                 dispatch_async(dispatch_get_main_queue(), ^{
                                     [self.progressBar setProgress:0 animated:YES];
                                     self.statusLabel.text = @"Sequence number update failed";
+                                    
+                                    // Wait for few seconds and then return to main menu
+                                    [self performSelector:@selector(returnToMainMenu) withObject:nil afterDelay:2];
                                 });
                             }
                         }];
@@ -138,11 +149,10 @@
     // Dispose of any resources that can be recreated.
 }
 
-// This method will be called when all upload actions are completed
-- (void) uploadCompleted{
-    
+// This function will be called when everything completes to return to main menu
+- (void) returnToMainMenu{
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
-
 /*
 #pragma mark - Navigation
 
