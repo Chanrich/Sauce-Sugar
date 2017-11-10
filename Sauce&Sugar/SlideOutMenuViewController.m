@@ -12,7 +12,11 @@
 
 @end
 
-@implementation SlideOutMenuViewController
+@implementation SlideOutMenuViewController {
+    CreditsViewController *creditVC;
+    UIStoryboard *sb;
+
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -42,6 +46,7 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     // indexPath.row is the currently selected row, use it to access menu items
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    NSLog(@"Selected indexPath.row: %ld", (long)indexPath.row);
     switch (indexPath.row) {
         case 0:
             NSLog(@"Selected Empty Space, row: %ld", (long)indexPath.row);
@@ -51,8 +56,27 @@
             break;
         case 2:
             NSLog(@"Selected Add, row: %ld", (long)indexPath.row);
+            // Reset slide menu button so it will allow this menu to slide back again
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"slideSuperViewBack" object:nil];
+            
             [[NSNotificationCenter defaultCenter] postNotificationName:@"addNewItem" object:nil];
+
             break;
+        case 3:
+            break;
+        case 4:
+            break;
+        case 5: //Credit
+            NSLog(@"Opening Credit view");
+            // Reset slide menu button so it will allow this menu to slide back again
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"slideSuperViewBack" object:nil];
+            sb = [UIStoryboard storyboardWithName:@"slideMenu" bundle:nil];
+            creditVC = (CreditsViewController*)[sb instantiateViewControllerWithIdentifier:@"creditsVC_ID"];
+            [self showViewController:creditVC sender:NULL];
+            
+
+            break;
+            
         default:
             break;
     }

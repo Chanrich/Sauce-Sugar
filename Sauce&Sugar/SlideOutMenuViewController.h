@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "AddToDatabase_ViewController.h"
+#import "CreditsViewController.h"
 
 @protocol SlideOutMenuViewControllerDelegate <NSObject>
 @optional

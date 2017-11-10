@@ -38,6 +38,9 @@
     // Initialize a singleton instance for Azure Data
     self.rcDataConnection = [rcAzureDataTable sharedDataTable];
     
+    // Request for location data
+    [self.rcDataConnection requestLocationData];
+    
     // Reset UI
     self.statusLabel.text = @"Downloading Sequence Number";
     self.progressBar.progress = 0;

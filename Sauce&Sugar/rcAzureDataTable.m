@@ -8,6 +8,8 @@
 
 #import "rcAzureDataTable.h"
 #define MAX_REQUIREMENT 4
+#define GPS_LONGITUDE @"longitude"
+#define GPS_LATITUDE @"latitude"
 @implementation rcAzureDataTable
 
 // Create a singleton
@@ -30,6 +32,8 @@
         // Initialize mutable dictionary to store data entries
         self.rcDataDictionary = [[NSMutableDictionary alloc] init];
         self.rcDataDictionaryForUserTable = [[NSMutableDictionary alloc] init];
+        // GPS Location mangager
+        self.rcLocationManager = [[CLLocationManager alloc] init];
     }
     return self;
 }
@@ -53,16 +57,25 @@
 }
 
 // Create a new user and set its seqNum
-- (void) prepareUserData:(NSString*)username{
+- (void) InsertIntoTableWithUsername:(NSString*)username{
     // Prepare object for integer since NSDictioanry only accepts object
-    NSNumber *seqNum = [NSNumber numberWithInt:0];
-
-    // Clear mutable dictionary
-    [self.rcDataDictionaryForUserTable removeAllObjects];
+    NSNumber *seqNum = [NSNumber numberWithInt:1];
     
     // Insert data
     [self.rcDataDictionaryForUserTable setObject:username forKey:@"USERNAME"];
     [self.rcDataDictionaryForUserTable setObject:seqNum forKey:@"SequenceNumber"];
+    
+    // Return a MSTable instance with rcUserDataInfo table
+    MSTable *itemTable = [self.client tableWithName:@"rcUserDataInfo"];
+    
+    // Insert data into table
+    [itemTable insert:self.rcDataDictionaryForUserTable completion:^(NSDictionary *InsertedItem, NSError *error) {
+        if (error){
+            NSLog(@"error: %@", error);
+        } else {
+            NSLog(@"User %@ added", username);
+        }
+    }];
 }
 
 // getUniqueID_WithCallback will make the request and return the unique serial number in a NSArray* to the callback function. Caller will have to create a block to catch the return value
@@ -175,6 +188,110 @@
     // Insert username and sequence number (image reference) into mutable dictionary
     [self.rcDataDictionary setObject:username forKey:@"userName"];
     [self.rcDataDictionary setObject:sequenceNumber forKey:@"sequence"];
+}
+
+// Search user with same username and return entries in callback
+- (void)verifyUsername:(NSString *)rcUsername Callback:(void(^)(BOOL callbackItem))returnCallback{
+    // Return a MSTable instance with tableName
+    MSTable *itemTable = [self.client tableWithName:@"rcUserDataInfo"];
+    
+    // Create a filter for
+    // 1. Username
+    NSPredicate *dataFilter = [NSPredicate predicateWithFormat:
+                               @"USERNAME=%@", rcUsername];
+    
+    // Prepare a MSQuery object with filter dataFilter
+    MSQuery *rcQuery = [itemTable queryWithPredicate:dataFilter];
+    
+    // Perform a read on the MSquery object, the read will return maximum 50 entries
+    [rcQuery readWithCompletion:^(MSQueryResult * _Nullable result, NSError * _Nullable error) {
+        if (error){
+            NSLog(@"Data download error!");
+            // return a NO
+            returnCallback(FALSE);
+        } else {
+            // Debug
+            NSNumber *temp = [NSNumber numberWithUnsignedLong:[result.items count]];
+            NSLog(@"Count of result.item array: %@", temp);
+            
+            if ([result.items count] == 0){
+                NSLog(@"No repeated user is found. Username valid!");
+                returnCallback(TRUE);
+            } else {
+                NSLog(@"Multiple user with same name is found. Username invalid");
+                returnCallback(FALSE);
+            }
+        }
+    }];;
+}
+
+// Send a request for location authorization and start updating location data
+- (void)requestLocationData {
+    self.rcLocationManager.delegate = self;
+    self.rcLocationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    // Initialize data entries in dictionary
+    [self.rcDataDictionary setObject:@"na" forKey:GPS_LONGITUDE];
+    [self.rcDataDictionary setObject:@"na" forKey:GPS_LATITUDE];
+    // Start updating, it will call the delegate function when data is returned
+    if ([CLLocationManager locationServicesEnabled] == YES){
+        NSLog(@"Requesting location data");
+        [self.rcLocationManager requestWhenInUseAuthorization];
+        [self.rcLocationManager startUpdatingLocation];
+    } else {
+        NSLog(@"Location service is not available");
+    }
+}
+
+// Save location data into dictionary and stop location data update
+- (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
+    // Get lastest object in locations array
+    CLLocation *myLocation = [locations lastObject];
+    
+    // Convert location data from double to string
+    NSString *longitudeToString = [NSString stringWithFormat:@"%f", myLocation.coordinate.longitude];
+    NSString *latitudeToString = [NSString stringWithFormat:@"%f", myLocation.coordinate.latitude];
+    // Debug
+    NSLog(@"Long:%@\nLat:%@", longitudeToString, latitudeToString);
+    
+    // Update data entries in dictionary
+    [self.rcDataDictionary setObject:longitudeToString forKey:GPS_LONGITUDE];
+    [self.rcDataDictionary setObject:latitudeToString forKey:GPS_LATITUDE];
+    
+    // Stop location update servie to preserve battery
+    [self.rcLocationManager stopUpdatingLocation];
+}
+
+// If error occured while requesting for location data, display error message
+- (void) locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
+    NSLog(@"Location service failed with error:\n%@", [error localizedDescription] );
+}
+
+// Show location update authorizatino status in debug window
+- (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status{
+    NSString *statusTranslate;
+    switch (status) {
+        case 0:
+            statusTranslate = @"kCLAuthorizationStatusNotDetermined";
+            break;
+        case 1:
+            statusTranslate = @"kCLAuthorizationStatusRestricted";
+            break;
+        case 2:
+            statusTranslate = @"kCLAuthorizationStatusDenied";
+            break;
+        case 3:
+            statusTranslate = @"kCLAuthorizationStatusAuthorizedAlways";
+            break;
+        case 4:
+            statusTranslate = @"kCLAuthorizationStatusAuthorizedWhenInUse";
+            break;
+        case 5:
+            statusTranslate = @"kCLAuthorizationStatusAuthorized";
+            break;
+        default:
+            break;
+    }
+    NSLog(@"Location authorization status updated to %@", statusTranslate);
 }
 
 @end

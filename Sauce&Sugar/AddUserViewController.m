@@ -43,13 +43,17 @@
 // Insert user info into table rcUserDataInfo
 - (IBAction)AddUser_TouchUpInside:(id)sender {
     // TODO: check for existing username with same name
+    [self.rcDataConnection verifyUsername:self.rcAddUser.text Callback:^(BOOL callbackItem) {
+        if (callbackItem == YES){
+            NSLog(@"Creating new user");
+            // Prepare username into dictionary collection
+            [self.rcDataConnection InsertIntoTableWithUsername:self.rcAddUser.text];
+        } else{
+            NSLog(@"Error: username existing. User is not created");
+        }
+    }];
+
     
-    // Prepare username into dictionary collection
-    [self.rcDataConnection prepareUserData:self.rcAddUser.text];
-    
-    NSLog(@"Inserting data into Azure table");
-    // Insert data into table rcUserDataInfo
-    [self.rcDataConnection InsertDataIntoTable:@"rcUserDataInfo" rcCallback:nil];
 }
 
 // Dismiss keyboard when return pressed in textfields

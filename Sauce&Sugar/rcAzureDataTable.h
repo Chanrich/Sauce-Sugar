@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 #import "AppDelegate.h"
-@interface rcAzureDataTable : NSObject
+@interface rcAzureDataTable : NSObject <CLLocationManagerDelegate>
 
 // Declare data object that will be stored into the table
 @property (strong, nonatomic) MSTable *rcMSTable;
@@ -16,6 +17,9 @@
 @property (strong, nonatomic) NSMutableDictionary *rcDataDictionaryForUserTable;
 // Add Microsoft client to connect to Azure
 @property (strong, nonatomic) MSClient *client;
+// Use GPS Location manager to get longtiude and latitude
+@property (strong, nonatomic) CLLocationManager *rcLocationManager;
+
 
 /* =========================== Usage Description ===========================
  This is a singleton module for connection to Azure mobile app services
@@ -38,6 +42,8 @@
 - (void) InsertDataIntoTable:(NSString*)tableName rcCallback:(void(^)(NSNumber *rcCompleteFlag))rcCallback;
 // Request all entries from a single user, return a NSArray of dictionaries in callback
 - (void) getDatafromUser:(NSString*)rcUsername Callback:(void(^)(NSArray *callbackItem)) returnCallback;
+// Request data in rcUserDataInfo table
+- (void) verifyUsername:(NSString*)rcUsername Callback:(void(^)(BOOL callbackItem))returnCallback;
 // =============================================
 
 // ======= Insert Data Functions  ==========
@@ -46,9 +52,11 @@
 - (void) insertTypeData:(NSString*)foodType;
 - (void) insertResNameData:(NSString*)resName;
 
-// Setup userdata to prepare for insertion to table rcUserDataInfo
-// Still need to call upload method
-- (void) prepareUserData:(NSString*)username;
+// Request location data
+- (void) requestLocationData;
+
+// Create a new user in rcUserDataInfo table with sequence number 1
+- (void) InsertIntoTableWithUsername:(NSString*)username;
 // =============================================
 
 // ======= Sequence Number Functions  ==========

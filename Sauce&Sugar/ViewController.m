@@ -185,10 +185,10 @@
         
     } completion:^(BOOL finished) {
         if (finished){
-            // Tag 0 = Menu is slided out
+            // Tag = 0, Menu is slided out
             self.SlideMenuButton.tag = 0;
             
-            // Enable fullscreen button on superview to return original position
+            // Enable fullscreen button to return to original position
             self.slideBackButton.enabled = YES;
         }
     }];
@@ -205,7 +205,7 @@
             self.rcSlideOutMenuView = nil;
             // Set flag to false
             self.showingMenu = NO;
-            // Tag 1 = Menu is in its original position
+            // Tag = 1, Menu is in its original position
             self.SlideMenuButton.tag = 1;
             
             // Reset shadow to default
@@ -257,7 +257,6 @@
         // Return to default value
         [self.tabBarController.view.layer setShadowOffset:CGSizeMake(0.0  , -3.0)];
     }
-    
 }
 
 @end

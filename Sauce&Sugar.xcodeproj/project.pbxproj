@@ -45,6 +45,7 @@
 		69DE29071F74CA8200B0527E /* rcAzureDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 69DE29061F74CA8200B0527E /* rcAzureDataTable.m */; };
 		69DE290A1F7865D700B0527E /* AddUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69DE29091F7865D700B0527E /* AddUserViewController.m */; };
 		69E3EDBE1F7A2D4E00C0F787 /* rcAzureBlobContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 69E3EDBD1F7A2D4E00C0F787 /* rcAzureBlobContainer.m */; };
+		69F39F201FB5280F00362888 /* CreditsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69F39F1F1FB5280F00362888 /* CreditsViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -127,6 +128,9 @@
 		69DE29091F7865D700B0527E /* AddUserViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddUserViewController.m; sourceTree = "<group>"; };
 		69E3EDBC1F7A2D4E00C0F787 /* rcAzureBlobContainer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rcAzureBlobContainer.h; sourceTree = "<group>"; };
 		69E3EDBD1F7A2D4E00C0F787 /* rcAzureBlobContainer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = rcAzureBlobContainer.m; sourceTree = "<group>"; };
+		69F39F1C1FB40EB100362888 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		69F39F1E1FB5280F00362888 /* CreditsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CreditsViewController.h; sourceTree = "<group>"; };
+		69F39F1F1FB5280F00362888 /* CreditsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CreditsViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -307,6 +311,7 @@
 		69C931AB1F53788A007696BA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				69F39F1C1FB40EB100362888 /* CoreLocation.framework */,
 				69A07FFA1F5D2E0200651946 /* libxml2.2.tbd */,
 				69A07FF81F5D2D9800651946 /* AZSClient.framework */,
 				69A07FF61F5AA2B100651946 /* WebKit.framework */,
@@ -320,6 +325,7 @@
 		69DE290C1F7866F900B0527E /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				69F39F1D1FB527F000362888 /* Credits */,
 				69162CCC1FB0646D00B7E853 /* SearchTable */,
 				698A0E071FA53DEF00915313 /* InsertDataAndImageVC */,
 				69C9315E1F502006007696BA /* ViewController.h */,
@@ -330,6 +336,15 @@
 				69C54F801F9AE13900C4005F /* SlideOutMenuViewController.m */,
 			);
 			name = ViewController;
+			sourceTree = "<group>";
+		};
+		69F39F1D1FB527F000362888 /* Credits */ = {
+			isa = PBXGroup;
+			children = (
+				69F39F1E1FB5280F00362888 /* CreditsViewController.h */,
+				69F39F1F1FB5280F00362888 /* CreditsViewController.m */,
+			);
+			name = Credits;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -481,6 +496,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6938F8A51F877AAE0079C555 /* rcShowItemsTableViewCell.m in Sources */,
+				69F39F201FB5280F00362888 /* CreditsViewController.m in Sources */,
 				69C931B01F57E764007696BA /* AddToDatabase_ViewController.m in Sources */,
 				69A0800D1F63EB0600651946 /* MainMenuButton.m in Sources */,
 				69C931A81F537272007696BA /* LocationDataController.m in Sources */,

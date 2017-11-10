@@ -104,6 +104,8 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
         // Set restaurant name to Azure Data placeholder
         [self.rcDataConnection insertResNameData:self.TextField_RestaurantName.text];
         
+
+        
         // Proceed to next view
         [self performSegueWithIdentifier:@"ShowFoodTypeSegue" sender:sender];
     }
