@@ -83,14 +83,29 @@
     // Return a MSTable instance with tableName
     MSTable *itemTable = [self.client tableWithName:@"rcUserDataInfo"];
     
-    // Create a predicate to select the user
-    NSString *rcSelectUser = [NSString stringWithFormat:@"USERNAME=%@", rcUsername];
+    // Data filter
+    NSPredicate *dataFilter;
     
-    // Read using query
-    [itemTable readWithQueryString:rcSelectUser completion:^(MSQueryResult * _Nullable result, NSError * _Nullable error) {
+    // Filter for username
+    if (rcUsername == nil){
+        // Return all user data
+        dataFilter = [NSPredicate predicateWithFormat:@"USERNAME != NULL"];
+    } else {
+        // Return individual user data
+        dataFilter = [NSPredicate predicateWithFormat:@"USERNAME == %@", rcUsername];
+    }
+    
+    // Prepare a MSQuery object with filter dataFilter
+    NSLog(@"Query filter: %@", [dataFilter predicateFormat]);
+    MSQuery *rcQuery = [itemTable queryWithPredicate:dataFilter];
+    
+    // Query database with dataFilter
+    [rcQuery readWithCompletion:^(MSQueryResult * _Nullable result, NSError * _Nullable error) {
         if (error){
             NSLog(@"Cannot get unique sequence number from server... Abort!");
+            returnCallback(nil);
         } else {
+            NSLog(@"Entries returned from itemTable readWithQueryString:%lu", [result.items count]);
             if ([result.items count] == 1){
                 // Pass the NSDictionary* stored in NSArray back to callback function
                 returnCallback([result.items objectAtIndex:0]);
@@ -100,24 +115,49 @@
             } else {
                 // Error
                 NSLog(@"No user is selected, task aborting");
+                returnCallback(nil);
             }
         }
-    }];
+    }]; // End of query read
 }
 
 // Make a query request for a single user, returns a NSArray of dictionaries in callback
-- (void) getDatafromUser:(NSString*)rcUsername Callback:(void(^)(NSArray *callbackItem)) returnCallback{
+- (void) getDatafromUser:(NSString*)rcUsername FoodType:(FoodTypes)foodType Callback:(void(^)(NSArray *callbackItem)) returnCallback{
     // Return a MSTable instance with tableName
     MSTable *itemTable = [self.client tableWithName:@"rcMainDataTable"];
-    
+
     // Create a filter for
     // 1. Username
     // 2. Foodtype
-    NSPredicate *dataFilter = [NSPredicate predicateWithFormat:
-                               @"(USERNAME=%@)AND(foodType!=NULL)", rcUsername];
+    NSPredicate *dataFilter;
+    NSPredicate *dataFilter2;
+    NSPredicate *finalAndPredicate;
+    
+    // Filter for username
+    if (rcUsername == nil){
+        // Return all user data
+        dataFilter = [NSPredicate predicateWithFormat:@"USERNAME != NULL"];
+    } else {
+        // Return individual user data
+        dataFilter = [NSPredicate predicateWithFormat:@"USERNAME == %@", rcUsername];
+    }
+    
+    // Filter for food type
+    if (foodType == -1){
+        // Return all types of food
+        dataFilter2 = [NSPredicate predicateWithFormat:@"foodType != NULL"];
+    } else {
+        // Select one foodType
+        dataFilter2 = [NSPredicate predicateWithFormat:@"foodType == %d", foodType];
+    }
+    
+    // AND those two data filters together to get: dataFilter AND dataFilter2
+    finalAndPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[dataFilter, dataFilter2]];
+    
+    NSLog(@"finalAndPredicate:%@\n", [finalAndPredicate predicateFormat]);
     
     // Prepare a MSQuery object with filter dataFilter
-    MSQuery *rcQuery = [itemTable queryWithPredicate:dataFilter];
+    MSQuery *rcQuery = [itemTable queryWithPredicate:finalAndPredicate];
     
     // Perform a read on the MSquery object, the read will return maximum 50 entries
     [rcQuery readWithCompletion:^(MSQueryResult * _Nullable result, NSError * _Nullable error) {
@@ -137,6 +177,7 @@
             } else {
                 // Error
                 NSLog(@"No user is selected, task aborting");
+                returnCallback(nil);
             }
         }
     }];
@@ -179,9 +220,9 @@
     [self.rcDataDictionary setObject:resName forKey:@"rName"];
 }
 
-- (void)insertTypeData:(NSString *)foodType { 
-    // Insert food type into mutable dictionary
-    [self.rcDataDictionary setObject:foodType forKey:@"foodType"];
+- (void)insertTypeData:(FoodTypes)foodType {
+    // Convert foodType to NSNumber with @() and store it into mutable dictionary
+    [self.rcDataDictionary setObject:@(foodType) forKey:@"foodType"];
 }
 
 - (void)insertSequenceNumber:(NSString *)sequenceNumber username:(NSString *)username { 
@@ -251,7 +292,7 @@
     NSString *longitudeToString = [NSString stringWithFormat:@"%f", myLocation.coordinate.longitude];
     NSString *latitudeToString = [NSString stringWithFormat:@"%f", myLocation.coordinate.latitude];
     // Debug
-    NSLog(@"Long:%@\nLat:%@", longitudeToString, latitudeToString);
+    NSLog(@"Long:%@\tLat:%@", longitudeToString, latitudeToString);
     
     // Update data entries in dictionary
     [self.rcDataDictionary setObject:longitudeToString forKey:GPS_LONGITUDE];

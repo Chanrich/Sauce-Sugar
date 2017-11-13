@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Menu-->
+        <!--Slide Out Menu View Controller-->
         <scene sceneID="u52-La-dfS">
             <objects>
                 <tableViewController storyboardIdentifier="SlideOutMenuID" useStoryboardIdentifierAsRestorationIdentifier="YES" id="04g-od-mmJ" customClass="SlideOutMenuViewController" sceneMemberID="viewController">
@@ -17,10 +17,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="separatorColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <button key="tableFooterView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="5tL-4A-lmV">
                             <rect key="frame" x="0.0" y="292" width="375" height="358"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.95412547079999999" green="0.93013392859999999" blue="0.96110491070000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <connections>
                                 <action selector="slideMenuSlideBackButton_TouchUpInside:" destination="04g-od-mmJ" eventType="touchUpInside" id="pB7-Nj-8xf"/>
                             </connections>
@@ -45,7 +45,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="USERNAME" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k1B-Pc-qvf">
-                                                    <rect key="frame" x="20" y="5" width="97" height="33"/>
+                                                    <rect key="frame" x="20" y="5" width="169" height="33"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -135,7 +135,9 @@
                             <outlet property="delegate" destination="04g-od-mmJ" id="38q-ff-TJ1"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Menu" id="7Nb-aF-jYC"/>
+                    <connections>
+                        <outlet property="usernameCell" destination="2cx-u8-ePj" id="ZI6-x0-oc5"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qni-Xs-RoF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -165,7 +167,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <items>
                                     <navigationItem title="Credit Page" id="5RG-jm-vLv">
-                                        <barButtonItem key="rightBarButtonItem" style="plain" id="ZtX-eN-Cfl">
+                                        <barButtonItem key="rightBarButtonItem" id="ZtX-eN-Cfl">
                                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="4ED-g8-GsP">
                                                 <rect key="frame" x="313" y="7" width="46" height="30"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

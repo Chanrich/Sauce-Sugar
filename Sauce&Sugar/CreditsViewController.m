@@ -18,7 +18,11 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self.creditsTextView insertText:@"Credits:\n"];
-    [self.creditsTextView insertText:@"Credits:\n"];
+    [self.creditsTextView insertText:@"Rice icon: Icon made by Freepik from  www.flaticon.com\n"];
+    [self.creditsTextView insertText:@"Noodles icon: Icon made by Smashicons from  www.flaticon.com\n"];
+    [self.creditsTextView insertText:@"Drink icon: Icon made by Iconnice from  www.flaticon.com\n"];
+    [self.creditsTextView insertText:@"Ice cream icon: Icon made by Freepik from  www.flaticon.com\n"];
+    [self.creditsTextView insertText:@"Cake icon: Icon made by Smashicons from  www.flaticon.com\n"];
 
 }
 

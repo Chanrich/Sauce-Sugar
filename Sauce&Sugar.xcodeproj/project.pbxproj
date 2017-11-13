@@ -21,9 +21,6 @@
 		69A07FF71F5AA2B100651946 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69A07FF61F5AA2B100651946 /* WebKit.framework */; };
 		69A07FF91F5D2D9800651946 /* AZSClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69A07FF81F5D2D9800651946 /* AZSClient.framework */; };
 		69A07FFB1F5D2E0200651946 /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 69A07FFA1F5D2E0200651946 /* libxml2.2.tbd */; };
-		69A080041F5E2AEE00651946 /* IMAG3191.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 69A080031F5E2AEE00651946 /* IMAG3191.jpg */; };
-		69A080061F5E2AFC00651946 /* IMAG3285.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 69A080051F5E2AFC00651946 /* IMAG3285.jpg */; };
-		69A080081F5E2B2600651946 /* IMAG3522.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 69A080071F5E2B2600651946 /* IMAG3522.jpg */; };
 		69A0800A1F62981D00651946 /* CameraBackground.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 69A080091F62981D00651946 /* CameraBackground.jpg */; };
 		69A0800D1F63EB0600651946 /* MainMenuButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 69A0800C1F63EB0600651946 /* MainMenuButton.m */; };
 		69C54F811F9AE13900C4005F /* SlideOutMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C54F801F9AE13900C4005F /* SlideOutMenuViewController.m */; };
@@ -39,13 +36,19 @@
 		69C931A21F53721F007696BA /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C931A11F53721F007696BA /* MapViewController.m */; };
 		69C931A51F53725C007696BA /* Location.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C931A41F53725C007696BA /* Location.m */; };
 		69C931A81F537272007696BA /* LocationDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C931A71F537272007696BA /* LocationDataController.m */; };
-		69C931AA1F5374E9007696BA /* abc.png in Resources */ = {isa = PBXBuildFile; fileRef = 69C931A91F5374E9007696BA /* abc.png */; };
 		69C931AD1F53788A007696BA /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69C931AC1F53788A007696BA /* MapKit.framework */; };
 		69C931B01F57E764007696BA /* AddToDatabase_ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C931AF1F57E764007696BA /* AddToDatabase_ViewController.m */; };
 		69DE29071F74CA8200B0527E /* rcAzureDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 69DE29061F74CA8200B0527E /* rcAzureDataTable.m */; };
 		69DE290A1F7865D700B0527E /* AddUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69DE29091F7865D700B0527E /* AddUserViewController.m */; };
 		69E3EDBE1F7A2D4E00C0F787 /* rcAzureBlobContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 69E3EDBD1F7A2D4E00C0F787 /* rcAzureBlobContainer.m */; };
 		69F39F201FB5280F00362888 /* CreditsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69F39F1F1FB5280F00362888 /* CreditsViewController.m */; };
+		69F39F271FB5892200362888 /* lemonade.png in Resources */ = {isa = PBXBuildFile; fileRef = 69F39F221FB5892200362888 /* lemonade.png */; };
+		69F39F281FB5892200362888 /* ice-cream.png in Resources */ = {isa = PBXBuildFile; fileRef = 69F39F231FB5892200362888 /* ice-cream.png */; };
+		69F39F291FB5892200362888 /* bowl-of-white-rice.png in Resources */ = {isa = PBXBuildFile; fileRef = 69F39F241FB5892200362888 /* bowl-of-white-rice.png */; };
+		69F39F2A1FB5892200362888 /* noodles.png in Resources */ = {isa = PBXBuildFile; fileRef = 69F39F251FB5892200362888 /* noodles.png */; };
+		69F39F2B1FB5892200362888 /* piece-of-cake.png in Resources */ = {isa = PBXBuildFile; fileRef = 69F39F261FB5892200362888 /* piece-of-cake.png */; };
+		69F39F2D1FB65D2200362888 /* MainMenu.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69F39F2C1FB65D2200362888 /* MainMenu.storyboard */; };
+		69F39F311FB67C5600362888 /* MainMenuTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69F39F301FB67C5600362888 /* MainMenuTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,9 +88,6 @@
 		69A07FF61F5AA2B100651946 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		69A07FF81F5D2D9800651946 /* AZSClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AZSClient.framework; sourceTree = "<group>"; };
 		69A07FFA1F5D2E0200651946 /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
-		69A080031F5E2AEE00651946 /* IMAG3191.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = IMAG3191.jpg; sourceTree = "<group>"; };
-		69A080051F5E2AFC00651946 /* IMAG3285.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = IMAG3285.jpg; sourceTree = "<group>"; };
-		69A080071F5E2B2600651946 /* IMAG3522.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = IMAG3522.jpg; sourceTree = "<group>"; };
 		69A080091F62981D00651946 /* CameraBackground.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = CameraBackground.jpg; sourceTree = "<group>"; };
 		69A0800B1F63EB0600651946 /* MainMenuButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenuButton.h; sourceTree = "<group>"; };
 		69A0800C1F63EB0600651946 /* MainMenuButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainMenuButton.m; sourceTree = "<group>"; };
@@ -118,7 +118,6 @@
 		69C931A41F53725C007696BA /* Location.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Location.m; sourceTree = "<group>"; };
 		69C931A61F537272007696BA /* LocationDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationDataController.h; sourceTree = "<group>"; };
 		69C931A71F537272007696BA /* LocationDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationDataController.m; sourceTree = "<group>"; };
-		69C931A91F5374E9007696BA /* abc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = abc.png; sourceTree = "<group>"; };
 		69C931AC1F53788A007696BA /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		69C931AE1F57E764007696BA /* AddToDatabase_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddToDatabase_ViewController.h; sourceTree = "<group>"; };
 		69C931AF1F57E764007696BA /* AddToDatabase_ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddToDatabase_ViewController.m; sourceTree = "<group>"; };
@@ -131,6 +130,14 @@
 		69F39F1C1FB40EB100362888 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		69F39F1E1FB5280F00362888 /* CreditsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CreditsViewController.h; sourceTree = "<group>"; };
 		69F39F1F1FB5280F00362888 /* CreditsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CreditsViewController.m; sourceTree = "<group>"; };
+		69F39F221FB5892200362888 /* lemonade.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lemonade.png; sourceTree = "<group>"; };
+		69F39F231FB5892200362888 /* ice-cream.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ice-cream.png"; sourceTree = "<group>"; };
+		69F39F241FB5892200362888 /* bowl-of-white-rice.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bowl-of-white-rice.png"; sourceTree = "<group>"; };
+		69F39F251FB5892200362888 /* noodles.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = noodles.png; sourceTree = "<group>"; };
+		69F39F261FB5892200362888 /* piece-of-cake.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "piece-of-cake.png"; sourceTree = "<group>"; };
+		69F39F2C1FB65D2200362888 /* MainMenu.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainMenu.storyboard; sourceTree = "<group>"; };
+		69F39F2F1FB67C5600362888 /* MainMenuTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainMenuTableViewController.h; sourceTree = "<group>"; };
+		69F39F301FB67C5600362888 /* MainMenuTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainMenuTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -185,6 +192,7 @@
 		698A0E041FA1B08C00915313 /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
+				69F39F2C1FB65D2200362888 /* MainMenu.storyboard */,
 				698A0E051FA1B17F00915313 /* insertToDatabase.storyboard */,
 				698A0DFF1FA1AFF800915313 /* searchTable.storyboard */,
 				698A0E011FA1B07800915313 /* slideMenu.storyboard */,
@@ -226,12 +234,9 @@
 			isa = PBXGroup;
 			children = (
 				69C54F7E1F8F3FCF00C4005F /* ss_icon2x.png */,
+				69F39F211FB5891200362888 /* FoodTypeIcon */,
 				69C54F7D1F8F3FCF00C4005F /* ss_icon3x.png */,
-				69C931A91F5374E9007696BA /* abc.png */,
 				69A080091F62981D00651946 /* CameraBackground.jpg */,
-				69A080031F5E2AEE00651946 /* IMAG3191.jpg */,
-				69A080051F5E2AFC00651946 /* IMAG3285.jpg */,
-				69A080071F5E2B2600651946 /* IMAG3522.jpg */,
 				69162CCA1FB01CC000B7E853 /* GreenCheck.png */,
 			);
 			name = ImagesResource;
@@ -325,6 +330,7 @@
 		69DE290C1F7866F900B0527E /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				69F39F2E1FB67C3700362888 /* MainMenuVC */,
 				69F39F1D1FB527F000362888 /* Credits */,
 				69162CCC1FB0646D00B7E853 /* SearchTable */,
 				698A0E071FA53DEF00915313 /* InsertDataAndImageVC */,
@@ -332,8 +338,6 @@
 				69C9315F1F502006007696BA /* ViewController.m */,
 				69DE29081F7865D700B0527E /* AddUserViewController.h */,
 				69DE29091F7865D700B0527E /* AddUserViewController.m */,
-				69C54F7F1F9AE13900C4005F /* SlideOutMenuViewController.h */,
-				69C54F801F9AE13900C4005F /* SlideOutMenuViewController.m */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -345,6 +349,29 @@
 				69F39F1F1FB5280F00362888 /* CreditsViewController.m */,
 			);
 			name = Credits;
+			sourceTree = "<group>";
+		};
+		69F39F211FB5891200362888 /* FoodTypeIcon */ = {
+			isa = PBXGroup;
+			children = (
+				69F39F241FB5892200362888 /* bowl-of-white-rice.png */,
+				69F39F231FB5892200362888 /* ice-cream.png */,
+				69F39F221FB5892200362888 /* lemonade.png */,
+				69F39F251FB5892200362888 /* noodles.png */,
+				69F39F261FB5892200362888 /* piece-of-cake.png */,
+			);
+			name = FoodTypeIcon;
+			sourceTree = "<group>";
+		};
+		69F39F2E1FB67C3700362888 /* MainMenuVC */ = {
+			isa = PBXGroup;
+			children = (
+				69F39F2F1FB67C5600362888 /* MainMenuTableViewController.h */,
+				69F39F301FB67C5600362888 /* MainMenuTableViewController.m */,
+				69C54F7F1F9AE13900C4005F /* SlideOutMenuViewController.h */,
+				69C54F801F9AE13900C4005F /* SlideOutMenuViewController.m */,
+			);
+			name = MainMenuVC;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -459,18 +486,20 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				69A080041F5E2AEE00651946 /* IMAG3191.jpg in Resources */,
+				69F39F271FB5892200362888 /* lemonade.png in Resources */,
+				69F39F2A1FB5892200362888 /* noodles.png in Resources */,
+				69F39F281FB5892200362888 /* ice-cream.png in Resources */,
+				69F39F291FB5892200362888 /* bowl-of-white-rice.png in Resources */,
 				698A0E031FA1B07800915313 /* slideMenu.storyboard in Resources */,
 				698A0E001FA1AFF800915313 /* searchTable.storyboard in Resources */,
-				69A080061F5E2AFC00651946 /* IMAG3285.jpg in Resources */,
 				69162CCB1FB01CC100B7E853 /* GreenCheck.png in Resources */,
-				69A080081F5E2B2600651946 /* IMAG3522.jpg in Resources */,
-				69C931AA1F5374E9007696BA /* abc.png in Resources */,
 				69C9316B1F502006007696BA /* LaunchScreen.storyboard in Resources */,
+				69F39F2D1FB65D2200362888 /* MainMenu.storyboard in Resources */,
 				69C931681F502006007696BA /* Assets.xcassets in Resources */,
 				69C931631F502006007696BA /* Main.storyboard in Resources */,
 				698A0E061FA1B17F00915313 /* insertToDatabase.storyboard in Resources */,
 				69A0800A1F62981D00651946 /* CameraBackground.jpg in Resources */,
+				69F39F2B1FB5892200362888 /* piece-of-cake.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -504,6 +533,7 @@
 				69C54F811F9AE13900C4005F /* SlideOutMenuViewController.m in Sources */,
 				69C931A21F53721F007696BA /* MapViewController.m in Sources */,
 				698A0E0A1FA53E3100915313 /* SelectFoodTypeTableViewController.m in Sources */,
+				69F39F311FB67C5600362888 /* MainMenuTableViewController.m in Sources */,
 				69DE29071F74CA8200B0527E /* rcAzureDataTable.m in Sources */,
 				698A0E0D1FA843FE00915313 /* LoadingScreenViewController.m in Sources */,
 				6938F8A21F84AA130079C555 /* ShowItemsTableViewController.m in Sources */,

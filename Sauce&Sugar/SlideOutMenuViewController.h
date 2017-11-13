@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "AddToDatabase_ViewController.h"
 #import "CreditsViewController.h"
-
+#import "AppDelegate.h"
 @protocol SlideOutMenuViewControllerDelegate <NSObject>
 @optional
 - (void) menuOptionSelected;
@@ -20,6 +20,8 @@
 
 @interface SlideOutMenuViewController : UITableViewController
 @property (nonatomic, assign) id<SlideOutMenuViewControllerDelegate> delegate;
+// UI Cell outlets
+@property (strong, nonatomic) IBOutlet UITableViewCell *usernameCell;
 
 // Send a notification message to slide super view back
 - (IBAction)slideMenuSlideBackButton_TouchUpInside:(id)sender;

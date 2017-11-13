@@ -49,6 +49,9 @@
     
     // Request a unique serial number from Azure Data Table
     [self.rcDataConnection getUniqueNumber_WithUsername:self.currentUsername Callback:^(NSDictionary *callbackItem) {
+        
+        // TODO: handle error. when callbackItem == nil
+        
         // Set UI Animation in main thread
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.progressBar setProgress:0.2 animated:YES];

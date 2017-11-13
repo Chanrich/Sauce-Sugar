@@ -29,4 +29,8 @@
 @property UIView *overlayUIView;
 @property NSMutableArray<rcShowItemsTableViewCell*> *rcCellMutableArray;
 
+// If searchFoodType is not declared, return data without food type filter
+// If searchFoodType is declared, return data related to that food type
+@property FoodTypes searchFoodType;
+
 @end

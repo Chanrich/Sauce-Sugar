@@ -21,11 +21,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    NSString *username = [(AppDelegate*)[[UIApplication sharedApplication] delegate] currentUsername];
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.usernameCell.textLabel.text = [NSString stringWithFormat:@"Hi, %@", username];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -49,13 +52,10 @@
     NSLog(@"Selected indexPath.row: %ld", (long)indexPath.row);
     switch (indexPath.row) {
         case 0:
-            NSLog(@"Selected Empty Space, row: %ld", (long)indexPath.row);
             break;
         case 1:
-            NSLog(@"Selected Username, row: %ld", (long)indexPath.row);
             break;
         case 2:
-            NSLog(@"Selected Add, row: %ld", (long)indexPath.row);
             // Reset slide menu button so it will allow this menu to slide back again
             [[NSNotificationCenter defaultCenter] postNotificationName:@"slideSuperViewBack" object:nil];
             
@@ -67,16 +67,16 @@
         case 4:
             break;
         case 5: //Credit
-            NSLog(@"Opening Credit view");
             // Reset slide menu button so it will allow this menu to slide back again
             [[NSNotificationCenter defaultCenter] postNotificationName:@"slideSuperViewBack" object:nil];
+            
+            // Create an instance of the credit view
             sb = [UIStoryboard storyboardWithName:@"slideMenu" bundle:nil];
             creditVC = (CreditsViewController*)[sb instantiateViewControllerWithIdentifier:@"creditsVC_ID"];
+            
+            // Display credit view
             [self showViewController:creditVC sender:NULL];
-            
-
             break;
-            
         default:
             break;
     }

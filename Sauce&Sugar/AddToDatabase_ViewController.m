@@ -35,9 +35,11 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
     
     // Perform animation to fade in restaurant textfield first
     [self.TextField_RestaurantName viewFadeInWithCompletion:^(BOOL rcFinished) {
-        // Then fade in image view
-        [self.MainImageView viewFadeInWithCompletion:nil];
-    }];
+        if (rcFinished == YES){
+            // Then fade in image view
+            [self.MainImageView viewFadeInWithCompletion:nil];
+        }
+    }]; // End of fading in UI elements
     
     // get current username
     self.currentUsername = [(AppDelegate*)[[UIApplication sharedApplication] delegate] currentUsername];

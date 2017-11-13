@@ -21,6 +21,15 @@
 @property (strong, nonatomic) CLLocationManager *rcLocationManager;
 
 
+typedef enum FoodTypesEnum {
+    FOODTYPE_INVALID = -1,
+    RICE = 0,
+    NOODLES = 1,
+    ICECREAM = 2,
+    DESSERT = 3,
+    DRINK = 4
+} FoodTypes;
+
 /* =========================== Usage Description ===========================
  This is a singleton module for connection to Azure mobile app services
  1. User should call getUniqueNumber_WithUsername to obtain a unique sequence number that will be used as image index for blob storage. The index will match up to an item in blob
@@ -36,12 +45,12 @@
 
 
 // ========= Data upload / download =========
-// Upload data into specified table:
+// Two data tables:
 // 1. rcMainDataTable : Contain all data related information
 // 2. rcUserDataInfo : Contain all user related information
 - (void) InsertDataIntoTable:(NSString*)tableName rcCallback:(void(^)(NSNumber *rcCompleteFlag))rcCallback;
-// Request all entries from a single user, return a NSArray of dictionaries in callback
-- (void) getDatafromUser:(NSString*)rcUsername Callback:(void(^)(NSArray *callbackItem)) returnCallback;
+// Request data from table with , return a NSArray of dictionaries in callback
+- (void) getDatafromUser:(NSString*)rcUsername FoodType:(FoodTypes)foodType Callback:(void(^)(NSArray *callbackItem)) returnCallback;
 // Request data in rcUserDataInfo table
 - (void) verifyUsername:(NSString*)rcUsername Callback:(void(^)(BOOL callbackItem))returnCallback;
 // =============================================
@@ -49,7 +58,7 @@
 // ======= Insert Data Functions  ==========
 
 - (void) insertSequenceNumber:(NSString*)sequenceNumber username:(NSString*)username;
-- (void) insertTypeData:(NSString*)foodType;
+- (void) insertTypeData:(FoodTypes)foodType;
 - (void) insertResNameData:(NSString*)resName;
 
 // Request location data

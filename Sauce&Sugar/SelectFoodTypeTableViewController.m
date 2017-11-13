@@ -35,31 +35,31 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     // indexPath.row is the currently selected row, use it to access menu items
     
-    NSString* typeName;
+    FoodTypes typeName;
     switch (indexPath.row) {
         case 0:
             // Noodle
-            typeName = @"Noodle";
+            typeName = NOODLES;
             break;
         case 1:
             // Rice
-            typeName = @"Rice";
+            typeName = RICE;
             break;
         case 2:
             // Drinks
-            typeName = @"Drinks";
+            typeName = DRINK;
             break;
         case 3:
-            typeName = @"Desserts";
+            typeName = DESSERT;
             // Desserts
             break;
         case 4:
-            typeName = @"Ice Cream";
+            typeName = ICECREAM;
             // Ice Cream
             break;
         default:
             // Default
-            typeName = @"Default";
+            typeName = FOODTYPE_INVALID;
             break;
     }
     

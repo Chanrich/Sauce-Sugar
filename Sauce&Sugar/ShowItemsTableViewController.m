@@ -14,8 +14,19 @@
 
 @implementation ShowItemsTableViewController
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder{
+    NSLog(@"Init with coder at ShowItemsTableViewController ");
+    self = [super initWithCoder:aDecoder];
+    // Initialize to 0
+    self.searchFoodType = FOODTYPE_INVALID;
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    NSLog(@"foodtype: %d", self.searchFoodType);
+    
     // Set up overlay UIView
     self.overlayUIView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.overlayUIView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.3];
@@ -26,7 +37,6 @@
     // Setup spinner
     [rcSpinner setFrame:self.view.frame];
     [rcSpinner.layer setBackgroundColor:[[UIColor colorWithWhite:0.0 alpha:0.3] CGColor]];
-    //rcSpinner.center = CGPointMake([[UIScreen mainScreen] bounds].size.width / 2.0f, [[UIScreen mainScreen] bounds].size.height/ 2.0f);
     rcSpinner.center = self.overlayUIView.center;
     rcSpinner.hidesWhenStopped = YES;
     
@@ -34,9 +44,8 @@
     [self.overlayUIView addSubview:rcSpinner];
     
     // Add spinner subview and start spinner
-    //[self.view addSubview:rcSpinner];
     [rcSpinner startAnimating];
-    [self.navigationController.view addSubview:self.overlayUIView];
+    [self.tabBarController.view addSubview:self.overlayUIView];
     
     // get current username
     NSString *currentUser = [(AppDelegate*)[[UIApplication sharedApplication] delegate] currentUsername];
@@ -44,7 +53,7 @@
     self.rcTableView.delegate = nil;
     self.rcTableView.dataSource = nil;
     
-    // Initialize a singleton instance
+    // Initialize singleton instances
     self.rcDataConnection = [rcAzureDataTable sharedDataTable];
     self.rcBlobContainer = [rcAzureBlobContainer sharedStorageContainer];
     
@@ -55,64 +64,73 @@
     [self.rcBlobContainer connectToContainerWithName:currentUser];
     
     // Get current user's data from the cloub
-    [self.rcDataConnection getDatafromUser:currentUser Callback:^(NSArray *callbackItem) {
-        NSLog(@"Array Data received, storing data self.userDataInfo_NSArray");
-        // Store the array as class property
-        self.userDataInfo_NSArray = callbackItem;
-        
-        // Check for first read
-        static BOOL ImageIsReturned;
-        ImageIsReturned = NO;
-        // Fast enumerate through returned array
-        for (NSDictionary* returnDict in callbackItem){
-            // Premade the cell that are going to be displayed in tableview
-            rcShowItemsTableViewCell *rcCell = [self.rcTableView dequeueReusableCellWithIdentifier:@"rcShowItemCell"];
+    [self.rcDataConnection getDatafromUser:currentUser FoodType:self.searchFoodType Callback:^(NSArray *callbackItem) {
+        // In Callback function
+        if (callbackItem == nil){
+            // Handle errors, either no data available or download error
+            NSLog(@"Error occured during loading");
+            // Stop the spinner from spinning
+            [rcSpinner stopAnimating];
+            [self.overlayUIView removeFromSuperview];
             
-
-            // Set cell properties
-            rcCell.rcMainCellLabel.text = [returnDict objectForKey:@"rName"];
-            rcCell.rcSecondCellLabel.text = [returnDict objectForKey:@"rName"];
+            // ========= Create Alert =========
+            // Create a UI AlertController to show warning message
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:@"Data Download Error" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:NULL];
+            [alert addAction:okAction];
+            [self presentViewController:alert animated:YES completion:NULL];
+            // ================================
             
-            // Get sequence number
-            NSString *sequenceNum = [[returnDict objectForKey:@"sequence"] stringValue];
-            // Request one image stored inside dictionary key "sequence"
-            [self.rcBlobContainer getImagefromBlobFromUser:currentUser sequenceNumber:sequenceNum rcCallback:^(UIImage *rcReturnedImage) {
-                // Get the returned UIImage into the cell in main thread
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    // Display image in current cell
-                    rcCell.rcCellRightImage.image = rcReturnedImage;
-                    NSLog(@"SN:%@ Image setting complete", sequenceNum);
-                    
-                    
-                    if (ImageIsReturned == NO){
-                        // Stop the spinner from spinning
-                        [rcSpinner stopAnimating];
-                        [self.overlayUIView removeFromSuperview];
-                        // Set flag to Yes
-                        ImageIsReturned = YES;
-                    }
-
-                });
+        } else {
+            // Successful download
+            NSLog(@"Array Data received, storing data self.userDataInfo_NSArray");
+            // Store the array as class property
+            self.userDataInfo_NSArray = callbackItem;
+            
+            // Check for first read
+            static BOOL ImageIsReturned;
+            ImageIsReturned = NO;
+            // Fast enumerate through returned array
+            for (NSDictionary* returnDict in callbackItem){
+                // Premade the cell that are going to be displayed in tableview
+                rcShowItemsTableViewCell *rcCell = [self.rcTableView dequeueReusableCellWithIdentifier:@"rcShowItemCell"];
                 
-            }];
-            // Add cell to the end of the array
-            [self.rcCellMutableArray addObject:rcCell];
-            NSLog(@"added an item to cell mutable array, size: %lu", (unsigned long)[self.rcCellMutableArray count]);
+                // Set cell properties
+                rcCell.rcMainCellLabel.text = [returnDict objectForKey:@"rName"];
+                rcCell.rcSecondCellLabel.text = [returnDict objectForKey:@"rName"];
+                
+                // Get sequence number
+                NSString *sequenceNum = [[returnDict objectForKey:@"sequence"] stringValue];
+                // Request one image stored inside dictionary key "sequence"
+                [self.rcBlobContainer getImagefromBlobFromUser:currentUser sequenceNumber:sequenceNum rcCallback:^(UIImage *rcReturnedImage) {
+                    // Get the returned UIImage into the cell in main thread
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        // Display image in current cell
+                        rcCell.rcCellRightImage.image = rcReturnedImage;
+                        NSLog(@"SN:%@ Image setting complete", sequenceNum);
+                        // Remove the overlay view when the first image is loaded
+                        if (ImageIsReturned == NO){
+                            // Stop the spinner from spinning
+                            [rcSpinner stopAnimating];
+                            [self.overlayUIView removeFromSuperview];
+                            // Set flag to Yes
+                            ImageIsReturned = YES;
+                        }
+                    }); // End of dispatch to main thread
+                }]; // End of download image method
+                
+                // Add cell to the end of the array
+                [self.rcCellMutableArray addObject:rcCell];
+                NSLog(@"added an item to cell mutable array, size: %lu", (unsigned long)[self.rcCellMutableArray count]);
+            } // End of for loop, end of processing of one entry
         }
-        
-        // After data finished downloading, enable tableview to reload by setting its delegate and datasource to self
+        // After storing all entries into cell mutable array, ask table to refresh
+        // Note: Image might not be returned at this point.
         self.rcTableView.delegate = self;
         self.rcTableView.dataSource = self;
-        
-        // Trigger data reload
         [self.rcTableView reloadData];
     }];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+
 }
 
 - (void)didReceiveMemoryWarning {
