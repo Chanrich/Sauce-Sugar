@@ -20,7 +20,8 @@
     
     // Set current user
     self.currentUsername = @"rchan";
-    
+    // Enable Google API
+    [GMSServices provideAPIKey:@"AIzaSyCElpQ25SaS9VxqFsdgR1pRkVYEbspWALI"];
     return YES;
 }
 

@@ -12,6 +12,10 @@
 #import <MicrosoftAzureMobile/MicrosoftAzureMobile.h>
 // Import Azure storage framework
 #import <AZSClient/AZSClient.h>
+
+// Import google map features
+@import GoogleMaps;
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;

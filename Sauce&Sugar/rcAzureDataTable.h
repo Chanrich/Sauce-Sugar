@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 #import "AppDelegate.h"
+
 @interface rcAzureDataTable : NSObject <CLLocationManagerDelegate>
 
 // Declare data object that will be stored into the table
@@ -19,6 +20,8 @@
 @property (strong, nonatomic) MSClient *client;
 // Use GPS Location manager to get longtiude and latitude
 @property (strong, nonatomic) CLLocationManager *rcLocationManager;
+// Current location
+@property CLLocation *currentGPSLocation;
 
 
 typedef enum FoodTypesEnum {

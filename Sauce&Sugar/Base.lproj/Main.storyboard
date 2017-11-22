@@ -50,7 +50,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YVc-u2-6IW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1196" y="914"/>
+            <point key="canvasLocation" x="972" y="908"/>
         </scene>
         <!--Tabbar-->
         <scene sceneID="Mtt-MM-1if">
@@ -67,6 +67,7 @@
                         <segue destination="3EF-Rr-6lw" kind="relationship" relationship="viewControllers" id="qqN-4x-pYD"/>
                         <segue destination="ZqG-pM-k23" kind="relationship" relationship="viewControllers" id="i4c-sN-Yh7"/>
                         <segue destination="WIB-4y-AJN" kind="relationship" relationship="viewControllers" id="EtQ-iN-ORL"/>
+                        <segue destination="BTS-Wu-riQ" kind="relationship" relationship="viewControllers" id="Unu-V3-0t7"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tWY-g3-UeK" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -92,6 +93,16 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iVO-6r-Ov3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1278" y="139"/>
+        </scene>
+        <!--GMapSearch-->
+        <scene sceneID="lhY-Po-A1Q">
+            <objects>
+                <viewControllerPlaceholder storyboardName="GMapSearch" id="BTS-Wu-riQ" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="crj-aS-yXM"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FEJ-Q4-wPH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1728" y="596"/>
         </scene>
     </scenes>
 </document>

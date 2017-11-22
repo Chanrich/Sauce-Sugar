@@ -7,6 +7,7 @@
 //
 
 #import "ShowItemsTableViewController.h"
+#import "ShowGMapViewController.h"
 
 @interface ShowItemsTableViewController ()
 
@@ -24,8 +25,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    NSLog(@"foodtype: %d", self.searchFoodType);
     
     // Set up overlay UIView
     self.overlayUIView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
@@ -87,17 +86,19 @@
             // Store the array as class property
             self.userDataInfo_NSArray = callbackItem;
             
+
             // Check for first read
             static BOOL ImageIsReturned;
             ImageIsReturned = NO;
-            // Fast enumerate through returned array
+            // Store result items into cell array.
             for (NSDictionary* returnDict in callbackItem){
                 // Premade the cell that are going to be displayed in tableview
                 rcShowItemsTableViewCell *rcCell = [self.rcTableView dequeueReusableCellWithIdentifier:@"rcShowItemCell"];
                 
                 // Set cell properties
                 rcCell.rcMainCellLabel.text = [returnDict objectForKey:@"rName"];
-                rcCell.rcSecondCellLabel.text = [returnDict objectForKey:@"rName"];
+                rcCell.rcSecondCellLabel.text = [returnDict objectForKey:@"userName"];
+                
                 
                 // Get sequence number
                 NSString *sequenceNum = [[returnDict objectForKey:@"sequence"] stringValue];
@@ -124,6 +125,12 @@
                 NSLog(@"added an item to cell mutable array, size: %lu", (unsigned long)[self.rcCellMutableArray count]);
             } // End of for loop, end of processing of one entry
         }
+        // Display number of entries in title
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // Set title
+            self.title = [NSString stringWithFormat:@"Found %lu items", [callbackItem count]];
+        });
+        
         // After storing all entries into cell mutable array, ask table to refresh
         // Note: Image might not be returned at this point.
         self.rcTableView.delegate = self;
@@ -208,14 +215,17 @@
 }
 */
 
-/*
-#pragma mark - Navigation
 
+#pragma mark - Navigation
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if ([[segue identifier] isEqualToString:@"fromSearchTableToMap"]){
+        // Get the destination view controller using [segue destinationViewController].
+        ShowGMapViewController *destVC = [segue destinationViewController];
+        // Pass the array containing all map locations to destination view controller
+        destVC.mapItemsArray = self.userDataInfo_NSArray;
+    }
 }
-*/
+
 
 @end

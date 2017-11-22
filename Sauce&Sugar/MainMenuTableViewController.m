@@ -32,6 +32,13 @@
     
     // Listen for ADD button click event slide out menu
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startCamera) name:@"addNewItem" object:nil];
+    
+    // Request current GPS location
+    // Initialize singleton instances
+    rcAzureDataTable *rcDataConnection;
+    rcDataConnection = [rcAzureDataTable sharedDataTable];
+    // The location will be store at the rcDataConnection currentGPSLocation member;
+    [rcDataConnection requestLocationData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -154,8 +161,8 @@
 {
     float actualHeight = image.size.height;
     float actualWidth = image.size.width;
-    float maxHeight = 300.0;
-    float maxWidth = 400.0;
+    float maxHeight = 800;
+    float maxWidth = 800;
     float imgRatio = actualWidth/actualHeight;
     float maxRatio = maxWidth/maxHeight;
     float compressionQuality = 0.7; // Compression factor

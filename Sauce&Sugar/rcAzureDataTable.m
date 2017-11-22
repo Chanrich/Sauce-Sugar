@@ -7,9 +7,8 @@
 //
 
 #import "rcAzureDataTable.h"
+#import "GlobalNames.h"
 #define MAX_REQUIREMENT 4
-#define GPS_LONGITUDE @"longitude"
-#define GPS_LATITUDE @"latitude"
 @implementation rcAzureDataTable
 
 // Create a singleton
@@ -62,8 +61,8 @@
     NSNumber *seqNum = [NSNumber numberWithInt:1];
     
     // Insert data
-    [self.rcDataDictionaryForUserTable setObject:username forKey:@"USERNAME"];
-    [self.rcDataDictionaryForUserTable setObject:seqNum forKey:@"SequenceNumber"];
+    [self.rcDataDictionaryForUserTable setObject:username forKey:AZURE_USER_TABLE_USERNAME];
+    [self.rcDataDictionaryForUserTable setObject:seqNum forKey:AZURE_USER_TABLE_SEQUENCE];
     
     // Return a MSTable instance with rcUserDataInfo table
     MSTable *itemTable = [self.client tableWithName:@"rcUserDataInfo"];
@@ -105,7 +104,8 @@
             NSLog(@"Cannot get unique sequence number from server... Abort!");
             returnCallback(nil);
         } else {
-            NSLog(@"Entries returned from itemTable readWithQueryString:%lu", [result.items count]);
+            NSNumber *itemCount = [NSNumber numberWithUnsignedLong:[result.items count]];
+            NSLog(@"Entries returned from itemTable readWithQueryString:%@", itemCount);
             if ([result.items count] == 1){
                 // Pass the NSDictionary* stored in NSArray back to callback function
                 returnCallback([result.items objectAtIndex:0]);
@@ -131,6 +131,8 @@
     // 2. Foodtype
     NSPredicate *dataFilter;
     NSPredicate *dataFilter2;
+    NSPredicate *dataFilter_latitude;
+    NSPredicate *dataFilter_longitude;
     NSPredicate *finalAndPredicate;
     
     // Filter for username
@@ -151,8 +153,24 @@
         dataFilter2 = [NSPredicate predicateWithFormat:@"foodType == %d", foodType];
     }
     
-    // AND those two data filters together to get: dataFilter AND dataFilter2
-    finalAndPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[dataFilter, dataFilter2]];
+    // TODO: Add a filter to select closest entries
+    // The filter should use longitude and latitude
+    // Each degree of latitude is approximately 69 miles
+    // A degree of longitude is widest at the equator at 69.172 miles (111.321) and gradually shrinks to zero at the poles.
+    // Latitude:
+    // ABS(y) < 0.8 (approx.55 miles)
+    // Longitudes:
+    // ABS(x) < 0.8 (approx.55 miles at equator and gradually to 0 at poles)
+    if (self.currentGPSLocation != nil){
+        // Need a function to return lower and upper bounds in a array for long/lat, param: current position object
+        NSArray *latitudeBounds = [self returnLatitudeBoundsWithCenterLocation:self.currentGPSLocation searchDegree:0.8];
+        NSArray *longitudeBounds = [self returnLongitudeBoundsWithCenterLocation:self.currentGPSLocation searchDegree:0.8];
+        dataFilter_latitude = [NSPredicate predicateWithFormat:@"latitude BETWEEN %@", latitudeBounds];
+        dataFilter_longitude = [NSPredicate predicateWithFormat:@"longitude BETWEEN %@", longitudeBounds];
+    }
+    
+    // AND all data filters together
+    finalAndPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[dataFilter, dataFilter2, dataFilter_latitude, dataFilter_longitude]];
     
     NSLog(@"finalAndPredicate:%@\n", [finalAndPredicate predicateFormat]);
     
@@ -217,18 +235,18 @@
 
 - (void)insertResNameData:(NSString *)resName {
     // Insert restaurant name into mutable dictionary
-    [self.rcDataDictionary setObject:resName forKey:@"rName"];
+    [self.rcDataDictionary setObject:resName forKey:AZURE_DATA_TABLE_RESTAURANT_NAME];
 }
 
 - (void)insertTypeData:(FoodTypes)foodType {
     // Convert foodType to NSNumber with @() and store it into mutable dictionary
-    [self.rcDataDictionary setObject:@(foodType) forKey:@"foodType"];
+    [self.rcDataDictionary setObject:@(foodType) forKey:AZURE_DATA_TABLE_FOODTYPE];
 }
 
 - (void)insertSequenceNumber:(NSString *)sequenceNumber username:(NSString *)username { 
     // Insert username and sequence number (image reference) into mutable dictionary
-    [self.rcDataDictionary setObject:username forKey:@"userName"];
-    [self.rcDataDictionary setObject:sequenceNumber forKey:@"sequence"];
+    [self.rcDataDictionary setObject:username forKey:AZURE_DATA_TABLE_USERNAME];
+    [self.rcDataDictionary setObject:sequenceNumber forKey:AZURE_DATA_TABLE_SEQUENCE];
 }
 
 // Search user with same username and return entries in callback
@@ -288,6 +306,9 @@
     // Get lastest object in locations array
     CLLocation *myLocation = [locations lastObject];
     
+    // Save a copy of the current location for search function to locate nearest places
+    self.currentGPSLocation = myLocation;
+    
     // Convert location data from double to string
     NSString *longitudeToString = [NSString stringWithFormat:@"%f", myLocation.coordinate.longitude];
     NSString *latitudeToString = [NSString stringWithFormat:@"%f", myLocation.coordinate.latitude];
@@ -333,6 +354,38 @@
             break;
     }
     NSLog(@"Location authorization status updated to %@", statusTranslate);
+}
+
+// Returns a NSArray with lower and upper bounds in latitude which will serve as latitude search area for items in database
+- (NSArray*) returnLatitudeBoundsWithCenterLocation:(CLLocation*)center searchDegree:(float)degree{
+    // The filter should use longitude and latitude
+    // Each degree of latitude is approximately 69 miles
+    // A degree of longitude is widest at the equator at 69.172 miles (111.321) and gradually shrinks to zero at the poles.
+    // Latitude:
+    // ABS(y) < 0.8 (approx.55 miles)
+    // Longitudes:
+    // ABS(x) < 0.8 (approx.55 miles at equator and gradually to 0 at poles)
+    float currentLatitude = center.coordinate.latitude;
+    NSArray *bounds = @[@(currentLatitude - degree), @(currentLatitude + degree)];
+    NSLog(@"Created: Latitude Bounds: %@", bounds);
+    return bounds;
+    
+}
+
+// Returns a NSArray with lower and upper bounds in longitude which will serve as longitude search area for items in database
+- (NSArray*) returnLongitudeBoundsWithCenterLocation:(CLLocation*)center searchDegree:(float)degree{
+    // The filter should use longitude and latitude
+    // Each degree of latitude is approximately 69 miles
+    // A degree of longitude is widest at the equator at 69.172 miles (111.321) and gradually shrinks to zero at the poles.
+    // Latitude:
+    // ABS(y) < 0.8 (approx.55 miles)
+    // Longitudes:
+    // ABS(x) < 0.8 (approx.55 miles at equator and gradually to 0 at poles)
+    float currentLongitude = center.coordinate.longitude;
+    NSArray *bounds = @[@(currentLongitude - degree), @(currentLongitude + degree)];
+    NSLog(@"Created: Latitude Bounds: %@", bounds);
+    return bounds;
+    
 }
 
 @end
