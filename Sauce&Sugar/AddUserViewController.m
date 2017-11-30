@@ -20,6 +20,7 @@
     
     // Set textfield delegate to self to hide keyboard
     self.rcAddUser.delegate = self;
+    self.rcUserPasswordTextField.delegate = self;
     
     // Initialize a singleton instance
     self.rcDataConnection = [rcAzureDataTable sharedDataTable];

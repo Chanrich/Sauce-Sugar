@@ -62,20 +62,24 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:@"addNewItem" object:nil];
 
             break;
-        case 3:
+        case 3: // LOGIN BUTTON
+            // Reset slide menu button so it will allow this menu to slide back again
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"slideSuperViewBack" object:nil];
+            
             break;
-        case 4:
+        case 4: // SIGN UP BUTTON
+            // Reset slide menu button so it will allow this menu to slide back again
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"slideSuperViewBack" object:nil];
+            
+            // Call target vc from main view
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"signUpNewUser" object:nil];
             break;
         case 5: //Credit
             // Reset slide menu button so it will allow this menu to slide back again
             [[NSNotificationCenter defaultCenter] postNotificationName:@"slideSuperViewBack" object:nil];
             
-            // Create an instance of the credit view
-            sb = [UIStoryboard storyboardWithName:@"slideMenu" bundle:nil];
-            creditVC = (CreditsViewController*)[sb instantiateViewControllerWithIdentifier:@"creditsVC_ID"];
-            
-            // Display credit view
-            [self showViewController:creditVC sender:NULL];
+            // Call target vc from main view
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"showCredit" object:nil];
             break;
         default:
             break;

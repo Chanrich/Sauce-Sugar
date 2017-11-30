@@ -27,11 +27,20 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    // Listen for button click event in slideout menu to return panel to original position
+    // Hide navigation bar's shadow line
+    [self.navigationController.navigationBar setValue:@(YES) forKey:@"hidesShadow"];
+    
+    // Listen for button click event in slide-out menu to return panel to original position
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slideSuperViewToOriginal) name:@"slideSuperViewBack" object:nil];
     
-    // Listen for ADD button click event slide out menu
+    // Listen for ADD button click event slide-out menu
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startCamera) name:@"addNewItem" object:nil];
+    
+    // Listen for SIGN UP button click event slide-out menu
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushAddUserViewController) name:@"signUpNewUser" object:nil];
+    
+    // Listen for credit button click event in slide-out menu
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushCreditsViewController) name:@"showCredit" object:nil];
     
     // Request current GPS location
     // Initialize singleton instances
@@ -213,27 +222,6 @@
 
 // ===================== Slide Out Menu functions =====================
 
-- (IBAction)rcSlideOutMenuButton_TouchUpInside:(id)sender {
-    UIButton *rcButton = sender;
-    // Slide the menu out or in depending on the tag of the sender button
-    // Tag = 0: Slideout Menu is in out position so slide it back in
-    // Tag = 1: Slideout Menu is in in position so slide it out.
-    switch (rcButton.tag) {
-        case 0:
-            // Slide menu back to original position
-            [self slideSuperViewToOriginal];
-            break;
-            
-        case 1:
-            // Slide menu out
-            [self slideSuperViewToRight];
-            break;
-        default:
-            NSLog(@"reached rcButton.tag default value. Program is not supposed to be here");
-            break;
-    }
-}
-
 // Animate a slide out menu option to the right of the super view
 - (void) slideSuperViewToRight{
     UIView *childView = [self getSlideOutMenuView];
@@ -244,7 +232,7 @@
     } completion:^(BOOL finished) {
         if (finished){
             // Tag = 0, Menu is slided out
-            self.rcSlideOutMenuButton.tag = 0;
+            self.rcSlideOutImage.tag = 0;
             
             // Enable fullscreen button to return to original position
             // self.slideBackButton.enabled = YES;
@@ -262,10 +250,10 @@
             [self.rcSlideOutMenuView.view removeFromSuperview];
             self.rcSlideOutMenuView = nil;
             // Tag = 1, Menu is in its original position
-            self.rcSlideOutMenuButton.tag = 1;
+            self.rcSlideOutImage.tag = 1;
             
             // Reset shadow to default
-            [self setShadowForSlideOutMenu:NO offset:0];
+            // [self setShadowForSlideOutMenu:NO offset:0];
             
             // Disable fullscreen button for sliding original panel back
             // self.slideBackButton.enabled = NO;
@@ -296,7 +284,7 @@
     }
     
     // Set shadow
-    [self setShadowForSlideOutMenu:YES offset:-2];
+    // [self setShadowForSlideOutMenu:YES offset:-2];
 
     UIView *returnView = self.rcSlideOutMenuView.view;
     return returnView;
@@ -317,28 +305,93 @@
 }
 - (IBAction)RiceClicked:(id)sender {
     NSLog(@"RiceClicked");
-    // Get storyboard
-    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"searchTable" bundle:nil];
-    // Get the view controller from storyboard
-    ShowItemsTableViewController *showdataVC = (ShowItemsTableViewController*)[sb instantiateViewControllerWithIdentifier:@"searchTableID"];
-    // Set the enum constant
-    showdataVC.searchFoodType = RICE;
-    
-    // Push the view controller onto navigation stack
-    [self.navigationController pushViewController:showdataVC animated:YES];
+    [self pushShowItemsViewControllerWithType:RICE];
     
 }
 
 - (IBAction)NoodlesClicked:(id)sender {
     NSLog(@"NoodlesClicked");
+    [self pushShowItemsViewControllerWithType:NOODLES];
+    
 }
 
 - (IBAction)IceCreamClicked:(id)sender {
     NSLog(@"IceCreamClicked");
+    [self pushShowItemsViewControllerWithType:ICECREAM];
 }
 
 
 - (IBAction)DrinkClicked:(id)sender {
     NSLog(@"DrinkClicked");
+    [self pushShowItemsViewControllerWithType:DRINK];
+}
+
+- (IBAction)DessertClicked:(id)sender {
+    NSLog(@"DessertClicked");
+    [self pushShowItemsViewControllerWithType:DESSERT];
+}
+
+
+// This private method will be called by each filter button to create data display view controller with filter pre-selected in parameter type
+- (void) pushShowItemsViewControllerWithType:(enum FoodTypesEnum)type{
+    // Get storyboard
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"searchTable" bundle:nil];
+    // Get the view controller from storyboard
+    ShowItemsTableViewController *showdataVC = (ShowItemsTableViewController*)[sb instantiateViewControllerWithIdentifier:@"searchTableID"];
+    // Set the enum constant
+    showdataVC.searchFoodType = type;
+    // Show view controller
+    [self.navigationController pushViewController:showdataVC animated:YES];
+    
+    }
+
+// SlideOutMenuView will call this method when sign up button is clicked.
+// This method will show AddUserViewController.
+- (void) pushAddUserViewController{
+    // Get storyboard
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"slideMenu" bundle:nil];
+    // Get the view controller from storyboard
+    ShowItemsTableViewController *vc = (ShowItemsTableViewController*)[sb instantiateViewControllerWithIdentifier:@"AddUserViewControllerID"];
+    
+    // Hide tab bar
+    vc.hidesBottomBarWhenPushed = YES;
+    // Show vc
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+// SlideOutMenuView will call this method when credit button is clicked.
+// This method will show CreditsViewController.
+- (void) pushCreditsViewController{
+    // Get storyboard
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"slideMenu" bundle:nil];
+    // Get the view controller from storyboard
+    ShowItemsTableViewController *vc = (ShowItemsTableViewController*)[sb instantiateViewControllerWithIdentifier:@"creditsVC_ID"];
+    
+    // Hide tab bar
+    vc.hidesBottomBarWhenPushed = YES;
+    // Show vc
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+
+// Gesture recognizer method to detect clicking of the menu image
+- (IBAction)rcSlideMenu_Tapped:(id)sender {
+    // Slide the menu out or in depending on the tag of the sender button
+    // Tag = 0: Slideout Menu is in out position so slide it back in
+    // Tag = 1: Slideout Menu is in in position so slide it out.
+    switch (self.rcSlideOutImage.tag) {
+        case 0:
+            // Slide menu back to original position
+            [self slideSuperViewToOriginal];
+            break;
+            
+        case 1:
+            // Slide menu out
+            [self slideSuperViewToRight];
+            break;
+        default:
+            NSLog(@"reached rcButton.tag default value. Program is not supposed to be here");
+            break;
+    }
 }
 @end

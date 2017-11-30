@@ -13,11 +13,11 @@
 #import "ShowItemsTableViewController.h"
 
 @interface MainMenuTableViewController : UITableViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, SlideOutMenuViewControllerDelegate>
-// Button to show Slide Out Menu
-@property (strong, nonatomic) IBOutlet UIButton *rcSlideOutMenuButton;
+// UI ImageView button to call slideout menu
+@property (strong, nonatomic) IBOutlet UIImageView *rcSlideOutImage;
 
-// Show Slide Out Menu
-- (IBAction)rcSlideOutMenuButton_TouchUpInside:(id)sender;
+- (IBAction)rcSlideMenu_Tapped:(id)sender;
+
 
 // Custom slide out menu view controller
 @property (strong, nonatomic) SlideOutMenuViewController *rcSlideOutMenuView;

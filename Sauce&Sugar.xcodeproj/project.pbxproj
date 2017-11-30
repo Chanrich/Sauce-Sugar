@@ -11,6 +11,8 @@
 		69162CCB1FB01CC100B7E853 /* GreenCheck.png in Resources */ = {isa = PBXBuildFile; fileRef = 69162CCA1FB01CC000B7E853 /* GreenCheck.png */; };
 		6938F8A21F84AA130079C555 /* ShowItemsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6938F8A11F84AA120079C555 /* ShowItemsTableViewController.m */; };
 		6938F8A51F877AAE0079C555 /* rcShowItemsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6938F8A41F877AAE0079C555 /* rcShowItemsTableViewCell.m */; };
+		696F14F61FCFECF9001300C6 /* menu_icon-01.png in Resources */ = {isa = PBXBuildFile; fileRef = 696F14F51FCFECF9001300C6 /* menu_icon-01.png */; };
+		696F14F81FCFF328001300C6 /* menu.png in Resources */ = {isa = PBXBuildFile; fileRef = 696F14F71FCFF327001300C6 /* menu.png */; };
 		698A0E001FA1AFF800915313 /* searchTable.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 698A0DFF1FA1AFF800915313 /* searchTable.storyboard */; };
 		698A0E031FA1B07800915313 /* slideMenu.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 698A0E011FA1B07800915313 /* slideMenu.storyboard */; };
 		698A0E061FA1B17F00915313 /* insertToDatabase.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 698A0E051FA1B17F00915313 /* insertToDatabase.storyboard */; };
@@ -32,8 +34,6 @@
 		69C9316B1F502006007696BA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69C931691F502006007696BA /* LaunchScreen.storyboard */; };
 		69C931761F502006007696BA /* Sauce_SugarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C931751F502006007696BA /* Sauce_SugarTests.m */; };
 		69C931811F502006007696BA /* Sauce_SugarUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C931801F502006007696BA /* Sauce_SugarUITests.m */; };
-		69C931A51F53725C007696BA /* Location.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C931A41F53725C007696BA /* Location.m */; };
-		69C931A81F537272007696BA /* LocationDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C931A71F537272007696BA /* LocationDataController.m */; };
 		69C931AD1F53788A007696BA /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69C931AC1F53788A007696BA /* MapKit.framework */; };
 		69C931B01F57E764007696BA /* AddToDatabase_ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69C931AF1F57E764007696BA /* AddToDatabase_ViewController.m */; };
 		69DE29071F74CA8200B0527E /* rcAzureDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 69DE29061F74CA8200B0527E /* rcAzureDataTable.m */; };
@@ -84,6 +84,8 @@
 		6938F8A11F84AA120079C555 /* ShowItemsTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShowItemsTableViewController.m; sourceTree = "<group>"; };
 		6938F8A31F877AAE0079C555 /* rcShowItemsTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rcShowItemsTableViewCell.h; sourceTree = "<group>"; };
 		6938F8A41F877AAE0079C555 /* rcShowItemsTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = rcShowItemsTableViewCell.m; sourceTree = "<group>"; };
+		696F14F51FCFECF9001300C6 /* menu_icon-01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu_icon-01.png"; sourceTree = "<group>"; };
+		696F14F71FCFF327001300C6 /* menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu.png; sourceTree = "<group>"; };
 		698A0DFF1FA1AFF800915313 /* searchTable.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = searchTable.storyboard; sourceTree = "<group>"; };
 		698A0E021FA1B07800915313 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = "Sauce&Sugar/Base.lproj/slideMenu.storyboard"; sourceTree = "<group>"; };
 		698A0E051FA1B17F00915313 /* insertToDatabase.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = insertToDatabase.storyboard; sourceTree = "<group>"; };
@@ -118,10 +120,6 @@
 		69C9317C1F502006007696BA /* Sauce&SugarUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Sauce&SugarUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		69C931801F502006007696BA /* Sauce_SugarUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Sauce_SugarUITests.m; sourceTree = "<group>"; };
 		69C931821F502006007696BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		69C931A31F53725C007696BA /* Location.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Location.h; sourceTree = "<group>"; };
-		69C931A41F53725C007696BA /* Location.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Location.m; sourceTree = "<group>"; };
-		69C931A61F537272007696BA /* LocationDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationDataController.h; sourceTree = "<group>"; };
-		69C931A71F537272007696BA /* LocationDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationDataController.m; sourceTree = "<group>"; };
 		69C931AC1F53788A007696BA /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		69C931AE1F57E764007696BA /* AddToDatabase_ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddToDatabase_ViewController.h; sourceTree = "<group>"; };
 		69C931AF1F57E764007696BA /* AddToDatabase_ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddToDatabase_ViewController.m; sourceTree = "<group>"; };
@@ -272,6 +270,8 @@
 			children = (
 				69C54F7E1F8F3FCF00C4005F /* ss_icon2x.png */,
 				69F39F341FBD911B00362888 /* AppStoreIcon1024.png */,
+				696F14F71FCFF327001300C6 /* menu.png */,
+				696F14F51FCFECF9001300C6 /* menu_icon-01.png */,
 				69F39F211FB5891200362888 /* FoodTypeIcon */,
 				69C54F7D1F8F3FCF00C4005F /* ss_icon3x.png */,
 				69A080091F62981D00651946 /* CameraBackground.jpg */,
@@ -315,10 +315,6 @@
 				69C9316C1F502006007696BA /* Info.plist */,
 				69C931641F502006007696BA /* Sauce_Sugar.xcdatamodeld */,
 				69C931581F502006007696BA /* Supporting Files */,
-				69C931A31F53725C007696BA /* Location.h */,
-				69C931A41F53725C007696BA /* Location.m */,
-				69C931A61F537272007696BA /* LocationDataController.h */,
-				69C931A71F537272007696BA /* LocationDataController.m */,
 			);
 			path = "Sauce&Sugar";
 			sourceTree = "<group>";
@@ -559,6 +555,8 @@
 				69C9316B1F502006007696BA /* LaunchScreen.storyboard in Resources */,
 				69F39F2D1FB65D2200362888 /* MainMenu.storyboard in Resources */,
 				69C931681F502006007696BA /* Assets.xcassets in Resources */,
+				696F14F81FCFF328001300C6 /* menu.png in Resources */,
+				696F14F61FCFECF9001300C6 /* menu_icon-01.png in Resources */,
 				69C931631F502006007696BA /* Main.storyboard in Resources */,
 				698A0E061FA1B17F00915313 /* insertToDatabase.storyboard in Resources */,
 				69A0800A1F62981D00651946 /* CameraBackground.jpg in Resources */,
@@ -592,7 +590,6 @@
 				69F39F201FB5280F00362888 /* CreditsViewController.m in Sources */,
 				69C931B01F57E764007696BA /* AddToDatabase_ViewController.m in Sources */,
 				69A0800D1F63EB0600651946 /* MainMenuButton.m in Sources */,
-				69C931A81F537272007696BA /* LocationDataController.m in Sources */,
 				69C54F811F9AE13900C4005F /* SlideOutMenuViewController.m in Sources */,
 				698A0E0A1FA53E3100915313 /* SelectFoodTypeTableViewController.m in Sources */,
 				69F39F531FBFED4800362888 /* GMapViewController.m in Sources */,
@@ -601,7 +598,6 @@
 				698A0E0D1FA843FE00915313 /* LoadingScreenViewController.m in Sources */,
 				6938F8A21F84AA130079C555 /* ShowItemsTableViewController.m in Sources */,
 				69162CC71FAF329300B7E853 /* UIView+UIView_ViewAnimations.m in Sources */,
-				69C931A51F53725C007696BA /* Location.m in Sources */,
 				69C9315D1F502006007696BA /* AppDelegate.m in Sources */,
 				69DE290A1F7865D700B0527E /* AddUserViewController.m in Sources */,
 				69F39F561FC0E7C400362888 /* ShowGMapViewController.m in Sources */,

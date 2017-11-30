@@ -15,7 +15,7 @@
         <scene sceneID="jjj-4T-zqJ">
             <objects>
                 <tableViewController id="PLe-MP-GPS" customClass="MainMenuTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="q74-cT-to1">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="q74-cT-to1">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -26,7 +26,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="400"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="OdK-ra-fZr" id="OeS-AL-9Iq">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="399.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="400"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rice" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6a9-zA-4d2">
@@ -86,6 +86,9 @@
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="baF-6u-Bvw">
                                                     <rect key="frame" x="225" y="139" width="70" height="70"/>
                                                     <state key="normal" backgroundImage="piece-of-cake.png"/>
+                                                    <connections>
+                                                        <action selector="DessertClicked:" destination="PLe-MP-GPS" eventType="touchUpInside" id="ndc-lI-eCC"/>
+                                                    </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dmu-3K-wj6">
                                                     <rect key="frame" x="75" y="256" width="70" height="70"/>
@@ -146,7 +149,7 @@
                                         <rect key="frame" x="0.0" y="400" width="375" height="400"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="mBH-3W-yeS" id="HfR-6H-r0I">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="399.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="400"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kGp-7z-Aog">
@@ -159,14 +162,6 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="fDJ-js-Z7w">
-                                        <rect key="frame" x="0.0" y="800" width="375" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="fDJ-js-Z7w" id="66n-Ai-dfL">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -176,22 +171,36 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Home" id="xyR-B1-b6j">
-                        <barButtonItem key="leftBarButtonItem" title="Item" id="oSj-EK-fte">
-                            <button key="customView" opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="eZQ-MK-6o2">
-                                <rect key="frame" x="16" y="7" width="46" height="30"/>
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="RP6-xF-lvl">
+                            <view key="customView" contentMode="scaleToFill" id="Ejj-3U-5Mb">
+                                <rect key="frame" x="16" y="2" width="40" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Menu"/>
-                                <connections>
-                                    <action selector="rcSlideOutMenuButton_TouchUpInside:" destination="PLe-MP-GPS" eventType="touchUpInside" id="F0M-rs-kmR"/>
-                                </connections>
-                            </button>
+                                <subviews>
+                                    <imageView tag="1" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="menu_icon-01.png" translatesAutoresizingMaskIntoConstraints="NO" id="JJl-H3-wo2">
+                                        <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <accessibility key="accessibilityConfiguration">
+                                            <accessibilityTraits key="traits" button="YES" image="YES"/>
+                                        </accessibility>
+                                        <gestureRecognizers/>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="qf6-Uv-VLV" appends="YES" id="gIU-XW-YkS"/>
+                                        </connections>
+                                    </imageView>
+                                </subviews>
+                            </view>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="rcSlideOutMenuButton" destination="eZQ-MK-6o2" id="zQa-6d-Zm7"/>
+                        <outlet property="rcSlideOutImage" destination="JJl-H3-wo2" id="44a-T5-2vH"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sUS-ZD-9NS" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="qf6-Uv-VLV">
+                    <connections>
+                        <action selector="rcSlideMenu_Tapped:" destination="PLe-MP-GPS" id="Xtt-KC-DOL"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="2044" y="-567.16641679160421"/>
         </scene>
@@ -202,9 +211,10 @@
                     <tabBarItem key="tabBarItem" systemItem="favorites" id="bul-in-DLP"/>
                     <toolbarItems/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="xw9-RS-dNW">
+                    <navigationBar key="navigationBar" clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="xw9-RS-dNW">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -219,6 +229,7 @@
     <resources>
         <image name="bowl-of-white-rice.png" width="128" height="128"/>
         <image name="lemonade.png" width="128" height="128"/>
+        <image name="menu_icon-01.png" width="417" height="417"/>
         <image name="noodles.png" width="128" height="128"/>
         <image name="piece-of-cake.png" width="128" height="128"/>
     </resources>

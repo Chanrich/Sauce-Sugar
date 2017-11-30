@@ -13,6 +13,7 @@
 @interface AddUserViewController : UIViewController <UITextFieldDelegate>
 // UI elements
 @property (strong, nonatomic) IBOutlet UITextField *rcAddUser;
+@property (strong, nonatomic) IBOutlet UITextField *rcUserPasswordTextField;
 @property (strong, nonatomic) IBOutlet UIButton *rcButton_Adduser;
 // Singleton instance of table data management
 @property (strong, nonatomic) rcAzureDataTable *rcDataConnection;
