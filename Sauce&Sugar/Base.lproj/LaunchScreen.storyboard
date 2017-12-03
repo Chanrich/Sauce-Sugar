@@ -22,24 +22,35 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="stew.png" translatesAutoresizingMaskIntoConstraints="NO" id="dzD-vl-Oc2">
+                                <rect key="frame" x="63" y="257" width="240" height="128"/>
+                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xxw-m0-jKw">
-                                <rect key="frame" x="63" y="146" width="248" height="75"/>
+                                <rect key="frame" x="63" y="165" width="248" height="75"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="75" id="TQj-KK-CQV"/>
+                                </constraints>
                                 <attributedString key="attributedText">
                                     <fragment content="Sauce &amp; Sugar">
                                         <attributes>
-                                            <color key="NSColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="36" name="Arial-Black"/>
+                                            <color key="NSColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="36" name="Times-Italic"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                         </attributes>
                                     </fragment>
                                 </attributedString>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
+                        <color key="backgroundColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="xxw-m0-jKw" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="126" id="QDD-5b-f5J"/>
-                            <constraint firstItem="xxw-m0-jKw" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="olP-Mw-bW8"/>
-                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="xxw-m0-jKw" secondAttribute="bottom" constant="446" id="poo-KP-tv7"/>
-                            <constraint firstItem="xxw-m0-jKw" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="47" id="zyQ-Vy-aFr"/>
+                            <constraint firstItem="xxw-m0-jKw" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="08b-jb-Ktv"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="dzD-vl-Oc2" secondAttribute="bottom" constant="282" id="DQh-9K-yMt"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="dzD-vl-Oc2" secondAttribute="trailing" constant="56" id="UIb-VV-GP2"/>
+                            <constraint firstItem="xxw-m0-jKw" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="145" id="Vb6-IT-iGF"/>
+                            <constraint firstItem="xxw-m0-jKw" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="47" id="bWl-QJ-TOe"/>
+                            <constraint firstItem="dzD-vl-Oc2" firstAttribute="top" secondItem="xxw-m0-jKw" secondAttribute="bottom" constant="17" id="dSE-DB-0ke"/>
+                            <constraint firstItem="xxw-m0-jKw" firstAttribute="leading" secondItem="dzD-vl-Oc2" secondAttribute="leading" id="ebr-JD-8AZ"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -48,4 +59,7 @@
             <point key="canvasLocation" x="52" y="374.66266866566718"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="stew.png" width="512" height="512"/>
+    </resources>
 </document>

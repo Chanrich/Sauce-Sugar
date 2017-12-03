@@ -56,43 +56,43 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="adZ-hY-0Ik">
+                                                <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="adZ-hY-0Ik">
                                                     <rect key="frame" x="75" y="40" width="70" height="70"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="70" id="JUu-A4-hDU"/>
                                                     </constraints>
-                                                    <state key="normal" backgroundImage="bowl-of-white-rice.png"/>
+                                                    <state key="normal" image="bowl-of-white-rice.png"/>
                                                     <connections>
                                                         <action selector="RiceClicked:" destination="PLe-MP-GPS" eventType="touchUpInside" id="bRS-29-qiI"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yoh-se-Py4">
+                                                <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yoh-se-Py4">
                                                     <rect key="frame" x="225" y="40" width="70" height="70"/>
-                                                    <state key="normal" backgroundImage="noodles.png"/>
+                                                    <state key="normal" image="noodles.png"/>
                                                     <connections>
                                                         <action selector="NoodlesClicked:" destination="PLe-MP-GPS" eventType="touchUpInside" id="cWG-DU-bDO"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ad9-s3-OeF">
+                                                <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ad9-s3-OeF">
                                                     <rect key="frame" x="75" y="139" width="70" height="70"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="70" id="mDQ-Au-Ygs"/>
                                                     </constraints>
-                                                    <state key="normal" backgroundImage="noodles.png"/>
+                                                    <state key="normal" image="ice-cream.png"/>
                                                     <connections>
                                                         <action selector="IceCreamClicked:" destination="PLe-MP-GPS" eventType="touchUpInside" id="w8z-zI-2tD"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="baF-6u-Bvw">
+                                                <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="baF-6u-Bvw">
                                                     <rect key="frame" x="225" y="139" width="70" height="70"/>
-                                                    <state key="normal" backgroundImage="piece-of-cake.png"/>
+                                                    <state key="normal" image="piece-of-cake.png"/>
                                                     <connections>
                                                         <action selector="DessertClicked:" destination="PLe-MP-GPS" eventType="touchUpInside" id="ndc-lI-eCC"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dmu-3K-wj6">
+                                                <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dmu-3K-wj6">
                                                     <rect key="frame" x="75" y="256" width="70" height="70"/>
-                                                    <state key="normal" backgroundImage="lemonade.png"/>
+                                                    <state key="normal" image="lemonade.png"/>
                                                     <connections>
                                                         <action selector="DrinkClicked:" destination="PLe-MP-GPS" eventType="touchUpInside" id="icS-pL-amN"/>
                                                     </connections>
@@ -171,7 +171,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Home" id="xyR-B1-b6j">
-                        <barButtonItem key="leftBarButtonItem" style="plain" id="RP6-xF-lvl">
+                        <barButtonItem key="leftBarButtonItem" id="RP6-xF-lvl">
                             <view key="customView" contentMode="scaleToFill" id="Ejj-3U-5Mb">
                                 <rect key="frame" x="16" y="2" width="40" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -204,11 +204,11 @@
             </objects>
             <point key="canvasLocation" x="2044" y="-567.16641679160421"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Home-->
         <scene sceneID="TLe-BU-IzT">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="dgi-Yy-oXB" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" systemItem="favorites" id="bul-in-DLP"/>
+                    <tabBarItem key="tabBarItem" title="Home" image="restaurant.png" id="bul-in-DLP"/>
                     <toolbarItems/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="xw9-RS-dNW">
@@ -228,9 +228,11 @@
     </scenes>
     <resources>
         <image name="bowl-of-white-rice.png" width="128" height="128"/>
+        <image name="ice-cream.png" width="128" height="128"/>
         <image name="lemonade.png" width="128" height="128"/>
         <image name="menu_icon-01.png" width="417" height="417"/>
         <image name="noodles.png" width="128" height="128"/>
         <image name="piece-of-cake.png" width="128" height="128"/>
+        <image name="restaurant.png" width="32" height="32"/>
     </resources>
 </document>

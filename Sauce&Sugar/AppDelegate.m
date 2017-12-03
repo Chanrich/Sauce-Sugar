@@ -7,12 +7,17 @@
 //
 
 #import "AppDelegate.h"
+#import "rcAzureDataTable.h"
+#import "rcAzureBlobContainer.h"
 
 @interface AppDelegate ()
 
 @end
 
-@implementation AppDelegate
+@implementation AppDelegate {
+    rcAzureDataTable *rcDataConnection;
+    rcAzureBlobContainer *rcBlobContainer;
+}
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -22,6 +27,11 @@
     self.currentUsername = @"rchan";
     // Enable Google API
     [GMSServices provideAPIKey:@"AIzaSyCElpQ25SaS9VxqFsdgR1pRkVYEbspWALI"];
+    
+    // Initialize singleton instances
+    rcDataConnection = [rcAzureDataTable sharedDataTable];
+    rcBlobContainer = [rcAzureBlobContainer sharedStorageContainer];
+    
     return YES;
 }
 

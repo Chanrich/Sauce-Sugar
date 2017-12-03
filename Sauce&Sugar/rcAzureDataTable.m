@@ -9,7 +9,15 @@
 #import "rcAzureDataTable.h"
 #import "GlobalNames.h"
 #define MAX_REQUIREMENT 4
-@implementation rcAzureDataTable
+#define AZURE_USER_DATA_TABLE_NAME @"rcUserDataInfo"
+#define AZURE_MAIN_DATA_TABLE_NAME @"rcMainDataTable"
+@implementation rcAzureDataTable {
+    // Private variables
+    NSNumber *rcCurrentSequenceNumber;
+    // Store references to table datas
+    MSTable *MainData_MSTable;
+    MSTable *UserData_MSTable;
+}
 
 // Create a singleton
 + (instancetype) sharedDataTable{
@@ -33,16 +41,18 @@
         self.rcDataDictionaryForUserTable = [[NSMutableDictionary alloc] init];
         // GPS Location mangager
         self.rcLocationManager = [[CLLocationManager alloc] init];
+        // Initialized sequence number to invalid
+        rcCurrentSequenceNumber = @(-1);
+        // Initialize all data table
+        MainData_MSTable = [self.client tableWithName:AZURE_MAIN_DATA_TABLE_NAME];;
+        UserData_MSTable = [self.client tableWithName:AZURE_USER_DATA_TABLE_NAME];
     }
     return self;
 }
 
-- (void) InsertDataIntoTable:(NSString*)tableName rcCallback:(void(^)(NSNumber *rcCompleteFlag))rcCallback{
-    // Return a MSTable instance with tableName
-    MSTable *itemTable = [self.client tableWithName:tableName];
-
+- (void) InsertDataIntoMainDataTable:(void(^)(NSNumber *rcCompleteFlag))rcCallback{
     // Insert data into table
-    [itemTable insert:self.rcDataDictionary completion:^(NSDictionary *InsertedItem, NSError *error) {
+    [MainData_MSTable insert:self.rcDataDictionary completion:^(NSDictionary *InsertedItem, NSError *error) {
         if (error){
             NSLog(@"error: %@", error);
             // Callback function should check the flag and issue a warning
@@ -64,11 +74,8 @@
     [self.rcDataDictionaryForUserTable setObject:username forKey:AZURE_USER_TABLE_USERNAME];
     [self.rcDataDictionaryForUserTable setObject:seqNum forKey:AZURE_USER_TABLE_SEQUENCE];
     
-    // Return a MSTable instance with rcUserDataInfo table
-    MSTable *itemTable = [self.client tableWithName:@"rcUserDataInfo"];
-    
     // Insert data into table
-    [itemTable insert:self.rcDataDictionaryForUserTable completion:^(NSDictionary *InsertedItem, NSError *error) {
+    [UserData_MSTable insert:self.rcDataDictionaryForUserTable completion:^(NSDictionary *InsertedItem, NSError *error) {
         if (error){
             NSLog(@"error: %@", error);
         } else {
@@ -79,53 +86,59 @@
 
 // getUniqueID_WithCallback will make the request and return the unique serial number in a NSArray* to the callback function. Caller will have to create a block to catch the return value
 - (void) getUniqueNumber_WithUsername:(NSString*)rcUsername  Callback:(void(^)(NSDictionary *callbackItem)) returnCallback {
-    // Return a MSTable instance with tableName
-    MSTable *itemTable = [self.client tableWithName:@"rcUserDataInfo"];
-    
-    // Data filter
-    NSPredicate *dataFilter;
-    
-    // Filter for username
-    if (rcUsername == nil){
-        // Return all user data
-        dataFilter = [NSPredicate predicateWithFormat:@"USERNAME != NULL"];
+    // Download sequence number from server only if sequence number is invalid, meaning never been downloaded before.
+    if (![rcCurrentSequenceNumber isEqualToNumber:@(-1)]){
+        // If sequence number is valid, get it from local copy
+        NSLog(@"Returning sequence number from local copy");
+        // Copy the style that data were returned from server, the returning NSNumber should be send to the callback function in a dictionary at key defined at AZURE_USER_TABLE_SEQUENCE
+        NSDictionary *tempStorage = @{AZURE_USER_TABLE_SEQUENCE:rcCurrentSequenceNumber};
+        returnCallback(tempStorage);
     } else {
-        // Return individual user data
-        dataFilter = [NSPredicate predicateWithFormat:@"USERNAME == %@", rcUsername];
-    }
-    
-    // Prepare a MSQuery object with filter dataFilter
-    NSLog(@"Query filter: %@", [dataFilter predicateFormat]);
-    MSQuery *rcQuery = [itemTable queryWithPredicate:dataFilter];
-    
-    // Query database with dataFilter
-    [rcQuery readWithCompletion:^(MSQueryResult * _Nullable result, NSError * _Nullable error) {
-        if (error){
-            NSLog(@"Cannot get unique sequence number from server... Abort!");
-            returnCallback(nil);
+        NSLog(@"Requesting sequence number from server");
+        
+        // Data filter
+        NSPredicate *dataFilter;
+        
+        // Filter for username
+        if (rcUsername == nil){
+            // Return all user data
+            dataFilter = [NSPredicate predicateWithFormat:@"USERNAME != NULL"];
         } else {
-            NSNumber *itemCount = [NSNumber numberWithUnsignedLong:[result.items count]];
-            NSLog(@"Entries returned from itemTable readWithQueryString:%@", itemCount);
-            if ([result.items count] == 1){
-                // Pass the NSDictionary* stored in NSArray back to callback function
-                returnCallback([result.items objectAtIndex:0]);
-            } else if ([result.items count] > 1){
-                // More than one entry is downloaded, something must be wrong as there shouldn't have two exact same user
-                NSLog(@"More than one user is selected, task aborting");
-            } else {
-                // Error
-                NSLog(@"No user is selected, task aborting");
-                returnCallback(nil);
-            }
+            // Return individual user data
+            dataFilter = [NSPredicate predicateWithFormat:@"USERNAME == %@", rcUsername];
         }
-    }]; // End of query read
+        
+        // Prepare a MSQuery object with filter dataFilter
+        NSLog(@"Query filter: %@", [dataFilter predicateFormat]);
+        MSQuery *rcQuery = [UserData_MSTable queryWithPredicate:dataFilter];
+        
+        // Query database with dataFilter
+        [rcQuery readWithCompletion:^(MSQueryResult * _Nullable result, NSError * _Nullable error) {
+            if (error){
+                NSLog(@"Cannot get unique sequence number from server... Abort!");
+                returnCallback(nil);
+            } else {
+                NSNumber *itemCount = [NSNumber numberWithUnsignedLong:[result.items count]];
+                NSLog(@"Entries returned from rcQuery readWithCompletion:%@", itemCount);
+                if ([result.items count] == 1){
+                    // Pass the NSDictionary* stored in NSArray back to callback function
+                    returnCallback([result.items objectAtIndex:0]);
+                } else if ([result.items count] > 1){
+                    // More than one entry is downloaded, something must be wrong as there shouldn't have two exact same user
+                    NSLog(@"More than one user is selected, task aborting");
+                } else {
+                    // Error
+                    NSLog(@"No user is selected, task aborting");
+                    returnCallback(nil);
+                }
+            }
+        }]; // End of query read
+    } // End of if sequence number is invalid
+    
 }
 
 // Make a query request for a single user, returns a NSArray of dictionaries in callback
 - (void) getDatafromUser:(NSString*)rcUsername FoodType:(FoodTypes)foodType Callback:(void(^)(NSArray *callbackItem)) returnCallback{
-    // Return a MSTable instance with tableName
-    MSTable *itemTable = [self.client tableWithName:@"rcMainDataTable"];
-
     // Create a filter for
     // 1. Username
     // 2. Foodtype
@@ -152,8 +165,7 @@
         // Select one foodType
         dataFilter2 = [NSPredicate predicateWithFormat:@"foodType == %d", foodType];
     }
-    
-    // TODO: Add a filter to select closest entries
+
     // The filter should use longitude and latitude
     // Each degree of latitude is approximately 69 miles
     // A degree of longitude is widest at the equator at 69.172 miles (111.321) and gradually shrinks to zero at the poles.
@@ -175,7 +187,7 @@
     NSLog(@"finalAndPredicate:%@\n", [finalAndPredicate predicateFormat]);
     
     // Prepare a MSQuery object with filter dataFilter
-    MSQuery *rcQuery = [itemTable queryWithPredicate:finalAndPredicate];
+    MSQuery *rcQuery = [MainData_MSTable queryWithPredicate:finalAndPredicate];
     
     // Perform a read on the MSquery object, the read will return maximum 50 entries
     [rcQuery readWithCompletion:^(MSQueryResult * _Nullable result, NSError * _Nullable error) {
@@ -204,9 +216,6 @@
 
 // Update an entry into the table, retrieve the information first and then update that entry
 - (void) incrementSequenceNumberWithDictionary:(NSDictionary*)myDict Callback:(void(^)(NSNumber* completeFlag)) returnCallback{
-    // Return a MSTable instance with tableName
-    MSTable *itemTable = [self.client tableWithName:@"rcUserDataInfo"];
-    
     // Increment the retrieved sequence number by 1
     NSNumber *newValue = [NSNumber numberWithInt:[[myDict objectForKey:@"SequenceNumber"] intValue] + 1];
     
@@ -214,13 +223,17 @@
     [myDict setValue:newValue forKey:@"SequenceNumber"];
     
     // Push it to Azure table
-    [itemTable update:myDict completion:^(NSDictionary * _Nullable item, NSError * _Nullable error) {
+    [UserData_MSTable update:myDict completion:^(NSDictionary * _Nullable item, NSError * _Nullable error) {
         if (error){
             NSLog(@"Error when updating dictionary");
             returnCallback(@NO);
         } else {
             NSLog(@"Successfully updated dictionary");
             returnCallback(@YES);
+            
+            // Save the new value to local copy
+            rcCurrentSequenceNumber = newValue;
+            NSLog(@"Local copy of sequence number update to: %d", [newValue intValue]);
         }
     }];
 }
@@ -249,18 +262,19 @@
     [self.rcDataDictionary setObject:sequenceNumber forKey:AZURE_DATA_TABLE_SEQUENCE];
 }
 
+- (NSDictionary*) getCurrentDictionaryData{
+    return self.rcDataDictionary;
+}
+
 // Search user with same username and return entries in callback
 - (void)verifyUsername:(NSString *)rcUsername Callback:(void(^)(BOOL callbackItem))returnCallback{
-    // Return a MSTable instance with tableName
-    MSTable *itemTable = [self.client tableWithName:@"rcUserDataInfo"];
-    
     // Create a filter for
     // 1. Username
     NSPredicate *dataFilter = [NSPredicate predicateWithFormat:
                                @"USERNAME=%@", rcUsername];
     
     // Prepare a MSQuery object with filter dataFilter
-    MSQuery *rcQuery = [itemTable queryWithPredicate:dataFilter];
+    MSQuery *rcQuery = [UserData_MSTable queryWithPredicate:dataFilter];
     
     // Perform a read on the MSquery object, the read will return maximum 50 entries
     [rcQuery readWithCompletion:^(MSQueryResult * _Nullable result, NSError * _Nullable error) {
@@ -284,6 +298,15 @@
     }];;
 }
 
+- (void) deleteEntry:(NSDictionary*)deleteEntry{
+    // Call the delete on main data table
+    [MainData_MSTable delete:deleteEntry completion:^(id  _Nullable itemId, NSError * _Nullable error) {
+        // Do nothing if the delete failed or succeed. Program should handle the failed case.
+        NSLog(@"Delete completed");
+    }];
+}
+
+#pragma mark - GPS Location Functions
 // Send a request for location authorization and start updating location data
 - (void)requestLocationData {
     self.rcLocationManager.delegate = self;

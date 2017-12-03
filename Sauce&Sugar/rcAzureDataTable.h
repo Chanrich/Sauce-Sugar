@@ -25,7 +25,7 @@
 
 
 typedef enum FoodTypesEnum {
-    FOODTYPE_INVALID = -1,
+    FOODTYPE_ALL = -1,
     RICE = 0,
     NOODLES = 1,
     ICECREAM = 2,
@@ -43,7 +43,7 @@ typedef enum FoodTypesEnum {
       b. foodType
       c. sequenceNumber
       d. username
- 3. Store data into rcMainDataTable, call function InsertDataIntoTable to upload stored dictionary data to Azure
+ 3. Store data into rcMainDataTable, call function InsertDataIntoMainDataTable to upload stored dictionary data to Azure
  ============================================================    */
 
 
@@ -51,7 +51,7 @@ typedef enum FoodTypesEnum {
 // Two data tables:
 // 1. rcMainDataTable : Contain all data related information
 // 2. rcUserDataInfo : Contain all user related information
-- (void) InsertDataIntoTable:(NSString*)tableName rcCallback:(void(^)(NSNumber *rcCompleteFlag))rcCallback;
+- (void) InsertDataIntoMainDataTable:(void(^)(NSNumber *rcCompleteFlag))rcCallback;
 // Request data from table with , return a NSArray of dictionaries in callback
 - (void) getDatafromUser:(NSString*)rcUsername FoodType:(FoodTypes)foodType Callback:(void(^)(NSArray *callbackItem)) returnCallback;
 // Request data in rcUserDataInfo table
@@ -59,14 +59,11 @@ typedef enum FoodTypesEnum {
 // =============================================
 
 // ======= Insert Data Functions  ==========
-
 - (void) insertSequenceNumber:(NSString*)sequenceNumber username:(NSString*)username;
 - (void) insertTypeData:(FoodTypes)foodType;
 - (void) insertResNameData:(NSString*)resName;
-
 // Request location data
 - (void) requestLocationData;
-
 // Create a new user in rcUserDataInfo table with sequence number 1
 - (void) InsertIntoTableWithUsername:(NSString*)username;
 // =============================================
@@ -78,6 +75,12 @@ typedef enum FoodTypesEnum {
 - (void) incrementSequenceNumberWithDictionary:(NSDictionary*)myDict Callback:(void(^)(NSNumber* completeFlag)) returnCallback;
 // ==============================================
 
+// ======= Delete Functions  ==========
+// Delete an entry from main data table. This function is created to revert the upload of a new entry due to failed sequence number update or failed image upload.
+- (void) deleteEntry:(NSDictionary*)deleteEntry;
+// ==============================================
+
+- (NSDictionary*) getCurrentDictionaryData;
 
 // Override init to initialize client
 - (id) init;

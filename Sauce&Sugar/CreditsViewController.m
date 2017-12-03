@@ -23,7 +23,11 @@
     [self.creditsTextView insertText:@"Drink icon: Icon made by Iconnice from  www.flaticon.com\n"];
     [self.creditsTextView insertText:@"Ice cream icon: Icon made by Freepik from  www.flaticon.com\n"];
     [self.creditsTextView insertText:@"Cake icon: Icon made by Smashicons from  www.flaticon.com\n"];
-
+    [self.creditsTextView insertText:@"Stew icon: Icon made by Smashicons from  www.flaticon.com\n"];
+    [self.creditsTextView insertText:@"User icon: Icon made by Smashicons from  www.flaticon.com\n"];
+    [self.creditsTextView insertText:@"User_profile icon: Icon made by Chanut is Industries from  www.flaticon.com\n"];
+    [self.creditsTextView insertText:@"Contract icon: Icon made by Prosymbols from  www.flaticon.com\n"];
+    [self.creditsTextView insertText:@"Restaurant icon: Icon made by Freepik from  www.flaticon.com\n"];
 }
 
 - (void)didReceiveMemoryWarning {

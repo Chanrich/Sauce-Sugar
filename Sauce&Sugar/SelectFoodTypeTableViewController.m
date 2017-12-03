@@ -59,7 +59,7 @@
             break;
         default:
             // Default
-            typeName = FOODTYPE_INVALID;
+            typeName = FOODTYPE_ALL;
             break;
     }
     

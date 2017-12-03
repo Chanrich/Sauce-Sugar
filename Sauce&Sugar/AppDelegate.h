@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
-// Import Azure Mobile app framework
-#import <MicrosoftAzureMobile/MicrosoftAzureMobile.h>
 // Import Azure storage framework
 #import <AZSClient/AZSClient.h>
+// Import Azure Mobile app framework
+#import <MicrosoftAzureMobile/MicrosoftAzureMobile.h>
 
 // Import google map features
 @import GoogleMaps;

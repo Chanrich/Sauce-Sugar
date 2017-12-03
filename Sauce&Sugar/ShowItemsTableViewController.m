@@ -19,7 +19,7 @@
     NSLog(@"Init with coder at ShowItemsTableViewController ");
     self = [super initWithCoder:aDecoder];
     // Initialize to 0
-    self.searchFoodType = FOODTYPE_INVALID;
+    self.searchFoodType = FOODTYPE_ALL;
     return self;
 }
 
@@ -58,9 +58,6 @@
     
     // Initialize cell mutable array
     self.rcCellMutableArray = [[NSMutableArray alloc] init];
-    
-    // Connect blob container
-    [self.rcBlobContainer connectToContainerWithName:currentUser];
     
     // Get current user's data from the cloub
     [self.rcDataConnection getDatafromUser:currentUser FoodType:self.searchFoodType Callback:^(NSArray *callbackItem) {
@@ -136,7 +133,8 @@
         self.rcTableView.delegate = self;
         self.rcTableView.dataSource = self;
         [self.rcTableView reloadData];
-    }];
+        
+    }]; // End of getDatafromUser
 
 }
 
