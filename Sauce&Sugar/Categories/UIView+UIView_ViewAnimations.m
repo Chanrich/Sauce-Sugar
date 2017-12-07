@@ -7,10 +7,9 @@
 //
 
 // Define a constant fading duration
-#define fadeDuration 1
 
 #import "UIView+UIView_ViewAnimations.h"
-
+#import "GlobalNames.h"
 @implementation UIView (UIView_ViewAnimations)
 
 - (void)viewFadeInWithCompletion:(void (^ _Nullable)(BOOL rcFinished))rcCompletion {
@@ -24,6 +23,13 @@
     [UIView animateWithDuration:fadeDuration animations:^{
         // Perform fading animation by adjusting alpha
         [self setAlpha:0];
+    } completion:rcCompletion];
+}
+
+- (void) viewFadeInToHalfAlphaWithCompletion:(void(^ __nullable)(BOOL rcFinished))rcCompletion{
+    [UIView animateWithDuration:fadeDuration_fast animations:^{
+        // Perform fading animation by adjusting alpha
+        [self setAlpha:0.5];
     } completion:rcCompletion];
 }
 

@@ -7,16 +7,16 @@
 //
 
 #import "MainMenuTableViewController.h"
-#define SLIDEMENU_WIDTH 275
-#define SLIDE_DURATION 0.2
-#define CORNER_RADIUS 4
-#define SLIDEOUT_VIEW_TAG 2
+#import "GlobalNames.h"
 
 @interface MainMenuTableViewController ()
 
 @end
 
-@implementation MainMenuTableViewController
+@implementation MainMenuTableViewController {
+    // View created to dismiss slide-out menu view when main view is clicked while slide-out menu is out
+    UIView* blockingView;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -119,6 +119,8 @@
 }
 */
 
+
+#pragma mark - Camera
 // Bring up the camera and then add to database view
 - (void) startCamera{
     // If camera module is not available, show alert message
@@ -220,12 +222,19 @@
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 
+#pragma mark - Slide Out Menu Functions
 // ===================== Slide Out Menu functions =====================
 
 // Animate a slide out menu option to the right of the super view
 - (void) slideSuperViewToRight{
     UIView *childView = [self getSlideOutMenuView];
     [self.tabBarController.view.superview sendSubviewToBack:childView];
+    
+    // If user click on main view while slide-out menu view is out, slide-out menu will be dismissed
+    blockingView = [self blockUserInteractionAtCGRect:self.tabBarController.view.bounds];
+    [self.tabBarController.view addSubview:blockingView];
+    [blockingView viewFadeInToHalfAlphaWithCompletion:nil];
+    
     [UIView animateWithDuration:SLIDE_DURATION delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
         self.tabBarController.view.frame = CGRectMake(SLIDEMENU_WIDTH, 0, self.tabBarController.view.frame.size.width, self.tabBarController.view.frame.size.height);
         
@@ -233,9 +242,6 @@
         if (finished){
             // Tag = 0, Menu is slided out
             self.rcSlideOutImage.tag = 0;
-            
-            // Enable fullscreen button to return to original position
-            // self.slideBackButton.enabled = YES;
         }
     }];
 }
@@ -244,6 +250,11 @@
 - (void) slideSuperViewToOriginal{
     [UIView animateWithDuration:SLIDE_DURATION delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
         self.tabBarController.view.frame = CGRectMake(0, 0, self.tabBarController.view.frame.size.width, self.tabBarController.view.frame.size.height);
+        
+        [blockingView viewFadeOutWithCompletion:^(BOOL rcFinished) {
+            // Also dismiss the blocking view
+            [blockingView removeFromSuperview];
+        }];
         
     } completion:^(BOOL finished) {
         if (finished){
@@ -254,13 +265,11 @@
             
             // Reset shadow to default
             // [self setShadowForSlideOutMenu:NO offset:0];
-            
-            // Disable fullscreen button for sliding original panel back
-            // self.slideBackButton.enabled = NO;
         }
     }];
 }
 
+// Create a instance of slide-out menu and return its view
 - (UIView *) getSlideOutMenuView{
     if (_rcSlideOutMenuView == nil){
         // Get storyboard
@@ -279,15 +288,32 @@
         
         // Set location of the slide out view to origin and size to fullscreen
         self.rcSlideOutMenuView.view.frame = CGRectMake(0, 0, self.view.frame.size.width , self.view.frame.size.height);
-        
-        
     }
-    
     // Set shadow
     // [self setShadowForSlideOutMenu:YES offset:-2];
 
-    UIView *returnView = self.rcSlideOutMenuView.view;
-    return returnView;
+    return self.rcSlideOutMenuView.view;
+}
+
+// Gesture recognizer method to detect clicking of the menu image
+- (IBAction)rcSlideMenu_Tapped:(id)sender {
+    // Slide the menu out or in depending on the tag of the sender button
+    // Tag = 0: Slideout Menu is in out position so slide it back in
+    // Tag = 1: Slideout Menu is in in position so slide it out.
+    switch (self.rcSlideOutImage.tag) {
+        case 0:
+            // Slide menu back to original position
+            [self slideSuperViewToOriginal];
+            break;
+            
+        case 1:
+            // Slide menu out
+            [self slideSuperViewToRight];
+            break;
+        default:
+            NSLog(@"reached rcButton.tag default value. Program is not supposed to be here");
+            break;
+    }
 }
 
 // Set shadow of the super view to create cool effects
@@ -303,6 +329,40 @@
         [self.tabBarController.view.layer setShadowOffset:CGSizeMake(0.0  , -3.0)];
     }
 }
+
+// Create a view that cover whole main view while the slide-out menu is slided out thus any click on the main view will dismiss the slide-out menu
+- (UIView*) blockUserInteractionAtCGRect:(CGRect)frameLocation{
+    UIView *blockingView = [[UIView alloc] init];
+    
+    /* ============= Blur Effect ============= 
+    // Blur is now removed as the blur is too strong for this effect. The code is kept here for future use.
+    if (!UIAccessibilityIsReduceTransparencyEnabled()){
+        // Add blur effect to the view
+        NSLog(@"Blocking blur view is created");
+        // If transparenct is not disabled
+        UIBlurEffect *blurFx = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
+        blockingView = [[UIVisualEffectView alloc] initWithEffect:blurFx];
+        blockingView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    } else {
+        NSLog(@"Blocking normal view is created");
+        blockingView = [[UIView alloc] init];
+    }
+    */
+    blockingView.backgroundColor = [UIColor blackColor];
+    blockingView.alpha = 0;
+    blockingView.frame = frameLocation;
+    blockingView.userInteractionEnabled = YES;
+    
+    // Create gesture recognizer to catch single tap event
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(slideSuperViewToOriginal)];
+    [blockingView addGestureRecognizer:singleTap];
+    
+    return blockingView;
+}
+
+#pragma mark - UI Touch Events
+/* ================ UI Touch Events ================ */
+
 - (IBAction)RiceClicked:(id)sender {
     NSLog(@"RiceClicked");
     [self pushShowItemsViewControllerWithType:RICE];
@@ -331,6 +391,8 @@
     [self pushShowItemsViewControllerWithType:DESSERT];
 }
 
+
+#pragma mark - Create View Controllers for slide-out menu
 
 // This private method will be called by each filter button to create data display view controller with filter pre-selected in parameter type
 - (void) pushShowItemsViewControllerWithType:(enum FoodTypesEnum)type{
@@ -374,24 +436,5 @@
 }
 
 
-// Gesture recognizer method to detect clicking of the menu image
-- (IBAction)rcSlideMenu_Tapped:(id)sender {
-    // Slide the menu out or in depending on the tag of the sender button
-    // Tag = 0: Slideout Menu is in out position so slide it back in
-    // Tag = 1: Slideout Menu is in in position so slide it out.
-    switch (self.rcSlideOutImage.tag) {
-        case 0:
-            // Slide menu back to original position
-            [self slideSuperViewToOriginal];
-            break;
-            
-        case 1:
-            // Slide menu out
-            [self slideSuperViewToRight];
-            break;
-        default:
-            NSLog(@"reached rcButton.tag default value. Program is not supposed to be here");
-            break;
-    }
-}
+
 @end

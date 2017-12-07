@@ -23,6 +23,23 @@
 		696F15111FD17FB3001300C6 /* user_profile.png in Resources */ = {isa = PBXBuildFile; fileRef = 696F150F1FD17FB3001300C6 /* user_profile.png */; };
 		696F15121FD17FB3001300C6 /* user_profile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 696F15101FD17FB3001300C6 /* user_profile@2x.png */; };
 		696F15161FD18067001300C6 /* UserProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 696F15151FD18067001300C6 /* UserProfileViewController.m */; };
+		696F151A1FD55861001300C6 /* add-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 696F15181FD55861001300C6 /* add-button.png */; };
+		696F151B1FD55861001300C6 /* add-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 696F15191FD55861001300C6 /* add-button@2x.png */; };
+		696F151E1FD55990001300C6 /* login.png in Resources */ = {isa = PBXBuildFile; fileRef = 696F151C1FD5598F001300C6 /* login.png */; };
+		696F151F1FD55990001300C6 /* login@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 696F151D1FD55990001300C6 /* login@2x.png */; };
+		696F15221FD559B1001300C6 /* add-friend@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 696F15201FD559B0001300C6 /* add-friend@2x.png */; };
+		696F15231FD559B1001300C6 /* add-friend.png in Resources */ = {isa = PBXBuildFile; fileRef = 696F15211FD559B1001300C6 /* add-friend.png */; };
+		696F15261FD5664E001300C6 /* list.png in Resources */ = {isa = PBXBuildFile; fileRef = 696F15241FD5664D001300C6 /* list.png */; };
+		696F15271FD5664E001300C6 /* list@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 696F15251FD5664E001300C6 /* list@2x.png */; };
+		696F152A1FD56737001300C6 /* add-white.png in Resources */ = {isa = PBXBuildFile; fileRef = 696F15281FD56735001300C6 /* add-white.png */; };
+		696F152B1FD56737001300C6 /* add-white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 696F15291FD56736001300C6 /* add-white@2x.png */; };
+		696F15321FD5682B001300C6 /* add-friend-white.png in Resources */ = {isa = PBXBuildFile; fileRef = 696F152C1FD56829001300C6 /* add-friend-white.png */; };
+		696F15331FD5682B001300C6 /* add-friend-white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 696F152D1FD56829001300C6 /* add-friend-white@2x.png */; };
+		696F15341FD5682B001300C6 /* list-white.png in Resources */ = {isa = PBXBuildFile; fileRef = 696F152E1FD5682A001300C6 /* list-white.png */; };
+		696F15351FD5682B001300C6 /* list-white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 696F152F1FD5682A001300C6 /* list-white@2x.png */; };
+		696F15361FD5682B001300C6 /* login-white.png in Resources */ = {isa = PBXBuildFile; fileRef = 696F15301FD5682A001300C6 /* login-white.png */; };
+		696F15371FD5682B001300C6 /* login-white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 696F15311FD5682B001300C6 /* login-white@2x.png */; };
+		696F153B1FD8DBD2001300C6 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 696F153A1FD8DBD1001300C6 /* LoginViewController.m */; };
 		698A0E001FA1AFF800915313 /* searchTable.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 698A0DFF1FA1AFF800915313 /* searchTable.storyboard */; };
 		698A0E031FA1B07800915313 /* slideMenu.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 698A0E011FA1B07800915313 /* slideMenu.storyboard */; };
 		698A0E061FA1B17F00915313 /* insertToDatabase.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 698A0E051FA1B17F00915313 /* insertToDatabase.storyboard */; };
@@ -107,6 +124,24 @@
 		696F15101FD17FB3001300C6 /* user_profile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "user_profile@2x.png"; sourceTree = "<group>"; };
 		696F15141FD18067001300C6 /* UserProfileViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserProfileViewController.h; sourceTree = "<group>"; };
 		696F15151FD18067001300C6 /* UserProfileViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserProfileViewController.m; sourceTree = "<group>"; };
+		696F15181FD55861001300C6 /* add-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add-button.png"; sourceTree = "<group>"; };
+		696F15191FD55861001300C6 /* add-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add-button@2x.png"; sourceTree = "<group>"; };
+		696F151C1FD5598F001300C6 /* login.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = login.png; sourceTree = "<group>"; };
+		696F151D1FD55990001300C6 /* login@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login@2x.png"; sourceTree = "<group>"; };
+		696F15201FD559B0001300C6 /* add-friend@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add-friend@2x.png"; sourceTree = "<group>"; };
+		696F15211FD559B1001300C6 /* add-friend.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add-friend.png"; sourceTree = "<group>"; };
+		696F15241FD5664D001300C6 /* list.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = list.png; sourceTree = "<group>"; };
+		696F15251FD5664E001300C6 /* list@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "list@2x.png"; sourceTree = "<group>"; };
+		696F15281FD56735001300C6 /* add-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add-white.png"; sourceTree = "<group>"; };
+		696F15291FD56736001300C6 /* add-white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add-white@2x.png"; sourceTree = "<group>"; };
+		696F152C1FD56829001300C6 /* add-friend-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add-friend-white.png"; sourceTree = "<group>"; };
+		696F152D1FD56829001300C6 /* add-friend-white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add-friend-white@2x.png"; sourceTree = "<group>"; };
+		696F152E1FD5682A001300C6 /* list-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "list-white.png"; sourceTree = "<group>"; };
+		696F152F1FD5682A001300C6 /* list-white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "list-white@2x.png"; sourceTree = "<group>"; };
+		696F15301FD5682A001300C6 /* login-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login-white.png"; sourceTree = "<group>"; };
+		696F15311FD5682B001300C6 /* login-white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login-white@2x.png"; sourceTree = "<group>"; };
+		696F15391FD8DBD1001300C6 /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		696F153A1FD8DBD1001300C6 /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		698A0DFF1FA1AFF800915313 /* searchTable.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = searchTable.storyboard; sourceTree = "<group>"; };
 		698A0E021FA1B07800915313 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = "Sauce&Sugar/Base.lproj/slideMenu.storyboard"; sourceTree = "<group>"; };
 		698A0E051FA1B17F00915313 /* insertToDatabase.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = insertToDatabase.storyboard; sourceTree = "<group>"; };
@@ -252,6 +287,47 @@
 			name = UserProfileVC;
 			sourceTree = "<group>";
 		};
+		696F15171FD5584D001300C6 /* SlideMenu */ = {
+			isa = PBXGroup;
+			children = (
+				696F15281FD56735001300C6 /* add-white.png */,
+				696F15291FD56736001300C6 /* add-white@2x.png */,
+				696F15181FD55861001300C6 /* add-button.png */,
+				696F15191FD55861001300C6 /* add-button@2x.png */,
+				696F152C1FD56829001300C6 /* add-friend-white.png */,
+				696F152D1FD56829001300C6 /* add-friend-white@2x.png */,
+				696F152E1FD5682A001300C6 /* list-white.png */,
+				696F152F1FD5682A001300C6 /* list-white@2x.png */,
+				696F15301FD5682A001300C6 /* login-white.png */,
+				696F15311FD5682B001300C6 /* login-white@2x.png */,
+				696F151C1FD5598F001300C6 /* login.png */,
+				696F151D1FD55990001300C6 /* login@2x.png */,
+				696F15211FD559B1001300C6 /* add-friend.png */,
+				696F15201FD559B0001300C6 /* add-friend@2x.png */,
+				696F15241FD5664D001300C6 /* list.png */,
+				696F15251FD5664E001300C6 /* list@2x.png */,
+			);
+			name = SlideMenu;
+			sourceTree = "<group>";
+		};
+		696F15381FD8DBB8001300C6 /* LoginPage */ = {
+			isa = PBXGroup;
+			children = (
+				696F15391FD8DBD1001300C6 /* LoginViewController.h */,
+				696F153A1FD8DBD1001300C6 /* LoginViewController.m */,
+			);
+			name = LoginPage;
+			sourceTree = "<group>";
+		};
+		696F153C1FD8E683001300C6 /* SignupPage */ = {
+			isa = PBXGroup;
+			children = (
+				69DE29081F7865D700B0527E /* AddUserViewController.h */,
+				69DE29091F7865D700B0527E /* AddUserViewController.m */,
+			);
+			name = SignupPage;
+			sourceTree = "<group>";
+		};
 		698A0E041FA1B08C00915313 /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
@@ -298,6 +374,7 @@
 		69A080021F5E2AD900651946 /* ImagesResource */ = {
 			isa = PBXGroup;
 			children = (
+				696F15171FD5584D001300C6 /* SlideMenu */,
 				696F150F1FD17FB3001300C6 /* user_profile.png */,
 				696F15101FD17FB3001300C6 /* user_profile@2x.png */,
 				696F150C1FD16CE2001300C6 /* restaurant.png */,
@@ -421,11 +498,7 @@
 				696F15131FD1804F001300C6 /* UserProfileVC */,
 				69F39F501FBFED2F00362888 /* GMap */,
 				69F39F2E1FB67C3700362888 /* MainMenuVC */,
-				69F39F1D1FB527F000362888 /* Credits */,
 				69162CCC1FB0646D00B7E853 /* SearchTable */,
-				698A0E071FA53DEF00915313 /* InsertDataAndImageVC */,
-				69DE29081F7865D700B0527E /* AddUserViewController.h */,
-				69DE29091F7865D700B0527E /* AddUserViewController.m */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -454,6 +527,10 @@
 		69F39F2E1FB67C3700362888 /* MainMenuVC */ = {
 			isa = PBXGroup;
 			children = (
+				698A0E071FA53DEF00915313 /* InsertDataAndImageVC */,
+				69F39F1D1FB527F000362888 /* Credits */,
+				696F153C1FD8E683001300C6 /* SignupPage */,
+				696F15381FD8DBB8001300C6 /* LoginPage */,
 				69F39F2F1FB67C5600362888 /* MainMenuTableViewController.h */,
 				69F39F301FB67C5600362888 /* MainMenuTableViewController.m */,
 				69C54F7F1F9AE13900C4005F /* SlideOutMenuViewController.h */,
@@ -585,23 +662,39 @@
 			files = (
 				696F15111FD17FB3001300C6 /* user_profile.png in Resources */,
 				696F150E1FD16CE2001300C6 /* restaurant.png in Resources */,
+				696F151F1FD55990001300C6 /* login@2x.png in Resources */,
 				69F39F271FB5892200362888 /* lemonade.png in Resources */,
+				696F15271FD5664E001300C6 /* list@2x.png in Resources */,
+				696F15341FD5682B001300C6 /* list-white.png in Resources */,
 				696F15121FD17FB3001300C6 /* user_profile@2x.png in Resources */,
+				696F15221FD559B1001300C6 /* add-friend@2x.png in Resources */,
+				696F151A1FD55861001300C6 /* add-button.png in Resources */,
+				696F151E1FD55990001300C6 /* login.png in Resources */,
 				69F39F2A1FB5892200362888 /* noodles.png in Resources */,
 				696F150A1FD16535001300C6 /* contract@2x.png in Resources */,
+				696F15351FD5682B001300C6 /* list-white@2x.png in Resources */,
 				69F39F281FB5892200362888 /* ice-cream.png in Resources */,
+				696F15231FD559B1001300C6 /* add-friend.png in Resources */,
+				696F151B1FD55861001300C6 /* add-button@2x.png in Resources */,
 				69F39F4F1FBFED1100362888 /* GMapSearch.storyboard in Resources */,
 				69F39F291FB5892200362888 /* bowl-of-white-rice.png in Resources */,
+				696F15371FD5682B001300C6 /* login-white@2x.png in Resources */,
 				698A0E031FA1B07800915313 /* slideMenu.storyboard in Resources */,
 				696F15091FD16535001300C6 /* contract.png in Resources */,
 				696F14FA1FD13804001300C6 /* stew.png in Resources */,
 				698A0E001FA1AFF800915313 /* searchTable.storyboard in Resources */,
+				696F152A1FD56737001300C6 /* add-white.png in Resources */,
 				69162CCB1FB01CC100B7E853 /* GreenCheck.png in Resources */,
 				69F39F3D1FBEDC6500362888 /* GoogleMaps.bundle in Resources */,
+				696F15261FD5664E001300C6 /* list.png in Resources */,
+				696F15331FD5682B001300C6 /* add-friend-white@2x.png in Resources */,
 				69C9316B1F502006007696BA /* LaunchScreen.storyboard in Resources */,
+				696F15361FD5682B001300C6 /* login-white.png in Resources */,
 				696F15041FD1625D001300C6 /* user.png in Resources */,
 				69F39F2D1FB65D2200362888 /* MainMenu.storyboard in Resources */,
 				69C931681F502006007696BA /* Assets.xcassets in Resources */,
+				696F152B1FD56737001300C6 /* add-white@2x.png in Resources */,
+				696F15321FD5682B001300C6 /* add-friend-white.png in Resources */,
 				696F14F81FCFF328001300C6 /* menu.png in Resources */,
 				696F14F61FCFECF9001300C6 /* menu_icon-01.png in Resources */,
 				696F150D1FD16CE2001300C6 /* restaurant@2x.png in Resources */,
@@ -639,6 +732,7 @@
 				69F39F201FB5280F00362888 /* CreditsViewController.m in Sources */,
 				69C931B01F57E764007696BA /* AddToDatabase_ViewController.m in Sources */,
 				69A0800D1F63EB0600651946 /* MainMenuButton.m in Sources */,
+				696F153B1FD8DBD2001300C6 /* LoginViewController.m in Sources */,
 				69C54F811F9AE13900C4005F /* SlideOutMenuViewController.m in Sources */,
 				698A0E0A1FA53E3100915313 /* SelectFoodTypeTableViewController.m in Sources */,
 				69F39F531FBFED4800362888 /* GMapViewController.m in Sources */,

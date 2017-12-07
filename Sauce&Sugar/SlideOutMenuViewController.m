@@ -7,7 +7,7 @@
 //
 
 #import "SlideOutMenuViewController.h"
-
+#import "GlobalNames.h"
 @interface SlideOutMenuViewController ()
 
 @end
@@ -50,6 +50,10 @@
     // indexPath.row is the currently selected row, use it to access menu items
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSLog(@"Selected indexPath.row: %ld", (long)indexPath.row);
+    
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(SLIDE_DURATION * NSEC_PER_SEC));
+
+    
     switch (indexPath.row) {
         case 0:
             break;
@@ -58,8 +62,11 @@
         case 2:
             // Reset slide menu button so it will allow this menu to slide back again
             [[NSNotificationCenter defaultCenter] postNotificationName:@"slideSuperViewBack" object:nil];
-            
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"addNewItem" object:nil];
+            // Wait for main view to return to original position
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"addNewItem" object:nil];
+            });
+
 
             break;
         case 3: // LOGIN BUTTON
@@ -70,16 +77,22 @@
         case 4: // SIGN UP BUTTON
             // Reset slide menu button so it will allow this menu to slide back again
             [[NSNotificationCenter defaultCenter] postNotificationName:@"slideSuperViewBack" object:nil];
-            
-            // Call target vc from main view
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"signUpNewUser" object:nil];
+            // Wait for main view to return to original position
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                // Call target vc from main view
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"signUpNewUser" object:nil];
+            });
+
             break;
         case 5: //Credit
             // Reset slide menu button so it will allow this menu to slide back again
             [[NSNotificationCenter defaultCenter] postNotificationName:@"slideSuperViewBack" object:nil];
-            
-            // Call target vc from main view
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"showCredit" object:nil];
+            // Wait for main view to return to original position
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                // Call target vc from main view
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"showCredit" object:nil];
+            });
+
             break;
         default:
             break;

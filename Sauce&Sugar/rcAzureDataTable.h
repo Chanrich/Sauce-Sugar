@@ -56,6 +56,7 @@ typedef enum FoodTypesEnum {
 - (void) getDatafromUser:(NSString*)rcUsername FoodType:(FoodTypes)foodType Callback:(void(^)(NSArray *callbackItem)) returnCallback;
 // Request data in rcUserDataInfo table
 - (void) verifyUsername:(NSString*)rcUsername Callback:(void(^)(BOOL callbackItem))returnCallback;
+- (void) verifyUserAccount:(NSString*)rcUsername Password:(NSString*)password Callback:(void(^)(BOOL callbackItem))returnCallback;
 // =============================================
 
 // ======= Insert Data Functions  ==========
@@ -64,8 +65,7 @@ typedef enum FoodTypesEnum {
 - (void) insertResNameData:(NSString*)resName;
 // Request location data
 - (void) requestLocationData;
-// Create a new user in rcUserDataInfo table with sequence number 1
-- (void) InsertIntoTableWithUsername:(NSString*)username;
+- (void) InsertIntoTableWithUsername:(NSString*)username Password:(NSString*)password Callback:(void(^)(NSNumber* completeFlag))returnCallback;
 // =============================================
 
 // ======= Sequence Number Functions  ==========

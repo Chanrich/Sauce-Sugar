@@ -50,6 +50,8 @@
     return self;
 }
 
+#pragma mark - Upload to Azure Server
+
 - (void) InsertDataIntoMainDataTable:(void(^)(NSNumber *rcCompleteFlag))rcCallback{
     // Insert data into table
     [MainData_MSTable insert:self.rcDataDictionary completion:^(NSDictionary *InsertedItem, NSError *error) {
@@ -65,24 +67,64 @@
     }];
 }
 
-// Create a new user and set its seqNum
-- (void) InsertIntoTableWithUsername:(NSString*)username{
+// Create a new user and set its seqNum to 1
+- (void) InsertIntoTableWithUsername:(NSString*)username Password:(NSString*)password Callback:(void(^)(NSNumber* completeFlag))returnCallback{
     // Prepare object for integer since NSDictioanry only accepts object
     NSNumber *seqNum = [NSNumber numberWithInt:1];
     
-    // Insert data
+    // Insert data to dictionary object
     [self.rcDataDictionaryForUserTable setObject:username forKey:AZURE_USER_TABLE_USERNAME];
     [self.rcDataDictionaryForUserTable setObject:seqNum forKey:AZURE_USER_TABLE_SEQUENCE];
+    [self.rcDataDictionaryForUserTable setObject:password forKey:AZURE_USER_TABLE_PASSWORD];
     
     // Insert data into table
     [UserData_MSTable insert:self.rcDataDictionaryForUserTable completion:^(NSDictionary *InsertedItem, NSError *error) {
         if (error){
             NSLog(@"error: %@", error);
+            returnCallback(@NO);
         } else {
             NSLog(@"User %@ added", username);
+            returnCallback(@YES);
         }
     }];
 }
+
+#pragma mark Update
+// Update an entry into the table, retrieve the information first and then update that entry
+- (void) incrementSequenceNumberWithDictionary:(NSDictionary*)myDict Callback:(void(^)(NSNumber* completeFlag)) returnCallback{
+    // Increment the retrieved sequence number by 1
+    NSNumber *newValue = [NSNumber numberWithInt:[[myDict objectForKey:@"SequenceNumber"] intValue] + 1];
+    
+    // Update the newly incremented number into the key
+    [myDict setValue:newValue forKey:@"SequenceNumber"];
+    
+    // Push it to Azure table
+    [UserData_MSTable update:myDict completion:^(NSDictionary * _Nullable item, NSError * _Nullable error) {
+        if (error){
+            NSLog(@"Error when updating dictionary");
+            returnCallback(@NO);
+        } else {
+            NSLog(@"Successfully updated dictionary");
+            returnCallback(@YES);
+            
+            // Save the new value to local copy
+            rcCurrentSequenceNumber = newValue;
+            NSLog(@"Local copy of sequence number update to: %d", [newValue intValue]);
+        }
+    }];
+}
+
+#pragma mark Delete Data
+
+- (void) deleteEntry:(NSDictionary*)deleteEntry{
+    // Call the delete on main data table
+    [MainData_MSTable delete:deleteEntry completion:^(id  _Nullable itemId, NSError * _Nullable error) {
+        // Do nothing if the delete failed or succeed. Program should handle the failed case.
+        NSLog(@"Delete completed");
+    }];
+}
+
+#pragma mark - Download data from server
 
 // getUniqueID_WithCallback will make the request and return the unique serial number in a NSArray* to the callback function. Caller will have to create a block to catch the return value
 - (void) getUniqueNumber_WithUsername:(NSString*)rcUsername  Callback:(void(^)(NSDictionary *callbackItem)) returnCallback {
@@ -214,59 +256,9 @@
 
 }
 
-// Update an entry into the table, retrieve the information first and then update that entry
-- (void) incrementSequenceNumberWithDictionary:(NSDictionary*)myDict Callback:(void(^)(NSNumber* completeFlag)) returnCallback{
-    // Increment the retrieved sequence number by 1
-    NSNumber *newValue = [NSNumber numberWithInt:[[myDict objectForKey:@"SequenceNumber"] intValue] + 1];
-    
-    // Update the newly incremented number into the key
-    [myDict setValue:newValue forKey:@"SequenceNumber"];
-    
-    // Push it to Azure table
-    [UserData_MSTable update:myDict completion:^(NSDictionary * _Nullable item, NSError * _Nullable error) {
-        if (error){
-            NSLog(@"Error when updating dictionary");
-            returnCallback(@NO);
-        } else {
-            NSLog(@"Successfully updated dictionary");
-            returnCallback(@YES);
-            
-            // Save the new value to local copy
-            rcCurrentSequenceNumber = newValue;
-            NSLog(@"Local copy of sequence number update to: %d", [newValue intValue]);
-        }
-    }];
-}
-
-
-// Collect data into NSDictionary object.
-// NSDictioanry format: NSDictionary *dict = @{ key : value, key2 : value2}
-//    Object descriptions:
-//    1.    Name of the restaurant (if not yet exist, option to add restaurant appears)
-//    2.    Username
-//    3.    Photo
-
-- (void)insertResNameData:(NSString *)resName {
-    // Insert restaurant name into mutable dictionary
-    [self.rcDataDictionary setObject:resName forKey:AZURE_DATA_TABLE_RESTAURANT_NAME];
-}
-
-- (void)insertTypeData:(FoodTypes)foodType {
-    // Convert foodType to NSNumber with @() and store it into mutable dictionary
-    [self.rcDataDictionary setObject:@(foodType) forKey:AZURE_DATA_TABLE_FOODTYPE];
-}
-
-- (void)insertSequenceNumber:(NSString *)sequenceNumber username:(NSString *)username { 
-    // Insert username and sequence number (image reference) into mutable dictionary
-    [self.rcDataDictionary setObject:username forKey:AZURE_DATA_TABLE_USERNAME];
-    [self.rcDataDictionary setObject:sequenceNumber forKey:AZURE_DATA_TABLE_SEQUENCE];
-}
-
-- (NSDictionary*) getCurrentDictionaryData{
-    return self.rcDataDictionary;
-}
-
-// Search user with same username and return entries in callback
+#pragma mark Verify Data
+// If username is already existing found in the database, raise a flag to the callback method.
+// This method is used to check username before creating a new user
 - (void)verifyUsername:(NSString *)rcUsername Callback:(void(^)(BOOL callbackItem))returnCallback{
     // Create a filter for
     // 1. Username
@@ -298,13 +290,78 @@
     }];;
 }
 
-- (void) deleteEntry:(NSDictionary*)deleteEntry{
-    // Call the delete on main data table
-    [MainData_MSTable delete:deleteEntry completion:^(id  _Nullable itemId, NSError * _Nullable error) {
-        // Do nothing if the delete failed or succeed. Program should handle the failed case.
-        NSLog(@"Delete completed");
-    }];
+// Create a filter for username and password from parameters. If any data is retrieved with filter, the user account is verified. Raise a flag to the callback method
+- (void)verifyUserAccount:(NSString *)rcUsername Password:(NSString *)password Callback:(void (^)(BOOL))returnCallback {
+    // Create a filter for
+    // 1. Username
+    // 2. Password
+    NSPredicate *dataFilter = [NSPredicate predicateWithFormat:
+                               @"USERNAME=%@", rcUsername];
+    NSPredicate *dataFilter2 = [NSPredicate predicateWithFormat:
+                               @"USERNAME=%@", rcUsername];
+    // Combine two predicate with and
+    NSPredicate *finalPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[dataFilter, dataFilter2]];
+    
+    NSLog(@"finalAndPredicate:%@\n", [finalPredicate predicateFormat]);
+    
+    // Prepare a MSQuery object with filter dataFilter
+    MSQuery *rcQuery = [UserData_MSTable queryWithPredicate:finalPredicate];
+    
+    // Perform a read on the MSquery object, the read will return maximum 50 entries
+    [rcQuery readWithCompletion:^(MSQueryResult * _Nullable result, NSError * _Nullable error) {
+        if (error){
+            NSLog(@"Data download error!");
+            // return a NO
+            returnCallback(FALSE);
+        } else {
+            // Debug
+            NSNumber *temp = [NSNumber numberWithUnsignedLong:[result.items count]];
+            NSLog(@"Count of result.item array: %@", temp);
+            
+            if ([result.items count] == 1){
+                NSLog(@"Found a matching account!");
+                returnCallback(TRUE);
+            } else {
+                NSLog(@"Multiple user with same name is found. Username invalid");
+                returnCallback(FALSE);
+            }
+        }
+    }];;
+    
 }
+
+
+#pragma mark - Insert Data
+
+// Collect data into NSDictionary object.
+// NSDictioanry format: NSDictionary *dict = @{ key : value, key2 : value2}
+//    Object descriptions:
+//    1.    Name of the restaurant (if not yet exist, option to add restaurant appears)
+//    2.    Username
+//    3.    Photo
+
+- (void)insertResNameData:(NSString *)resName {
+    // Insert restaurant name into mutable dictionary
+    [self.rcDataDictionary setObject:resName forKey:AZURE_DATA_TABLE_RESTAURANT_NAME];
+}
+
+- (void)insertTypeData:(FoodTypes)foodType {
+    // Convert foodType to NSNumber with @() and store it into mutable dictionary
+    [self.rcDataDictionary setObject:@(foodType) forKey:AZURE_DATA_TABLE_FOODTYPE];
+}
+
+- (void)insertSequenceNumber:(NSString *)sequenceNumber username:(NSString *)username { 
+    // Insert username and sequence number (image reference) into mutable dictionary
+    [self.rcDataDictionary setObject:username forKey:AZURE_DATA_TABLE_USERNAME];
+    [self.rcDataDictionary setObject:sequenceNumber forKey:AZURE_DATA_TABLE_SEQUENCE];
+}
+
+#pragma mark returnData
+
+- (NSDictionary*) getCurrentDictionaryData{
+    return self.rcDataDictionary;
+}
+
 
 #pragma mark - GPS Location Functions
 // Send a request for location authorization and start updating location data
@@ -379,6 +436,7 @@
     NSLog(@"Location authorization status updated to %@", statusTranslate);
 }
 
+#pragma mark Return Location
 // Returns a NSArray with lower and upper bounds in latitude which will serve as latitude search area for items in database
 - (NSArray*) returnLatitudeBoundsWithCenterLocation:(CLLocation*)center searchDegree:(float)degree{
     // The filter should use longitude and latitude
@@ -410,5 +468,6 @@
     return bounds;
     
 }
+
 
 @end
