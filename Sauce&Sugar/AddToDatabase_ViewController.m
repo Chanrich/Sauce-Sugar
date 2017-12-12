@@ -32,17 +32,19 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
     // Set all textfield and image view to transparent so they can be faded in later
     [self.TextField_RestaurantName setAlpha:0];
     [self.MainImageView setAlpha:0];
+    [self.rcUsernameLabel setAlpha:0];
+    
+    // Set username to the label
+    NSString* username = [(AppDelegate*)[[UIApplication sharedApplication] delegate] getUsername];
+    NSString *usernameLabel = [NSString stringWithFormat:@"Username: %@", username];
+    [self.rcUsernameLabel setText:usernameLabel];
     
     // Perform animation to fade in restaurant textfield first
     [self.TextField_RestaurantName viewFadeInWithCompletion:^(BOOL rcFinished) {
-        if (rcFinished == YES){
-            // Then fade in image view
-            [self.MainImageView viewFadeInWithCompletion:nil];
-        }
+        // Then fade in image view and label
+        [self.rcUsernameLabel viewFadeInWithCompletion:nil];
+        [self.MainImageView viewFadeInWithCompletion:nil];
     }]; // End of fading in UI elements
-    
-    // get current username
-    self.currentUsername = [(AppDelegate*)[[UIApplication sharedApplication] delegate] currentUsername];
     
     // Load image to Azure Blob Storage if image is valid
     if (_rcImageHolder != nil){
@@ -123,7 +125,7 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
 // Hide keyboard when return is pressed
 - (BOOL) textFieldShouldReturn:(UITextField *)textField{
     [textField resignFirstResponder];
-    return YES;
+    return NO;
 }
 
 @end

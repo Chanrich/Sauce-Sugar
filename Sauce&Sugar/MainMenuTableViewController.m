@@ -42,12 +42,22 @@
     // Listen for credit button click event in slide-out menu
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushCreditsViewController) name:@"showCredit" object:nil];
     
+    // Listen for credit button click event in slide-out menu
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushSignInViewConroller) name:@"showSignIn" object:nil];
+    
     // Request current GPS location
     // Initialize singleton instances
     rcAzureDataTable *rcDataConnection;
     rcDataConnection = [rcAzureDataTable sharedDataTable];
     // The location will be store at the rcDataConnection currentGPSLocation member;
     [rcDataConnection requestLocationData];
+    
+    // Request for sequence number to speed up process.
+    NSString *username = [(AppDelegate*)[[UIApplication sharedApplication] delegate] getUsername];
+    [rcDataConnection getUniqueNumber_WithUsername:username Callback:^(NSDictionary *callbackItem) {
+        // Do nothing with the returned data. Data should already be stored locally within the class
+        NSLog(@"Sequence number is pre-loaded");
+    }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -287,7 +297,7 @@
         [self.rcSlideOutMenuView didMoveToParentViewController:self.tabBarController];
         
         // Set location of the slide out view to origin and size to fullscreen
-        self.rcSlideOutMenuView.view.frame = CGRectMake(0, 0, self.view.frame.size.width , self.view.frame.size.height);
+        self.rcSlideOutMenuView.view.frame = CGRectMake(0, 0, self.tabBarController.view.frame.size.width , self.tabBarController.view.frame.size.height);
     }
     // Set shadow
     // [self setShadowForSlideOutMenu:YES offset:-2];
@@ -428,6 +438,19 @@
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"slideMenu" bundle:nil];
     // Get the view controller from storyboard
     ShowItemsTableViewController *vc = (ShowItemsTableViewController*)[sb instantiateViewControllerWithIdentifier:@"creditsVC_ID"];
+    
+    // Hide tab bar
+    vc.hidesBottomBarWhenPushed = YES;
+    // Show vc
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+// SlideOutMenuView will call this method when sign pu button is clicked
+- (void) pushSignInViewConroller{
+    // Get storyboard
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"slideMenu" bundle:nil];
+    // Get the view controller from storyboard
+    LoginViewController *vc = (LoginViewController*)[sb instantiateViewControllerWithIdentifier:@"LoginViewControllerID"];
     
     // Hide tab bar
     vc.hidesBottomBarWhenPushed = YES;

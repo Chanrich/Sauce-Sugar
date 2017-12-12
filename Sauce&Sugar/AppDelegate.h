@@ -22,11 +22,10 @@
 
 @property (readonly, strong) NSPersistentContainer *persistentContainer;
 
-// Username placeholder
-@property NSString *currentUsername;
-
 - (void)saveContext;
 
+- (void) setUsername:(NSString*)username;
+- (NSString*) getUsername;
 
 @end
 

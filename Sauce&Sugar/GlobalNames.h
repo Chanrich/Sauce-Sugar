@@ -22,8 +22,10 @@
 
 // Corresponding name in Azure User Table
 #define AZURE_USER_TABLE_USERNAME @"USERNAME"
-#define AZURE_USER_TABLE_SEQUENCE @"SequenceNumber"
+#define AZURE_USER_TABLE_SEQUENCE @"SequenceNumber" // This has a type of NSNumber
 #define AZURE_USER_TABLE_PASSWORD @"PASSWORD"
+#define AZURE_USER_GUEST @"Guest"
+#define AZURE_USER_GUEST_PASSWORD @"0000"
 
 // Main view constants
 #define SLIDEMENU_WIDTH 275
@@ -32,5 +34,5 @@
 #define SLIDEOUT_VIEW_TAG 2
 
 // Fading parameters
-#define fadeDuration 1
+#define fadeDuration 0.8
 #define fadeDuration_fast 0.3

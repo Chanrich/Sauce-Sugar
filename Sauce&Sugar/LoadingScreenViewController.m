@@ -26,7 +26,7 @@
     // Do any additional setup after loading the view.
     
     // get current username
-    self.currentUsername = [(AppDelegate*)[[UIApplication sharedApplication] delegate] currentUsername];
+    self.currentUsername = [(AppDelegate*)[[UIApplication sharedApplication] delegate] getUsername];
     // Hide navigation controller's back button
     self.navigationItem.hidesBackButton = YES;
     // Hide green check image
@@ -50,113 +50,124 @@
     
     // Request a unique serial number from User Data Table
     [self.rcDataConnection getUniqueNumber_WithUsername:self.currentUsername Callback:^(NSDictionary *callbackItem) {
-        
-        // TODO: handle error. when callbackItem == nil
-        
-        // Set UI Animation in main thread
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.progressBar setProgress:0.2 animated:YES];
-            self.statusLabel.text = @"Uploading to Data Table";
-        });
-
-        // Store a copy of the dictioanry entry returned from the callback in order to increment the number by 1
-        self.rcDownloadedDictionary = callbackItem;
-        
-        NSLog(@"Retrieved unique sequence number: %@", [callbackItem objectForKey:AZURE_USER_TABLE_SEQUENCE]);
-        
-        // Store sequence number to Azure Blob Storage object (No connection to server is made)
-        [self.rcBlobstorage insertUniqueSequenceNumber:[(NSNumber*)[callbackItem objectForKey:AZURE_USER_TABLE_SEQUENCE] stringValue]];
-        
-        // Insert sequence number and username to Azure data table (No connection to server is made)
-        [self.rcDataConnection insertSequenceNumber:[(NSNumber*)[callbackItem objectForKey:AZURE_USER_TABLE_SEQUENCE] stringValue] username:self.currentUsername];
-        
-        // Upload all data into rcMainDataTable
-        [self.rcDataConnection InsertDataIntoMainDataTable:^(NSNumber *rcCompleteFlag) {
+        // Perform error handling
+        if (callbackItem == nil){
+            // If the unique sequence number cannot be retrieved from server. Abort task
+            // Set image to failed icon and fade it in
+            self.checkedImage.image = [UIImage imageNamed:@"error"];
+            [self.checkedImage viewFadeInWithCompletion:nil];
+            
+            // Stop indicator
+            [self.statusIndicator stopAnimating];
+            
+            // Show error message
+            self.statusLabel.text = @"Cannot retrieve an index number from server";
+            
+            // Return to main menu
+            [self performSelector:@selector(returnToMainMenu) withObject:nil afterDelay:2];
+        } else {
             // Set UI Animation in main thread
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.progressBar setProgress:0.5 animated:YES];
-                self.statusLabel.text = @"Uploading image";
+                [self.progressBar setProgress:0.2 animated:YES];
+                self.statusLabel.text = @"Uploading to Data Table";
             });
-            // Proceed when uplaod is successful
-            if ([rcCompleteFlag isEqualToNumber:@YES]){
-                // Data is uploaded to Data Table, then upload the image into blob storage
-                NSLog(@"Uploading Image...");
-                
-                // Use unique sequence number as blob's name
-                [self.rcBlobstorage createImageWithBlobContainer:self.currentUsername SetCallback:^(NSNumber *rcCompleteFlag) {
-                    // All uploads completed
-                    NSLog(@"Setting UI to complete");
+            
+            // Store a copy of the dictioanry entry returned from the callback in order to increment the number by 1
+            self.rcDownloadedDictionary = callbackItem;
+            
+            NSLog(@"Retrieved unique sequence number: %@", [callbackItem objectForKey:AZURE_USER_TABLE_SEQUENCE]);
+            
+            // Store sequence number to Azure Blob Storage object (Only stores local copy, no connection to server is made)
+            [self.rcBlobstorage insertUniqueSequenceNumber:[(NSNumber*)[callbackItem objectForKey:AZURE_USER_TABLE_SEQUENCE] stringValue]];
+            
+            // Insert sequence number and username to Azure data table (Only stores local copy, no connection to server is made)
+            [self.rcDataConnection insertSequenceNumber:[(NSNumber*)[callbackItem objectForKey:AZURE_USER_TABLE_SEQUENCE] stringValue] username:self.currentUsername];
+            
+            // Upload all data into rcMainDataTable in server
+            [self.rcDataConnection InsertDataIntoMainDataTable:^(NSNumber *rcCompleteFlag) {
+                // Set UI Animation in main thread
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.progressBar setProgress:0.5 animated:YES];
+                    self.statusLabel.text = @"Uploading image";
+                });
+                // Proceed when uplaod is successful
+                if ([rcCompleteFlag isEqualToNumber:@YES]){
+                    // Data is uploaded to Data Table, then upload the image into blob storage
+                    NSLog(@"Uploading Image...");
                     
-                    // Check whether image is successfully uploaded to blob
-                    if ([rcCompleteFlag isEqualToNumber:@YES]){
-                        // Upload complete
-                        NSLog(@"Insert image into blob storage successful");
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [self.progressBar setProgress:0.9 animated:YES];
-                            self.statusLabel.text = @"Incrementing sequence ID in user table";
-                        });
-
-                        // Increment the sequence number in rcUserDataInfo
-                        NSLog(@"Incrementing sequence number");
-                        [self.rcDataConnection incrementSequenceNumberWithDictionary:self.rcDownloadedDictionary Callback:^(NSNumber *completeFlag) {
-                            // Check status of sequence number update
-                            if ([completeFlag  isEqual: @YES]){
-                                // Sequence number update completed, push updates to UI view elements and then call uploadCompleted function
-                                dispatch_async(dispatch_get_main_queue(), ^{
-                                    // Fade out status indicator
-                                    [self.statusIndicator viewFadeOutWithCompletion:nil];
-                                    
-                                    // Fade in green check image
-                                    [self.checkedImage viewFadeInWithCompletion:nil];
-                                    // Update UI elements
-                                    [self.progressBar setProgress:1.0 animated:YES];
-                                    self.statusLabel.text = @"Done";
-                                    [self.statusIndicator stopAnimating];
-                                    
-                                    // Wait for few seconds and then return to main menu
-                                    [self performSelector:@selector(returnToMainMenu) withObject:nil afterDelay:2];
-                                });
-                            } else {
-                                // Sequence number update failed
-                                NSLog(@"Sequence number update failed");
-                                // Delete the entry just added in main data table
-                                [self.rcDataConnection deleteEntry:[self.rcDataConnection getCurrentDictionaryData]];
-                                // Update UI in main thread and return to main menu
-                                dispatch_async(dispatch_get_main_queue(), ^{
-                                    [self.progressBar setProgress:0 animated:YES];
-                                    self.statusLabel.text = @"Sequence number update failed";
-                                    
-                                    // Wait for few seconds and then return to main menu
-                                    [self performSelector:@selector(returnToMainMenu) withObject:nil afterDelay:2];
-                                });
-                                
-                            }
-                        }];
+                    // Use unique sequence number as blob's name
+                    [self.rcBlobstorage createImageWithBlobContainer:self.currentUsername SetCallback:^(NSNumber *rcCompleteFlag) {
+                        // All uploads completed
+                        NSLog(@"Setting UI to complete");
                         
-                    } else {
-                        // Upload image failed
-                        NSLog(@"Insert image into blob storage failed");
-                        // Delete the entry just added in main data table
-                        [self.rcDataConnection deleteEntry:[self.rcDataConnection getCurrentDictionaryData]];
-                        // Update UI in main thread and return to main menu
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [self.progressBar setProgress:0 animated:YES];
-                            self.statusLabel.text = @"Upload image failed";
+                        // Check whether image is successfully uploaded to blob
+                        if ([rcCompleteFlag isEqualToNumber:@YES]){
+                            // Upload complete
+                            NSLog(@"Insert image into blob storage successful");
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                [self.progressBar setProgress:0.9 animated:YES];
+                                self.statusLabel.text = @"Incrementing sequence ID in user table";
+                            });
                             
-                            // Wait for few seconds and then return to main menu
-                            [self performSelector:@selector(returnToMainMenu) withObject:nil afterDelay:2];
-                        });
-                        
-                    }
-                }]; // End of createImageWithBlobContainer
-            } else {
-                // If data not uploaded into Azure Data Table
-                NSLog(@"Cannot upload data to Azure Data Table, Abort!");
-            }
-
-        }];
+                            // Increment the sequence number in rcUserDataInfo
+                            [self.rcDataConnection incrementSequenceNumberWithDictionary:self.rcDownloadedDictionary Callback:^(NSNumber *completeFlag) {
+                                // Check status of sequence number update
+                                if ([completeFlag  isEqual: @YES]){
+                                    // Sequence number update completed, push updates to UI view elements and then call uploadCompleted function
+                                    dispatch_async(dispatch_get_main_queue(), ^{
+                                        // Fade in green check image
+                                        self.checkedImage.image = [UIImage imageNamed:@"checked"];
+                                        [self.checkedImage viewFadeInWithCompletion:nil];
+                                        // Update UI elements
+                                        [self.progressBar setProgress:1.0 animated:YES];
+                                        self.statusLabel.text = @"Done";
+                                        [self.statusIndicator stopAnimating];
+                                        
+                                        // Wait for few seconds and then return to main menu
+                                        [self performSelector:@selector(returnToMainMenu) withObject:nil afterDelay:2];
+                                    });
+                                } else {
+                                    // Sequence number update failed
+                                    NSLog(@"Sequence number update failed");
+                                    // Delete the entry just added in main data table
+                                    [self.rcDataConnection deleteEntry:[self.rcDataConnection getCurrentDictionaryData]];
+                                    // Update UI in main thread and return to main menu
+                                    dispatch_async(dispatch_get_main_queue(), ^{
+                                        [self.progressBar setProgress:0 animated:YES];
+                                        self.statusLabel.text = @"Sequence number update failed";
+                                        
+                                        // Wait for few seconds and then return to main menu
+                                        [self performSelector:@selector(returnToMainMenu) withObject:nil afterDelay:2];
+                                    });
+                                    
+                                }
+                            }];
+                            
+                        } else {
+                            // Upload image failed
+                            NSLog(@"Insert image into blob storage failed");
+                            // Delete the entry just added in main data table
+                            [self.rcDataConnection deleteEntry:[self.rcDataConnection getCurrentDictionaryData]];
+                            // Update UI in main thread and return to main menu
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                [self.progressBar setProgress:0 animated:YES];
+                                self.statusLabel.text = @"Upload image failed";
+                                
+                                // Wait for few seconds and then return to main menu
+                                [self performSelector:@selector(returnToMainMenu) withObject:nil afterDelay:2];
+                            });
+                            
+                        }
+                    }]; // End of createImageWithBlobContainer
+                } else {
+                    // If data not uploaded into Azure Data Table
+                    NSLog(@"Cannot upload data to Azure Data Table, Abort!");
+                }
+                
+            }]; // End of self.rcDataConnection InsertDataIntoMainDataTable call
+        }
         
-    }];
+    }]; // End of self.rcDataConnection getUniqueNumber_WithUsername call
     
 
 }
@@ -179,5 +190,10 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+// Switch to main thread to update UI
+- (void) setProgressBar:(NSNumber*)nPercentage StatusText:(NSString*)text{
+    
+}
 
 @end

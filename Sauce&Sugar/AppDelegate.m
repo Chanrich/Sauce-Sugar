@@ -9,7 +9,7 @@
 #import "AppDelegate.h"
 #import "rcAzureDataTable.h"
 #import "rcAzureBlobContainer.h"
-
+#import "GlobalNames.h"
 @interface AppDelegate ()
 
 @end
@@ -17,14 +17,16 @@
 @implementation AppDelegate {
     rcAzureDataTable *rcDataConnection;
     rcAzureBlobContainer *rcBlobContainer;
+    NSString *currentUsername;
 }
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    // Set current user
-    self.currentUsername = @"rchan";
+    // Invalidate current user
+    currentUsername = @"";
+    
     // Enable Google API
     [GMSServices provideAPIKey:@"AIzaSyCElpQ25SaS9VxqFsdgR1pRkVYEbspWALI"];
     
@@ -33,6 +35,20 @@
     rcBlobContainer = [rcAzureBlobContainer sharedStorageContainer];
     
     return YES;
+}
+
+// Set username
+- (void) setUsername:(NSString*)username{
+    currentUsername = username;
+}
+
+// If no user is set return 'Guest' as current username
+- (NSString*) getUsername{
+    if ([currentUsername  isEqual: @""]){
+        return AZURE_USER_GUEST;
+    } else {
+        return currentUsername;
+    }
 }
 
 

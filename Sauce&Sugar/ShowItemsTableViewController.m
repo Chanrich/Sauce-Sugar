@@ -27,14 +27,14 @@
     [super viewDidLoad];
     
     // Set up overlay UIView
-    self.overlayUIView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    self.overlayUIView = [[UIView alloc] initWithFrame:self.tabBarController.view.bounds];
     self.overlayUIView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.3];
     
     // Display an activity indicator to alert user that download is in progress
     UIActivityIndicatorView *rcSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:(UIActivityIndicatorViewStyle)UIActivityIndicatorViewStyleWhiteLarge];
     
     // Setup spinner
-    [rcSpinner setFrame:self.view.frame];
+    [rcSpinner setFrame:self.tabBarController.view.frame];
     [rcSpinner.layer setBackgroundColor:[[UIColor colorWithWhite:0.0 alpha:0.3] CGColor]];
     rcSpinner.center = self.overlayUIView.center;
     rcSpinner.hidesWhenStopped = YES;
@@ -47,7 +47,7 @@
     [self.tabBarController.view addSubview:self.overlayUIView];
     
     // get current username
-    NSString *currentUser = [(AppDelegate*)[[UIApplication sharedApplication] delegate] currentUsername];
+    NSString *currentUser = [(AppDelegate*)[[UIApplication sharedApplication] delegate] getUsername];
     // stop tableview from loading by setting delegate and datasource to null
     self.rcTableView.delegate = nil;
     self.rcTableView.dataSource = nil;
@@ -125,7 +125,7 @@
         // Display number of entries in title
         dispatch_async(dispatch_get_main_queue(), ^{
             // Set title
-            self.title = [NSString stringWithFormat:@"Found %lu items", [callbackItem count]];
+            self.title = [NSString stringWithFormat:@"Found %lu items", (unsigned long)[callbackItem count]];
         });
         
         // After storing all entries into cell mutable array, ask table to refresh

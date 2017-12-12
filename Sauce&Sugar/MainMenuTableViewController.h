@@ -11,7 +11,7 @@
 #import "MainMenuButton.h"
 #import "SlideOutMenuViewController.h"
 #import "ShowItemsTableViewController.h"
-
+#import "LoginViewController.h"
 @interface MainMenuTableViewController : UITableViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, SlideOutMenuViewControllerDelegate>
 // UI ImageView button to call slideout menu
 @property (strong, nonatomic) IBOutlet UIImageView *rcSlideOutImage;

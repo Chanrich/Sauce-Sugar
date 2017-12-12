@@ -17,17 +17,15 @@
 
 
 // ============== UI Outlets  ===============
-// Text collection
+
+@property (strong, nonatomic) IBOutlet UILabel *rcUsernameLabel;
 @property (strong, nonatomic) IBOutlet UITextField *TextField_RestaurantName;
-// UI elements
 @property (strong, nonatomic) IBOutlet UIImageView *MainImageView;
 // ==========================================
 
 // ============ Custom Properties ==============
 // A property to hold image being passed in from presenting view controller
 @property (strong, nonatomic) UIImage *rcImageHolder;
-// current user
-@property NSString* currentUsername;
 // Singleton instance of table data management
 @property (strong, nonatomic) rcAzureDataTable *rcDataConnection;
 // Singleton instance of image blob database

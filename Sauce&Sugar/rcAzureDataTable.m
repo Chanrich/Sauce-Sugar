@@ -67,8 +67,10 @@
     }];
 }
 
+#pragma mark User Table
+
 // Create a new user and set its seqNum to 1
-- (void) InsertIntoTableWithUsername:(NSString*)username Password:(NSString*)password Callback:(void(^)(NSNumber* completeFlag))returnCallback{
+- (void) InsertIntoUserTableWithUsername:(NSString*)username Password:(NSString*)password Callback:(void(^)(NSNumber* completeFlag))returnCallback{
     // Prepare object for integer since NSDictioanry only accepts object
     NSNumber *seqNum = [NSNumber numberWithInt:1];
     
@@ -93,10 +95,10 @@
 // Update an entry into the table, retrieve the information first and then update that entry
 - (void) incrementSequenceNumberWithDictionary:(NSDictionary*)myDict Callback:(void(^)(NSNumber* completeFlag)) returnCallback{
     // Increment the retrieved sequence number by 1
-    NSNumber *newValue = [NSNumber numberWithInt:[[myDict objectForKey:@"SequenceNumber"] intValue] + 1];
+    NSNumber *newValue = [NSNumber numberWithInt:[[myDict objectForKey:AZURE_USER_TABLE_SEQUENCE] intValue] + 1];
     
     // Update the newly incremented number into the key
-    [myDict setValue:newValue forKey:@"SequenceNumber"];
+    [myDict setValue:newValue forKey:AZURE_USER_TABLE_SEQUENCE];
     
     // Push it to Azure table
     [UserData_MSTable update:myDict completion:^(NSDictionary * _Nullable item, NSError * _Nullable error) {
@@ -132,7 +134,7 @@
     if (![rcCurrentSequenceNumber isEqualToNumber:@(-1)]){
         // If sequence number is valid, get it from local copy
         NSLog(@"Returning sequence number from local copy");
-        // Copy the style that data were returned from server, the returning NSNumber should be send to the callback function in a dictionary at key defined at AZURE_USER_TABLE_SEQUENCE
+        // Copy the style that data were returned from server, the returning NSNumber should be send to the callback function in a dictionary at key defined at @AZURE_USER_TABLE_SEQUENCE
         NSDictionary *tempStorage = @{AZURE_USER_TABLE_SEQUENCE:rcCurrentSequenceNumber};
         returnCallback(tempStorage);
     } else {
@@ -142,13 +144,7 @@
         NSPredicate *dataFilter;
         
         // Filter for username
-        if (rcUsername == nil){
-            // Return all user data
-            dataFilter = [NSPredicate predicateWithFormat:@"USERNAME != NULL"];
-        } else {
-            // Return individual user data
-            dataFilter = [NSPredicate predicateWithFormat:@"USERNAME == %@", rcUsername];
-        }
+        dataFilter = [NSPredicate predicateWithFormat:@"USERNAME == %@", rcUsername];
         
         // Prepare a MSQuery object with filter dataFilter
         NSLog(@"Query filter: %@", [dataFilter predicateFormat]);
@@ -163,11 +159,39 @@
                 NSNumber *itemCount = [NSNumber numberWithUnsignedLong:[result.items count]];
                 NSLog(@"Entries returned from rcQuery readWithCompletion:%@", itemCount);
                 if ([result.items count] == 1){
+                    // Store the sequence number into local copy
+                    NSDictionary *returnedData = [result.items objectAtIndex:0];
+                    rcCurrentSequenceNumber = [returnedData objectForKey:AZURE_USER_TABLE_SEQUENCE];
+                    
                     // Pass the NSDictionary* stored in NSArray back to callback function
                     returnCallback([result.items objectAtIndex:0]);
                 } else if ([result.items count] > 1){
                     // More than one entry is downloaded, something must be wrong as there shouldn't have two exact same user
                     NSLog(@"More than one user is selected, task aborting");
+                } else if ([result.items count] == 0){
+                    // No user is found
+                    // If current user is guest, create a guest account and re-run
+                    if ([rcUsername isEqualToString:AZURE_USER_GUEST]){
+                        // Create a guest user account with sequence number 1 and return a pre-built dictionary containing sequence number 1
+                        [self InsertIntoUserTableWithUsername:AZURE_USER_GUEST Password:AZURE_USER_GUEST_PASSWORD Callback:^(NSNumber *completeFlag) {
+                            if ([completeFlag isEqual:@YES]){
+                                NSLog(@"Guest account is created");
+                                // Return sequence number 1 in a dictionary
+                                NSNumber *numberWithOne = [NSNumber numberWithInt:1];
+                                NSDictionary *tempReturnDic = @{AZURE_USER_TABLE_SEQUENCE : numberWithOne};
+                                returnCallback(tempReturnDic);
+                            } else {
+                                // Return nil if error occured
+                                NSLog(@"Creating guest account failed");
+                                returnCallback(nil);
+                            }
+                        
+                        }];
+                    } else {
+                        // If username is not guest, then it doesn't exist
+                        NSLog(@"No user is selected, task aborting");
+                        returnCallback(nil);
+                    }
                 } else {
                     // Error
                     NSLog(@"No user is selected, task aborting");
@@ -298,7 +322,7 @@
     NSPredicate *dataFilter = [NSPredicate predicateWithFormat:
                                @"USERNAME=%@", rcUsername];
     NSPredicate *dataFilter2 = [NSPredicate predicateWithFormat:
-                               @"USERNAME=%@", rcUsername];
+                               @"PASSWORD=%@", password];
     // Combine two predicate with and
     NSPredicate *finalPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[dataFilter, dataFilter2]];
     
@@ -316,7 +340,7 @@
         } else {
             // Debug
             NSNumber *temp = [NSNumber numberWithUnsignedLong:[result.items count]];
-            NSLog(@"Count of result.item array: %@", temp);
+            NSLog(@"Number of entries found with this username and password: %@", temp);
             
             if ([result.items count] == 1){
                 NSLog(@"Found a matching account!");
@@ -328,6 +352,10 @@
         }
     }];;
     
+}
+
+- (void) invalidateSequenceNumber{
+    rcCurrentSequenceNumber = @(-1);
 }
 
 
@@ -355,13 +383,6 @@
     [self.rcDataDictionary setObject:username forKey:AZURE_DATA_TABLE_USERNAME];
     [self.rcDataDictionary setObject:sequenceNumber forKey:AZURE_DATA_TABLE_SEQUENCE];
 }
-
-#pragma mark returnData
-
-- (NSDictionary*) getCurrentDictionaryData{
-    return self.rcDataDictionary;
-}
-
 
 #pragma mark - GPS Location Functions
 // Send a request for location authorization and start updating location data
@@ -469,5 +490,39 @@
     
 }
 
+#pragma mark - Utility Functions
+
+- (NSDictionary*) getCurrentDictionaryData{
+    return self.rcDataDictionary;
+}
+
+// Parse the food type enum and return a string describing the type
+- (NSString*) parseFoodType:(FoodTypes)enum_type{
+    NSString *parsedText;
+    switch (enum_type) {
+        case FOODTYPE_ALL:
+            parsedText = @"All";
+            break;
+        case RICE:
+            parsedText = @"Rice";
+            break;
+        case NOODLES:
+            parsedText = @"Noodles";
+            break;
+        case ICECREAM:
+            parsedText = @"Ice Cream";
+            break;
+        case DESSERT:
+            parsedText = @"Dessert";
+            break;
+        case DRINK:
+            parsedText = @"Drink";
+            break;
+        default:
+            parsedText = @"FoodType Invalid";
+            break;
+    }
+    return parsedText;
+}
 
 @end

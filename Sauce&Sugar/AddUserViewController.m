@@ -9,7 +9,7 @@
 #import "AddUserViewController.h"
 #import "GlobalNames.h"
 
-@interface AddUserViewController ()
+@interface AddUserViewController () <UIGestureRecognizerDelegate>
 
 
 @end
@@ -18,8 +18,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    NSLog(@"Entering Sign up page");
+    
     // Set textfield delegate to self to hide keyboard
     self.rcAddUser.delegate = self;
     self.rcUserPasswordTextField.delegate = self;
@@ -44,6 +43,11 @@
     [self.rcUsernameLabel viewFadeInWithCompletion:^(BOOL rcFinished) {
         [self.rcAddUser viewFadeInWithCompletion:nil];
     }];
+    
+    // Tap anywhere on view to remove keyboard
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapping)];
+    tap.delegate = self;
+    [self.view addGestureRecognizer:tap];
     
 
 }
@@ -71,11 +75,14 @@
     [self.rcButton_Adduser setEnabled:FALSE];
     [self.rcActivityIndicator startAnimating];
     
+    // Remove keyboard
+    [[self view] endEditing:YES];
+    
     [self.rcDataConnection verifyUsername:self.rcAddUser.text Callback:^(BOOL callbackItem) {
         if (callbackItem == YES){
             NSLog(@"Creating new user");
             // Prepare username into dictionary collection
-            [self.rcDataConnection InsertIntoTableWithUsername:self.rcAddUser.text Password:self.rcUserPasswordTextField.text Callback:^(NSNumber *completeFlag) {
+            [self.rcDataConnection InsertIntoUserTableWithUsername:self.rcAddUser.text Password:self.rcUserPasswordTextField.text Callback:^(NSNumber *completeFlag) {
                 // Stop animation
                 [self.rcActivityIndicator stopAnimating];
                 if ([completeFlag isEqualToNumber:@YES]){
@@ -120,9 +127,24 @@
     
 }
 
+#pragma mark - Text Field Handling
 // Dismiss keyboard when return pressed in textfields
 - (BOOL) textFieldShouldReturn:(UITextField *)textField{
     [textField resignFirstResponder];
+    if (textField == self.rcAddUser){
+        NSLog(@"Move to next field");
+        [self.rcUserPasswordTextField becomeFirstResponder];
+    } else if (textField == self.rcUserPasswordTextField){
+        // Click on the create button
+        [self AddUser_TouchUpInside:textField];
+    }
+   
     return NO;
+}
+
+// This is called when background view is tapped
+- (void) tapping{
+    // End text edit
+    [[self view] endEditing:YES];
 }
 @end

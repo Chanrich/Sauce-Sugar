@@ -15,20 +15,33 @@
 @implementation SlideOutMenuViewController {
     CreditsViewController *creditVC;
     UIStoryboard *sb;
-
+    IBOutlet UITableView *rcTableview;
+    
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NSString *username = [(AppDelegate*)[[UIApplication sharedApplication] delegate] currentUsername];
+    NSString *username = [(AppDelegate*)[[UIApplication sharedApplication] delegate] getUsername];
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    self.usernameCell.textLabel.text = [NSString stringWithFormat:@"Hi, %@", username];
+    if ([username isEqualToString:@""]){
+        // Username invalid
+        self.usernameCell.textLabel.text = [NSString stringWithFormat:@"User logged out"];
+    } else {
+        self.usernameCell.textLabel.text = [NSString stringWithFormat:@"Hi, %@", username];
+    }
+    
+    // === Following code enable tap-dismiss on the background of the tableview ===
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissSlideOutMenu)];
+    UIView *bkgView = [[UIView alloc] init];
+    rcTableview.backgroundView = bkgView;
+    [rcTableview.backgroundView addGestureRecognizer:tapGesture];
+    // =============================================================================
 }
 
 - (void)didReceiveMemoryWarning {
@@ -61,7 +74,7 @@
             break;
         case 2:
             // Reset slide menu button so it will allow this menu to slide back again
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"slideSuperViewBack" object:nil];
+            [self dismissSlideOutMenu];
             // Wait for main view to return to original position
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"addNewItem" object:nil];
@@ -71,22 +84,26 @@
             break;
         case 3: // LOGIN BUTTON
             // Reset slide menu button so it will allow this menu to slide back again
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"slideSuperViewBack" object:nil];
+            [self dismissSlideOutMenu];
+            // Wait for main view to return to original position
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                // Call target vc from main view
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"showSignIn" object:nil];
+            });
             
             break;
         case 4: // SIGN UP BUTTON
             // Reset slide menu button so it will allow this menu to slide back again
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"slideSuperViewBack" object:nil];
+            [self dismissSlideOutMenu];
             // Wait for main view to return to original position
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                 // Call target vc from main view
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"signUpNewUser" object:nil];
             });
-
             break;
         case 5: //Credit
             // Reset slide menu button so it will allow this menu to slide back again
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"slideSuperViewBack" object:nil];
+            [self dismissSlideOutMenu];
             // Wait for main view to return to original position
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                 // Call target vc from main view
@@ -154,8 +171,9 @@
 }
 */
 
-// Send a notification message to slide super view back
-- (IBAction)slideMenuSlideBackButton_TouchUpInside:(id)sender {
+#pragma mark - Dismiss Self
+- (void) dismissSlideOutMenu{
+    // Send a message to main view to dismiss the slide-out view
     [[NSNotificationCenter defaultCenter] postNotificationName:@"slideSuperViewBack" object:nil];
 }
 @end

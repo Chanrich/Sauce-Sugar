@@ -33,6 +33,8 @@
     [self.creditsTextView insertText:@"Add User icon: Icon made by Freepik from  www.flaticon.com\n"];
     [self.creditsTextView insertText:@"Credit icon: Icon made by Catalin Fertu from  www.flaticon.com\n"];
     [self.creditsTextView insertText:@"Credit icon: Icon made by Google Material Design from  www.flaticon.com\n"];
+    [self.creditsTextView insertText:@"Error icon: Icon made by Smashicons from  www.flaticon.com\n"];
+    [self.creditsTextView insertText:@"Green check icon: Icon made by Maxim Basinski from  www.flaticon.com\n"];
 }
 
 - (void)didReceiveMemoryWarning {

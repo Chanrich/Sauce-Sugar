@@ -18,6 +18,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *rcUsernameLabel;
 @property (strong, nonatomic) IBOutlet UILabel *rcUploadCount;
 @property (strong, nonatomic) IBOutlet UICollectionViewFlowLayout *rcCollectionViewLayout;
+@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *rcIndicator;
 
 // Singleton instance of table data management
 @property (strong, nonatomic) rcAzureDataTable *rcDataConnection;
@@ -30,12 +31,14 @@
     // Store all downloaded image data
     NSMutableArray <NSMutableDictionary*> *userPhotosMutableArray;
     unsigned long downloadedImageCount;
+    // A UIView to cover up collection view during data loading
+    UIView *collectionOverlay;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Set username
-    NSString *currentUser = [(AppDelegate*)[[UIApplication sharedApplication] delegate] currentUsername];
+    NSString *currentUser = [(AppDelegate*)[[UIApplication sharedApplication] delegate] getUsername];
     [self.rcUsernameLabel setText:currentUser];
     
     // Initialize singleton instances
@@ -48,20 +51,54 @@
     // Initialize variables
     downloadedImageCount = 0;
     
+    // Enable spinning animation
+    //[self.rcIndicator startAnimating];
+    
+    // Create a overlay view to cover up UI collection view during loading
+    collectionOverlay = [[UIView alloc] initWithFrame:self.tabBarController.view.bounds];
+    collectionOverlay.backgroundColor = [UIColor colorWithWhite:0 alpha:0.3];
+    
+    // Display an activity indicator to alert user that download is in progress
+    UIActivityIndicatorView *rcSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:(UIActivityIndicatorViewStyle)UIActivityIndicatorViewStyleWhiteLarge];
+    
+    // Setup spinner
+    [rcSpinner setFrame:self.tabBarController.view.bounds];
+    [rcSpinner.layer setBackgroundColor:[[UIColor colorWithWhite:0.0 alpha:0.3] CGColor]];
+    rcSpinner.center = collectionOverlay.center;
+    rcSpinner.hidesWhenStopped = YES;
+    
+    // Add subview
+    [collectionOverlay addSubview:rcSpinner];
+    
+    // Add spinner subview and start spinner
+    [rcSpinner startAnimating];
+    [self.tabBarController.view addSubview:collectionOverlay];
+    
     // Get sequence number
     [self.rcDataConnection getUniqueNumber_WithUsername:currentUser Callback:^(NSDictionary *callbackItem) {
         // Deduct 1 from sequence number to get total counts of entries
         NSNumber *tempSequence = [callbackItem objectForKey:AZURE_USER_TABLE_SEQUENCE];
-        NSNumber *totalCount = [NSNumber numberWithInt:(tempSequence.intValue - 1)];
+        NSNumber *totalCount = [NSNumber numberWithInt:(tempSequence.intValue)];
         // Update Sequence label UI in main thread
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.rcUploadCount setText:[NSString stringWithFormat:@"User upload count: %@", totalCount]];
+            
+            // Stop animation
+            //[self.rcIndicator stopAnimating];
         }); // End of dispatch to main thread
     }];
     
     // Request all photos that current user had uploaded
     // Get current user's data from the cloub
     [self.rcDataConnection getDatafromUser:currentUser FoodType:FOODTYPE_ALL Callback:^(NSArray *callbackItem) {
+        // Remove loading screen after a delay
+        double delayInSeconds = 1.0;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            [collectionOverlay removeFromSuperview];
+        });
+        
+        
         // In Callback function
         if (callbackItem == nil){
             // Handle errors, either no data available or download error
@@ -77,7 +114,7 @@
             // Successful download
             NSLog(@"Array Data received");
             
-            NSLog(@"Data received from callbackItem %lu", [callbackItem count]);
+            NSLog(@"Data received from callbackItem %lu", (unsigned long)[callbackItem count]);
             // Store result items into cell array.
             for (NSDictionary* returnDict in callbackItem){
                 // Get sequence number and minus the value by 1 to get total count of entries
@@ -99,7 +136,7 @@
                     // "seq"    : sequence number for the photo
                     [userPhotosMutableArray addObject:imageDictionary];
 
-                    NSLog(@"User photo array size: %lu/%lu", (unsigned long)[userPhotosMutableArray count], [callbackItem count]);
+                    NSLog(@"User photo array size: %lu/%lu", (unsigned long)[userPhotosMutableArray count], (unsigned long)[callbackItem count]);
                 
                     // Increment image count
                     downloadedImageCount++;

@@ -33,9 +33,11 @@ typedef enum FoodTypesEnum {
     DRINK = 4
 } FoodTypes;
 
+
+
 /* =========================== Usage Description ===========================
  This is a singleton module for connection to Azure mobile app services
- 1. User should call getUniqueNumber_WithUsername to obtain a unique sequence number that will be used as image index for blob storage. The index will match up to an item in blob
+ 1. User should call getUniqueNumber_WithUsername to obtain a unique sequence number that will be used as image name for blob storage. The index will match up to an item in blob
  
  2. Call insert method to store data into internal dictionary first
       The table should store 4 kinds of data:
@@ -65,7 +67,7 @@ typedef enum FoodTypesEnum {
 - (void) insertResNameData:(NSString*)resName;
 // Request location data
 - (void) requestLocationData;
-- (void) InsertIntoTableWithUsername:(NSString*)username Password:(NSString*)password Callback:(void(^)(NSNumber* completeFlag))returnCallback;
+- (void) InsertIntoUserTableWithUsername:(NSString*)username Password:(NSString*)password Callback:(void(^)(NSNumber* completeFlag))returnCallback;
 // =============================================
 
 // ======= Sequence Number Functions  ==========
@@ -73,6 +75,8 @@ typedef enum FoodTypesEnum {
 - (void) getUniqueNumber_WithUsername:(NSString*)rcUsername  Callback:(void(^)(NSDictionary *callbackItem)) returnCallback;
 // Update an entry into the table, retrieve the information first and then update that entry//
 - (void) incrementSequenceNumberWithDictionary:(NSDictionary*)myDict Callback:(void(^)(NSNumber* completeFlag)) returnCallback;
+// This function should be called after new user is logged in
+- (void) invalidateSequenceNumber;
 // ==============================================
 
 // ======= Delete Functions  ==========
@@ -80,8 +84,10 @@ typedef enum FoodTypesEnum {
 - (void) deleteEntry:(NSDictionary*)deleteEntry;
 // ==============================================
 
+// ======= Utility Functions =========
 - (NSDictionary*) getCurrentDictionaryData;
-
+- (NSString*) parseFoodType:(FoodTypes)enum_type;
+// ======================================
 // Override init to initialize client
 - (id) init;
 
