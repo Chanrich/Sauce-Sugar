@@ -46,8 +46,6 @@
     [rcSpinner startAnimating];
     [self.tabBarController.view addSubview:self.overlayUIView];
     
-    // get current username
-    NSString *currentUser = [(AppDelegate*)[[UIApplication sharedApplication] delegate] getUsername];
     // stop tableview from loading by setting delegate and datasource to null
     self.rcTableView.delegate = nil;
     self.rcTableView.dataSource = nil;
@@ -60,7 +58,7 @@
     self.rcCellMutableArray = [[NSMutableArray alloc] init];
     
     // Get current user's data from the cloub
-    [self.rcDataConnection getDatafromUser:currentUser FoodType:self.searchFoodType Callback:^(NSArray *callbackItem) {
+    [self.rcDataConnection getDatafromUser:nil FoodType:self.searchFoodType Callback:^(NSArray *callbackItem) {
         // In Callback function
         if (callbackItem == nil){
             // Handle errors, either no data available or download error
@@ -92,15 +90,17 @@
                 // Premade the cell that are going to be displayed in tableview
                 rcShowItemsTableViewCell *rcCell = [self.rcTableView dequeueReusableCellWithIdentifier:@"rcShowItemCell"];
                 
-                // Set cell properties
-                rcCell.rcMainCellLabel.text = [returnDict objectForKey:@"rName"];
-                rcCell.rcSecondCellLabel.text = [returnDict objectForKey:@"userName"];
-                
-                
-                // Get sequence number
+                // === Retrieve data from the returned dictionary ===
                 NSString *sequenceNum = [[returnDict objectForKey:@"sequence"] stringValue];
+                NSString *dataOwner = [returnDict objectForKey:@"userName"];
+                NSString *restaurantName = [returnDict objectForKey:@"rName"];
+                
+                // Set cell properties
+                rcCell.rcMainCellLabel.text = [NSString stringWithFormat:@"Restaurant: %@", restaurantName];
+                rcCell.rcSecondCellLabel.text = [NSString stringWithFormat:@"User: %@", dataOwner];
+
                 // Request one image stored inside dictionary key "sequence"
-                [self.rcBlobContainer getImagefromBlobFromUser:currentUser sequenceNumber:sequenceNum rcCallback:^(UIImage *rcReturnedImage) {
+                [self.rcBlobContainer getImagefromBlobFromUser:dataOwner sequenceNumber:sequenceNum rcCallback:^(UIImage *rcReturnedImage) {
                     // Get the returned UIImage into the cell in main thread
                     dispatch_async(dispatch_get_main_queue(), ^{
                         // Display image in current cell

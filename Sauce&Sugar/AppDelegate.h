@@ -26,6 +26,7 @@
 
 - (void) setUsername:(NSString*)username;
 - (NSString*) getUsername;
+- (void) logoutUser;
 
 @end
 

@@ -45,6 +45,9 @@
     // Listen for credit button click event in slide-out menu
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushSignInViewConroller) name:@"showSignIn" object:nil];
     
+    // Listen for credit button click event in slide-out menu
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLogout) name:@"userLogout" object:nil];
+    
     // Request current GPS location
     // Initialize singleton instances
     rcAzureDataTable *rcDataConnection;
@@ -456,6 +459,25 @@
     vc.hidesBottomBarWhenPushed = YES;
     // Show vc
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+#pragma mark User logout
+// SlideOutMenuView will call this method when sign pu button is clicked
+- (void) userLogout{
+    // Request username
+    NSString *username = [(AppDelegate*)[[UIApplication sharedApplication] delegate] getUsername];
+    // Show log out message
+    NSString *sLogoutBody = [NSString stringWithFormat:@"%@ is logged out", username];
+    // Log out current user
+    [(AppDelegate*)[[UIApplication sharedApplication] delegate] logoutUser];
+    // ========= Create Alert =========
+    // Create a UI AlertController to show warning message
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:username message:sLogoutBody preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:NULL];
+    [alert addAction:okAction];
+    // Show alert
+    [self presentViewController:alert animated:YES completion:NULL];
+    // ================================
 }
 
 

@@ -87,6 +87,10 @@
 		69FFDCF41FDE4722006BA988 /* checked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 69FFDCF21FDE4721006BA988 /* checked@2x.png */; };
 		69FFDCF51FDE4722006BA988 /* checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 69FFDCF31FDE4722006BA988 /* checked.png */; };
 		69FFDCF81FDEA3E5006BA988 /* UserProfile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69FFDCF61FDEA3E5006BA988 /* UserProfile.storyboard */; };
+		69FFDCFE1FE5DC47006BA988 /* SearchTableUser.png in Resources */ = {isa = PBXBuildFile; fileRef = 69FFDCFA1FE5DC46006BA988 /* SearchTableUser.png */; };
+		69FFDCFF1FE5DC47006BA988 /* SearchTableUser@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 69FFDCFB1FE5DC46006BA988 /* SearchTableUser@2x.png */; };
+		69FFDD001FE5DC47006BA988 /* star.png in Resources */ = {isa = PBXBuildFile; fileRef = 69FFDCFC1FE5DC47006BA988 /* star.png */; };
+		69FFDD011FE5DC47006BA988 /* star@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 69FFDCFD1FE5DC47006BA988 /* star@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -225,6 +229,10 @@
 		69FFDCF21FDE4721006BA988 /* checked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checked@2x.png"; sourceTree = "<group>"; };
 		69FFDCF31FDE4722006BA988 /* checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checked.png; sourceTree = "<group>"; };
 		69FFDCF71FDEA3E5006BA988 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = "Sauce&Sugar/Base.lproj/UserProfile.storyboard"; sourceTree = "<group>"; };
+		69FFDCFA1FE5DC46006BA988 /* SearchTableUser.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SearchTableUser.png; sourceTree = "<group>"; };
+		69FFDCFB1FE5DC46006BA988 /* SearchTableUser@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SearchTableUser@2x.png"; sourceTree = "<group>"; };
+		69FFDCFC1FE5DC47006BA988 /* star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = star.png; sourceTree = "<group>"; };
+		69FFDCFD1FE5DC47006BA988 /* star@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "star@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -382,6 +390,7 @@
 		69A080021F5E2AD900651946 /* ImagesResource */ = {
 			isa = PBXGroup;
 			children = (
+				69FFDCF91FE5DB81006BA988 /* SearchTable */,
 				69FFDCED1FDE4671006BA988 /* DataInsert */,
 				69FFDCEC1FDE460C006BA988 /* TabBar */,
 				696F15171FD5584D001300C6 /* SlideMenu */,
@@ -563,6 +572,17 @@
 			path = DataInsert;
 			sourceTree = "<group>";
 		};
+		69FFDCF91FE5DB81006BA988 /* SearchTable */ = {
+			isa = PBXGroup;
+			children = (
+				69FFDCFA1FE5DC46006BA988 /* SearchTableUser.png */,
+				69FFDCFB1FE5DC46006BA988 /* SearchTableUser@2x.png */,
+				69FFDCFC1FE5DC47006BA988 /* star.png */,
+				69FFDCFD1FE5DC47006BA988 /* star@2x.png */,
+			);
+			path = SearchTable;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -689,6 +709,7 @@
 				696F150A1FD16535001300C6 /* contract@2x.png in Resources */,
 				696F15351FD5682B001300C6 /* list-white@2x.png in Resources */,
 				69F39F281FB5892200362888 /* ice-cream.png in Resources */,
+				69FFDCFE1FE5DC47006BA988 /* SearchTableUser.png in Resources */,
 				696F15231FD559B1001300C6 /* add-friend.png in Resources */,
 				696F151B1FD55861001300C6 /* add-button@2x.png in Resources */,
 				69F39F4F1FBFED1100362888 /* GMapSearch.storyboard in Resources */,
@@ -700,6 +721,7 @@
 				698A0E001FA1AFF800915313 /* searchTable.storyboard in Resources */,
 				696F152A1FD56737001300C6 /* add-white.png in Resources */,
 				69162CCB1FB01CC100B7E853 /* GreenCheck.png in Resources */,
+				69FFDD001FE5DC47006BA988 /* star.png in Resources */,
 				69F39F3D1FBEDC6500362888 /* GoogleMaps.bundle in Resources */,
 				696F15261FD5664E001300C6 /* list.png in Resources */,
 				696F15331FD5682B001300C6 /* add-friend-white@2x.png in Resources */,
@@ -707,6 +729,7 @@
 				696F15361FD5682B001300C6 /* login-white.png in Resources */,
 				696F15041FD1625D001300C6 /* user.png in Resources */,
 				69FFDCF51FDE4722006BA988 /* checked.png in Resources */,
+				69FFDD011FE5DC47006BA988 /* star@2x.png in Resources */,
 				69FFDCF01FDE46C6006BA988 /* error@2x.png in Resources */,
 				69F39F2D1FB65D2200362888 /* MainMenu.storyboard in Resources */,
 				69C931681F502006007696BA /* Assets.xcassets in Resources */,
@@ -722,6 +745,7 @@
 				69F39F351FBD911C00362888 /* AppStoreIcon1024.png in Resources */,
 				69FFDCF81FDEA3E5006BA988 /* UserProfile.storyboard in Resources */,
 				69FFDCF41FDE4722006BA988 /* checked@2x.png in Resources */,
+				69FFDCFF1FE5DC47006BA988 /* SearchTableUser@2x.png in Resources */,
 				696F15051FD1625D001300C6 /* user@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -23,8 +23,5 @@
 
 @interface SlideOutMenuViewController : UITableViewController
 @property (nonatomic, assign) id<SlideOutMenuViewControllerDelegate> delegate;
-// UI Cell outlets
-@property (strong, nonatomic) IBOutlet UITableViewCell *usernameCell;
-
 
 @end

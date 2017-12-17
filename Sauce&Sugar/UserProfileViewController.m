@@ -78,7 +78,7 @@
     [self.rcDataConnection getUniqueNumber_WithUsername:currentUser Callback:^(NSDictionary *callbackItem) {
         // Deduct 1 from sequence number to get total counts of entries
         NSNumber *tempSequence = [callbackItem objectForKey:AZURE_USER_TABLE_SEQUENCE];
-        NSNumber *totalCount = [NSNumber numberWithInt:(tempSequence.intValue)];
+        NSNumber *totalCount = [NSNumber numberWithInt:(tempSequence.intValue) - 1];
         // Update Sequence label UI in main thread
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.rcUploadCount setText:[NSString stringWithFormat:@"User upload count: %@", totalCount]];

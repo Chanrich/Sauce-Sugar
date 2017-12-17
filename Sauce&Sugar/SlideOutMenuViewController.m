@@ -16,24 +16,38 @@
     CreditsViewController *creditVC;
     UIStoryboard *sb;
     IBOutlet UITableView *rcTableview;
-    
+    IBOutlet UILabel *LoginLogoutLabel;
+    IBOutlet UIImageView *LoginLogoutImage;
+    // The label at the top of the menu
+    IBOutlet UILabel *usernameLabel;
+    // Store user info
+    NSString *username;
+    bool bUserLoggedIn;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NSString *username = [(AppDelegate*)[[UIApplication sharedApplication] delegate] getUsername];
+    username = [(AppDelegate*)[[UIApplication sharedApplication] delegate] getUsername];
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    if ([username isEqualToString:@""]){
+    if ([username isEqualToString:AZURE_USER_GUEST]){
         // Username invalid
-        self.usernameCell.textLabel.text = [NSString stringWithFormat:@"User logged out"];
+        usernameLabel.text = [NSString stringWithFormat:@"Hi, Guest"];
+        
+        // Allow user to log in
+        [LoginLogoutLabel setText:@"Login"];
+        bUserLoggedIn = 0;
     } else {
-        self.usernameCell.textLabel.text = [NSString stringWithFormat:@"Hi, %@", username];
+        usernameLabel.text = [NSString stringWithFormat:@"Hi, %@", username];
+        
+        // Current user can logout with this button
+        [LoginLogoutLabel setText:@"LOGOUT"];
+        bUserLoggedIn = 1;
     }
     
     // === Following code enable tap-dismiss on the background of the tableview ===
@@ -75,6 +89,7 @@
         case 2:
             // Reset slide menu button so it will allow this menu to slide back again
             [self dismissSlideOutMenu];
+            
             // Wait for main view to return to original position
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"addNewItem" object:nil];
@@ -82,19 +97,30 @@
 
 
             break;
-        case 3: // LOGIN BUTTON
+        case 3: // LOGIN/OUT BUTTON
             // Reset slide menu button so it will allow this menu to slide back again
             [self dismissSlideOutMenu];
-            // Wait for main view to return to original position
-            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                // Call target vc from main view
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"showSignIn" object:nil];
-            });
             
+            // Log the user out if a user is logged in
+            if (bUserLoggedIn == 1){
+                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                    // Call target vc from main view
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"userLogout" object:nil];
+                });
+            } else {
+                // Show sign in page if no user is logged in
+                // Wait for main view to return to original position
+                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                    // Call target vc from main view
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"showSignIn" object:nil];
+                });
+
+            }
             break;
         case 4: // SIGN UP BUTTON
             // Reset slide menu button so it will allow this menu to slide back again
             [self dismissSlideOutMenu];
+            
             // Wait for main view to return to original position
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                 // Call target vc from main view

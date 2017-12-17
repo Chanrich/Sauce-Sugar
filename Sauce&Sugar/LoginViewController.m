@@ -94,7 +94,7 @@
                 // Update UI in main thread and return to main menu
                 dispatch_async(dispatch_get_main_queue(), ^{
                     // Wait for few seconds and then return to main menu
-                    [self performSelector:@selector(returnToMainMenu) withObject:nil afterDelay:2];
+                    [self performSelector:@selector(returnToMainMenu) withObject:nil afterDelay:0.5];
                 });
             }];
         } else {
@@ -104,12 +104,11 @@
             // Set fail msg and alert
             NSString *failedMsg = [NSString stringWithFormat:@"User %@ is not logged on", textUsername];
             alert = [UIAlertController alertControllerWithTitle:@"Login Failed" message:failedMsg     preferredStyle:UIAlertControllerStyleAlert];
-            okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                // Clear text field and set focus to username field
-                [self.rcUsernameTextField setText:@""];
-                [self.rcPasswordTextField setText:@""];
-                [self.rcUsernameTextField becomeFirstResponder];
-            }];
+            okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+            // Clear text field and set focus to username field
+            [self.rcUsernameTextField setText:@""];
+            [self.rcPasswordTextField setText:@""];
+            [self.rcUsernameTextField becomeFirstResponder];
         }
         [alert addAction:okAction];
         [self presentViewController:alert animated:YES completion:NULL];
