@@ -9,13 +9,16 @@
 #import "MainMenuTableViewController.h"
 #import "GlobalNames.h"
 
-@interface MainMenuTableViewController ()
+@interface MainMenuTableViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
 
 @end
 
 @implementation MainMenuTableViewController {
     // View created to dismiss slide-out menu view when main view is clicked while slide-out menu is out
     UIView* blockingView;
+    IBOutlet UICollectionView *typeSelectCollectView;
+    // Initialize singleton instances
+    rcAzureDataTable *rcDataConnection;
 }
 
 - (void)viewDidLoad {
@@ -48,19 +51,21 @@
     // Listen for credit button click event in slide-out menu
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLogout) name:@"userLogout" object:nil];
     
-    // Request current GPS location
-    // Initialize singleton instances
-    rcAzureDataTable *rcDataConnection;
+
     rcDataConnection = [rcAzureDataTable sharedDataTable];
-    // The location will be store at the rcDataConnection currentGPSLocation member;
+    
+    // Request current GPS location
     [rcDataConnection requestLocationData];
     
     // Request for sequence number to speed up process.
     NSString *username = [(AppDelegate*)[[UIApplication sharedApplication] delegate] getUsername];
     [rcDataConnection getUniqueNumber_WithUsername:username Callback:^(NSDictionary *callbackItem) {
         // Do nothing with the returned data. Data should already be stored locally within the class
-        NSLog(@"Sequence number is pre-loaded");
+        NSNumber* numSeq = [callbackItem objectForKey:AZURE_USER_TABLE_SEQUENCE];
+        NSLog(@"Sequence number is pre-loaded: %@", numSeq);
     }];
+    
+    typeSelectCollectView.delegate = self;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -71,7 +76,7 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -376,33 +381,7 @@
 #pragma mark - UI Touch Events
 /* ================ UI Touch Events ================ */
 
-- (IBAction)RiceClicked:(id)sender {
-    NSLog(@"RiceClicked");
-    [self pushShowItemsViewControllerWithType:RICE];
-    
-}
 
-- (IBAction)NoodlesClicked:(id)sender {
-    NSLog(@"NoodlesClicked");
-    [self pushShowItemsViewControllerWithType:NOODLES];
-    
-}
-
-- (IBAction)IceCreamClicked:(id)sender {
-    NSLog(@"IceCreamClicked");
-    [self pushShowItemsViewControllerWithType:ICECREAM];
-}
-
-
-- (IBAction)DrinkClicked:(id)sender {
-    NSLog(@"DrinkClicked");
-    [self pushShowItemsViewControllerWithType:DRINK];
-}
-
-- (IBAction)DessertClicked:(id)sender {
-    NSLog(@"DessertClicked");
-    [self pushShowItemsViewControllerWithType:DESSERT];
-}
 
 
 #pragma mark - Create View Controllers for slide-out menu
@@ -480,6 +459,40 @@
     // ================================
 }
 
+// Collection view should read icon names from rcDataConnection
+- (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    // Declare a collection view cell designed in storyboard
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"mainCollectionViewCellID" forIndexPath:indexPath];
+    
+    // In storyboard, set:
+    // - UIImageView's tag  to 9
+    // - Label's tag        to 8
+    UIImageView *cellImage = (UIImageView*)[cell viewWithTag:9];
+    UILabel *cellLabel = (UILabel*)[cell viewWithTag:8];
+    
+    // Icon name and food type name will be returned from rcDataConnection
+    NSString *iconName = [rcDataConnection getFoodIconNameWithIndex:indexPath.row];
+    NSString *foodTypeName = [rcDataConnection getFoodTypeNameWithIndex:indexPath.row];
+    
+    // Set cell contents
+    [cellLabel setText:foodTypeName];
+    [cellImage setImage:[UIImage imageNamed:iconName]];
+    
+    return cell;
+}
 
+- (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    NSLog(@"numberOfItemsInSection SET TO: %lu", (unsigned long)[rcDataConnection getTotalNumberOfType]);
+    return [rcDataConnection getTotalNumberOfType];
+}
 
+#pragma mark - Collection View Delegate
+// When user tap on any item in the collectino view, push a view controller to show search result for that item
+- (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    NSUInteger selectedIndex = indexPath.row;
+    NSLog(@"selected : %lu", selectedIndex);
+    NSNumber *foodEnum = [rcDataConnection getFoodTypeEnumWithIndex:indexPath.row];
+    NSLog(@"\t Enum: %@", foodEnum);
+    [self pushShowItemsViewControllerWithType:(enum FoodTypesEnum)[foodEnum intValue]];
+}
 @end

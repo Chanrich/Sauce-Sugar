@@ -65,9 +65,10 @@ typedef enum FoodTypesEnum {
 - (void) insertSequenceNumber:(NSString*)sequenceNumber username:(NSString*)username;
 - (void) insertTypeData:(FoodTypes)foodType;
 - (void) insertResNameData:(NSString*)resName;
+- (void) InsertIntoUserTableWithUsername:(NSString*)username Password:(NSString*)password Callback:(void(^)(NSNumber* completeFlag))returnCallback;
 // Request location data
 - (void) requestLocationData;
-- (void) InsertIntoUserTableWithUsername:(NSString*)username Password:(NSString*)password Callback:(void(^)(NSNumber* completeFlag))returnCallback;
+
 // =============================================
 
 // ======= Sequence Number Functions  ==========
@@ -86,7 +87,16 @@ typedef enum FoodTypesEnum {
 
 // ======= Utility Functions =========
 - (NSDictionary*) getCurrentDictionaryData;
+
+// ======= Food Type Data Processing ========
 - (NSString*) parseFoodType:(FoodTypes)enum_type;
+- (NSUInteger) getTotalNumberOfType;
+- (NSString*) getFoodIconNameWithEnum:(int)enumFood;
+- (NSString*) getFoodIconNameWithIndex:(NSInteger)index;
+- (NSNumber*) getFoodTypeEnumWithIndex:(NSInteger)index;
+- (NSString*) getFoodTypeNameWithIndex:(NSInteger)index;
+- (void) insertNewFoodTypeWithIcon:(NSString*)icon atKey:(int)enumFood;
+
 // ======================================
 // Override init to initialize client
 - (id) init;

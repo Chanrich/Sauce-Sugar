@@ -36,3 +36,8 @@
 // Fading parameters
 #define fadeDuration 0.8
 #define fadeDuration_fast 0.3
+
+// Food Data Array Dictionary key names
+#define FOOD_DATA_KEY_TYPE_NAME @"NAME"
+#define FOOD_DATA_KEY_ICON @"ICON"
+#define FOOD_DATA_KEY_ENUM @"ENUM"

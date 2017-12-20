@@ -17,6 +17,15 @@
     // Store references to table datas
     MSTable *MainData_MSTable;
     MSTable *UserData_MSTable;
+    // Mutable array to store food data including:
+    // 1. Icon Name
+    // 2. Food type
+    // 3. Food Enum
+    NSMutableDictionary *foodData;
+    // An Array to translate from 0 index to food Enum index
+    NSMutableArray *foodIndexToEnum;
+    // Store pre-loaded user data table returned dictionary
+    NSDictionary *preloadedUserDataTable;
 }
 
 // Create a singleton
@@ -39,13 +48,23 @@
         // Initialize mutable dictionary to store data entries
         self.rcDataDictionary = [[NSMutableDictionary alloc] init];
         self.rcDataDictionaryForUserTable = [[NSMutableDictionary alloc] init];
+        // Initialize food data array
+        foodData = [[NSMutableDictionary alloc] init];
+        foodIndexToEnum = [[NSMutableArray alloc] init];
         // GPS Location mangager
         self.rcLocationManager = [[CLLocationManager alloc] init];
         // Initialized sequence number to invalid
         rcCurrentSequenceNumber = @(-1);
         // Initialize all data table
-        MainData_MSTable = [self.client tableWithName:AZURE_MAIN_DATA_TABLE_NAME];;
+        MainData_MSTable = [self.client tableWithName:AZURE_MAIN_DATA_TABLE_NAME];
         UserData_MSTable = [self.client tableWithName:AZURE_USER_DATA_TABLE_NAME];
+        // Initialize food data array with icon names and enum number
+        [self insertNewFoodTypeWithIcon:@"info" atKey:FOODTYPE_ALL];
+        [self insertNewFoodTypeWithIcon:@"rice" atKey:RICE];
+        [self insertNewFoodTypeWithIcon:@"noodles" atKey:NOODLES];
+        [self insertNewFoodTypeWithIcon:@"ice-cream" atKey:ICECREAM];
+        [self insertNewFoodTypeWithIcon:@"doughnut" atKey:DESSERT];
+        [self insertNewFoodTypeWithIcon:@"water" atKey:DRINK];
     }
     return self;
 }
@@ -96,7 +115,7 @@
 - (void) incrementSequenceNumberWithDictionary:(NSDictionary*)myDict Callback:(void(^)(NSNumber* completeFlag)) returnCallback{
     // Increment the retrieved sequence number by 1
     NSNumber *newValue = [NSNumber numberWithInt:[[myDict objectForKey:AZURE_USER_TABLE_SEQUENCE] intValue] + 1];
-    
+    NSLog(@"Incrementing Sequence number to %@", newValue);
     // Update the newly incremented number into the key
     [myDict setValue:newValue forKey:AZURE_USER_TABLE_SEQUENCE];
     
@@ -134,9 +153,8 @@
     if (![rcCurrentSequenceNumber isEqualToNumber:@(-1)]){
         // If sequence number is valid, get it from local copy
         NSLog(@"Returning sequence number from local copy");
-        // Copy the style that data were returned from server, the returning NSNumber should be send to the callback function in a dictionary at key defined at @AZURE_USER_TABLE_SEQUENCE
-        NSDictionary *tempStorage = @{AZURE_USER_TABLE_SEQUENCE:rcCurrentSequenceNumber};
-        returnCallback(tempStorage);
+        // Return the local copy
+        returnCallback(preloadedUserDataTable);
     } else {
         NSLog(@"Requesting sequence number from server");
         
@@ -161,6 +179,8 @@
                 if ([result.items count] == 1){
                     // Store the sequence number into local copy
                     NSDictionary *returnedData = [result.items objectAtIndex:0];
+                    // Store the returned dictionary to a local copy
+                    preloadedUserDataTable = returnedData;
                     rcCurrentSequenceNumber = [returnedData objectForKey:AZURE_USER_TABLE_SEQUENCE];
                     
                     // Pass the NSDictionary* stored in NSArray back to callback function
@@ -189,7 +209,7 @@
                         }];
                     } else {
                         // If username is not guest, then it doesn't exist
-                        NSLog(@"No user is selected, task aborting");
+                        NSLog(@"If username is not guest, then it doesn't exist, task aborting");
                         returnCallback(nil);
                     }
                 } else {
@@ -224,7 +244,7 @@
     }
     
     // Filter for food type
-    if (foodType == -1){
+    if (foodType == FOODTYPE_ALL){
         // Return all types of food
         dataFilter2 = [NSPredicate predicateWithFormat:@"foodType != NULL"];
     } else {
@@ -249,7 +269,7 @@
     
     // AND all data filters together
     finalAndPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[dataFilter, dataFilter2, dataFilter_latitude, dataFilter_longitude]];
-    
+    //finalAndPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[dataFilter, dataFilter2]];
     NSLog(@"finalAndPredicate:%@\n", [finalAndPredicate predicateFormat]);
     
     // Prepare a MSQuery object with filter dataFilter
@@ -258,7 +278,8 @@
     // Perform a read on the MSquery object, the read will return maximum 50 entries
     [rcQuery readWithCompletion:^(MSQueryResult * _Nullable result, NSError * _Nullable error) {
         if (error){
-            NSLog(@"Data download error!");
+            NSLog(@"<getDatafromUser> Data download error!");
+            NSLog(@"%@", [error localizedDescription]);
             // Pass a null back to callback, callback should check this for error
             returnCallback(nil);
         } else {
@@ -272,7 +293,7 @@
                 returnCallback(result.items);
             } else {
                 // Error
-                NSLog(@"No user is selected, task aborting");
+                NSLog(@"<getDatafromUser> No user is selected, task aborting");
                 returnCallback(nil);
             }
         }
@@ -295,7 +316,7 @@
     // Perform a read on the MSquery object, the read will return maximum 50 entries
     [rcQuery readWithCompletion:^(MSQueryResult * _Nullable result, NSError * _Nullable error) {
         if (error){
-            NSLog(@"Data download error!");
+            NSLog(@"<verifyUsername> Data download error!");
             // return a NO
             returnCallback(FALSE);
         } else {
@@ -334,7 +355,7 @@
     // Perform a read on the MSquery object, the read will return maximum 50 entries
     [rcQuery readWithCompletion:^(MSQueryResult * _Nullable result, NSError * _Nullable error) {
         if (error){
-            NSLog(@"Data download error!");
+            NSLog(@"<verifyUserAccount> Data download error!");
             // return a NO
             returnCallback(FALSE);
         } else {
@@ -411,14 +432,18 @@
     self.currentGPSLocation = myLocation;
     
     // Convert location data from double to string
-    NSString *longitudeToString = [NSString stringWithFormat:@"%f", myLocation.coordinate.longitude];
-    NSString *latitudeToString = [NSString stringWithFormat:@"%f", myLocation.coordinate.latitude];
+    // NSString *longitudeToString = [NSString stringWithFormat:@"%f", myLocation.coordinate.longitude];
+    // NSString *latitudeToString = [NSString stringWithFormat:@"%f", myLocation.coordinate.latitude];
+    
+    // Location data should be stored as double to Azure server
+    NSNumber *dLong = [NSNumber numberWithDouble:myLocation.coordinate.longitude];
+    NSNumber *dLat = [NSNumber numberWithDouble:myLocation.coordinate.latitude];
     // Debug
-    NSLog(@"Long:%@\tLat:%@", longitudeToString, latitudeToString);
+    NSLog(@"Long:%@\tLat:%@", dLong, dLat);
     
     // Update data entries in dictionary
-    [self.rcDataDictionary setObject:longitudeToString forKey:GPS_LONGITUDE];
-    [self.rcDataDictionary setObject:latitudeToString forKey:GPS_LATITUDE];
+    [self.rcDataDictionary setObject:dLong forKey:GPS_LONGITUDE];
+    [self.rcDataDictionary setObject:dLat forKey:GPS_LATITUDE];
     
     // Stop location update servie to preserve battery
     [self.rcLocationManager stopUpdatingLocation];
@@ -459,7 +484,7 @@
 
 #pragma mark Return Location
 // Returns a NSArray with lower and upper bounds in latitude which will serve as latitude search area for items in database
-- (NSArray*) returnLatitudeBoundsWithCenterLocation:(CLLocation*)center searchDegree:(float)degree{
+- (NSArray*) returnLatitudeBoundsWithCenterLocation:(CLLocation*)center searchDegree:(double)degree{
     // The filter should use longitude and latitude
     // Each degree of latitude is approximately 69 miles
     // A degree of longitude is widest at the equator at 69.172 miles (111.321) and gradually shrinks to zero at the poles.
@@ -467,15 +492,17 @@
     // ABS(y) < 0.8 (approx.55 miles)
     // Longitudes:
     // ABS(x) < 0.8 (approx.55 miles at equator and gradually to 0 at poles)
-    float currentLatitude = center.coordinate.latitude;
-    NSArray *bounds = @[@(currentLatitude - degree), @(currentLatitude + degree)];
+    double currentLatitude = center.coordinate.latitude;
+    NSNumber *lowerBound = [NSNumber numberWithDouble:(double)currentLatitude - (double)degree];
+    NSNumber *upperBound = [NSNumber numberWithDouble:(double)currentLatitude + (double)degree];
+    NSArray *bounds = @[lowerBound, upperBound];
     NSLog(@"Created: Latitude Bounds: %@", bounds);
     return bounds;
     
 }
 
 // Returns a NSArray with lower and upper bounds in longitude which will serve as longitude search area for items in database
-- (NSArray*) returnLongitudeBoundsWithCenterLocation:(CLLocation*)center searchDegree:(float)degree{
+- (NSArray*) returnLongitudeBoundsWithCenterLocation:(CLLocation*)center searchDegree:(double)degree{
     // The filter should use longitude and latitude
     // Each degree of latitude is approximately 69 miles
     // A degree of longitude is widest at the equator at 69.172 miles (111.321) and gradually shrinks to zero at the poles.
@@ -483,8 +510,10 @@
     // ABS(y) < 0.8 (approx.55 miles)
     // Longitudes:
     // ABS(x) < 0.8 (approx.55 miles at equator and gradually to 0 at poles)
-    float currentLongitude = center.coordinate.longitude;
-    NSArray *bounds = @[@(currentLongitude - degree), @(currentLongitude + degree)];
+    double currentLongitude = center.coordinate.longitude;
+    NSNumber *lowerBound = [NSNumber numberWithDouble:(double)currentLongitude - (double)degree];
+    NSNumber *upperBound = [NSNumber numberWithDouble:(double)currentLongitude + (double)degree];
+    NSArray *bounds = @[lowerBound,upperBound];
     NSLog(@"Created: Latitude Bounds: %@", bounds);
     return bounds;
     
@@ -496,6 +525,7 @@
     return self.rcDataDictionary;
 }
 
+#pragma mark - Food Type Data Processing
 // Parse the food type enum and return a string describing the type
 - (NSString*) parseFoodType:(FoodTypes)enum_type{
     NSString *parsedText;
@@ -523,6 +553,52 @@
             break;
     }
     return parsedText;
+}
+
+- (NSUInteger) getTotalNumberOfType{
+    return [foodData count];
+}
+
+// This function should store data into a dictionary and then insert it into food data array
+- (void) insertNewFoodTypeWithIcon:(NSString*)icon atKey:(int)enumFood{
+    static NSUInteger arrayIndex = 0;
+    NSString *tempTypeName = [self parseFoodType:enumFood];
+    NSDictionary *tempStorage = @{FOOD_DATA_KEY_TYPE_NAME: tempTypeName,
+                                  FOOD_DATA_KEY_ICON: icon,
+                                  FOOD_DATA_KEY_ENUM: [NSNumber numberWithInt:enumFood]
+                                  };
+    // Add object to the mutable array
+    [foodData setObject:tempStorage forKey:[NSNumber numberWithInt:enumFood]];
+    
+    // Create an index array to translate normal index (starting from 0) to enum index
+    [foodIndexToEnum insertObject:[NSNumber numberWithInt:enumFood] atIndex:arrayIndex];
+    arrayIndex++;
+}
+
+// This function will return name of the icon associated with the enum type
+- (NSString*) getFoodIconNameWithEnum:(int)enumFood{
+    NSDictionary *fData = [foodData objectForKey:[NSNumber numberWithInt:enumFood]];
+    return [fData objectForKey:FOOD_DATA_KEY_ICON];
+}
+
+// This function will return name of the icon associated with an array index starting from 0
+- (NSString*) getFoodIconNameWithIndex:(NSInteger)index{
+    NSNumber* Enum = [foodIndexToEnum objectAtIndex:index];
+    NSDictionary *fData = [foodData objectForKey:Enum];
+    return [fData objectForKey:FOOD_DATA_KEY_ICON];
+}
+
+// This function will return the enum of food type
+- (NSNumber*) getFoodTypeEnumWithIndex:(NSInteger)index{
+    NSNumber* Enum = [foodIndexToEnum objectAtIndex:index];
+    return Enum;
+}
+
+// This function will return the enum of food type
+- (NSString*) getFoodTypeNameWithIndex:(NSInteger)index{
+    NSNumber* Enum = [foodIndexToEnum objectAtIndex:index];
+    NSDictionary *fData = [foodData objectForKey:Enum];
+    return [fData objectForKey:FOOD_DATA_KEY_TYPE_NAME];
 }
 
 @end

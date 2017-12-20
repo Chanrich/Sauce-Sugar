@@ -30,10 +30,4 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info;
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker;
 
-// UI Actions
-- (IBAction)RiceClicked:(id)sender;
-- (IBAction)NoodlesClicked:(id)sender;
-- (IBAction)IceCreamClicked:(id)sender;
-- (IBAction)DrinkClicked:(id)sender;
-
 @end

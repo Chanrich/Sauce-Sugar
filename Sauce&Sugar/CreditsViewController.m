@@ -18,11 +18,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self.creditsTextView insertText:@"Credits:\n"];
-    [self.creditsTextView insertText:@"Rice icon: Icon made by Freepik from  www.flaticon.com\n"];
-    [self.creditsTextView insertText:@"Noodles icon: Icon made by Smashicons from  www.flaticon.com\n"];
-    [self.creditsTextView insertText:@"Drink icon: Icon made by Iconnice from  www.flaticon.com\n"];
-    [self.creditsTextView insertText:@"Ice cream icon: Icon made by Freepik from  www.flaticon.com\n"];
-    [self.creditsTextView insertText:@"Cake icon: Icon made by Smashicons from  www.flaticon.com\n"];
     [self.creditsTextView insertText:@"Stew icon: Icon made by Smashicons from  www.flaticon.com\n"];
     [self.creditsTextView insertText:@"User icon: Icon made by Smashicons from  www.flaticon.com\n"];
     [self.creditsTextView insertText:@"User_profile icon: Icon made by Chanut is Industries from  www.flaticon.com\n"];
@@ -37,6 +32,19 @@
     [self.creditsTextView insertText:@"Green check icon: Icon made by Maxim Basinski from  www.flaticon.com\n"];
     [self.creditsTextView insertText:@"Star icon: Icon made by Freepik from www.flaticon.com\n"];
     [self.creditsTextView insertText:@"Search Table User icon: Icon made by Smashicons from www.flaticon.com\n"];
+    // Food Type
+    // https://www.flaticon.com/free-icon/rice_184532#term=rice&page=1&position=77
+    [self.creditsTextView insertText:@"Rice icon: Icon made by Freepik from www.flaticon.com\n"];
+    // https://www.flaticon.com/free-icon/noodles_605282#term=noodles&page=2&position=51
+    [self.creditsTextView insertText:@"Noodles icon: Icon made by Smashicons from www.flaticon.com\n"];
+    // https://www.flaticon.com/free-icon/ice-cream_422929#term=ice cream&page=1&position=59
+    [self.creditsTextView insertText:@"Ice cream icon: Icon made by Freepik from www.flaticon.com\n"];
+    // https://www.flaticon.com/free-icon/doughnut_135559#term=doughnut&page=1&position=2
+    [self.creditsTextView insertText:@"Doughnut icon: Icon made by Smashicons from www.flaticon.com\n"];
+    // https://www.flaticon.com/free-icon/water_648636#term=water&page=1&position=24
+    [self.creditsTextView insertText:@"Water icon: Icon made by Freepik from www.flaticon.com\n"];
+    // https://www.flaticon.com/free-icon/info_148769#term=question&page=1&position=3
+    [self.creditsTextView insertText:@"Info icon: Icon made by Smashicons from www.flaticon.com\n"];
 }
 
 - (void)didReceiveMemoryWarning {

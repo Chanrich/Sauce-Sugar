@@ -104,7 +104,6 @@
         if (error){
             NSLog(@"Error when downloading image at sequence number : %@", sequenceNumber);
         } else {
-            NSLog(@"Download successful, SN: %@", sequenceNumber);
             // Transform from NSData to UIImage type
             UIImage *imagefromdata = [UIImage imageWithData:downloadedData];
             

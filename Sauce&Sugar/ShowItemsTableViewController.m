@@ -16,7 +16,6 @@
 @implementation ShowItemsTableViewController
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder{
-    NSLog(@"Init with coder at ShowItemsTableViewController ");
     self = [super initWithCoder:aDecoder];
     // Initialize to 0
     self.searchFoodType = FOODTYPE_ALL;
@@ -105,7 +104,6 @@
                     dispatch_async(dispatch_get_main_queue(), ^{
                         // Display image in current cell
                         rcCell.rcCellRightImage.image = rcReturnedImage;
-                        NSLog(@"SN:%@ Image setting complete", sequenceNum);
                         // Remove the overlay view when the first image is loaded
                         if (ImageIsReturned == NO){
                             // Stop the spinner from spinning
@@ -119,7 +117,6 @@
                 
                 // Add cell to the end of the array
                 [self.rcCellMutableArray addObject:rcCell];
-                NSLog(@"added an item to cell mutable array, size: %lu", (unsigned long)[self.rcCellMutableArray count]);
             } // End of for loop, end of processing of one entry
         }
         // Display number of entries in title
