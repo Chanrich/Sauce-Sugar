@@ -82,12 +82,26 @@
         if (callbackItem == YES){
             NSLog(@"Creating new user");
             // Prepare username into dictionary collection
-            [self.rcDataConnection InsertIntoUserTableWithUsername:self.rcAddUser.text Password:self.rcUserPasswordTextField.text Callback:^(NSNumber *completeFlag) {
+            [self.rcDataConnection InsertIntoUserTableWithUsername:self.rcAddUser.text Password:self.rcUserPasswordTextField.text Callback:^(NSDictionary* returnedDictionary) {
                 // Stop animation
                 [self.rcActivityIndicator stopAnimating];
-                if ([completeFlag isEqualToNumber:@YES]){
+                if (returnedDictionary != nil){
                     // User successfully created
                     [self.rcButton_Adduser setTitle:@"Completed" forState:UIControlStateDisabled];
+                    
+                    // Login current user
+                    NSString *newUsername = [returnedDictionary objectForKey:AZURE_USER_TABLE_USERNAME];
+                    [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUsername:newUsername];
+                    
+                    // Show welcome message
+                    NSString *welcomeMsg = [NSString stringWithFormat:@"User %@ is logged in", newUsername];
+                    
+                    // Create a UI AlertController to show welcome message
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Welcome" message:welcomeMsg preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+                    [alert addAction:okAction];
+                    [self presentViewController:alert animated:YES completion:NULL];
+                    
                     // Delay 2 seconds and then exit this view
                     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC));
                     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
@@ -110,8 +124,6 @@
                 }
             }];
         } else{
-            // Stop spinning
-            [self.rcActivityIndicator stopAnimating];
             NSLog(@"Error: username existing. User is not created");
             // ========= Create Alert =========
             // Create a UI AlertController to show warning message
@@ -119,8 +131,12 @@
             UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:NULL];
             [alert addAction:okAction];
             [self presentViewController:alert animated:YES completion:NULL];
-            // ================================
+            // ===== Reset UI =====
+            [self.rcAddUser setText:@""];
+            [self.rcUserPasswordTextField setText:@""];
             [self.rcButton_Adduser setEnabled:YES];
+            // Stop spinning
+            [self.rcActivityIndicator stopAnimating];
         }
     }];
 

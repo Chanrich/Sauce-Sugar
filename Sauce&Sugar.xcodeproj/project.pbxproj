@@ -15,6 +15,15 @@
 		6921E1101FEA5ABB00048246 /* ice-cream@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6921E10A1FEA5ABA00048246 /* ice-cream@3x.png */; };
 		6921E1111FEA5ABB00048246 /* rice@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6921E10B1FEA5ABB00048246 /* rice@3x.png */; };
 		6921E1121FEA5ABB00048246 /* info@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6921E10C1FEA5ABB00048246 /* info@3x.png */; };
+		6921E1161FECF1F000048246 /* store@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6921E1131FECF1EF00048246 /* store@2x.png */; };
+		6921E1171FECF1F000048246 /* store.png in Resources */ = {isa = PBXBuildFile; fileRef = 6921E1141FECF1EF00048246 /* store.png */; };
+		6921E1181FECF1F000048246 /* store@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6921E1151FECF1F000048246 /* store@3x.png */; };
+		6921E11C1FECF69E00048246 /* users@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6921E1191FECF69C00048246 /* users@3x.png */; };
+		6921E11D1FECF69E00048246 /* users.png in Resources */ = {isa = PBXBuildFile; fileRef = 6921E11A1FECF69D00048246 /* users.png */; };
+		6921E11E1FECF69E00048246 /* users@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6921E11B1FECF69E00048246 /* users@2x.png */; };
+		6921E1221FECF99600048246 /* food.png in Resources */ = {isa = PBXBuildFile; fileRef = 6921E11F1FECF99400048246 /* food.png */; };
+		6921E1231FECF99600048246 /* food@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6921E1201FECF99500048246 /* food@3x.png */; };
+		6921E1241FECF99600048246 /* food@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6921E1211FECF99500048246 /* food@2x.png */; };
 		6938F8A21F84AA130079C555 /* ShowItemsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6938F8A11F84AA120079C555 /* ShowItemsTableViewController.m */; };
 		6938F8A51F877AAE0079C555 /* rcShowItemsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6938F8A41F877AAE0079C555 /* rcShowItemsTableViewCell.m */; };
 		696F14F61FCFECF9001300C6 /* menu_icon-01.png in Resources */ = {isa = PBXBuildFile; fileRef = 696F14F51FCFECF9001300C6 /* menu_icon-01.png */; };
@@ -134,6 +143,15 @@
 		6921E10A1FEA5ABA00048246 /* ice-cream@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ice-cream@3x.png"; sourceTree = "<group>"; };
 		6921E10B1FEA5ABB00048246 /* rice@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rice@3x.png"; sourceTree = "<group>"; };
 		6921E10C1FEA5ABB00048246 /* info@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "info@3x.png"; sourceTree = "<group>"; };
+		6921E1131FECF1EF00048246 /* store@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "store@2x.png"; sourceTree = "<group>"; };
+		6921E1141FECF1EF00048246 /* store.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = store.png; sourceTree = "<group>"; };
+		6921E1151FECF1F000048246 /* store@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "store@3x.png"; sourceTree = "<group>"; };
+		6921E1191FECF69C00048246 /* users@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "users@3x.png"; sourceTree = "<group>"; };
+		6921E11A1FECF69D00048246 /* users.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = users.png; sourceTree = "<group>"; };
+		6921E11B1FECF69E00048246 /* users@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "users@2x.png"; sourceTree = "<group>"; };
+		6921E11F1FECF99400048246 /* food.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = food.png; sourceTree = "<group>"; };
+		6921E1201FECF99500048246 /* food@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "food@3x.png"; sourceTree = "<group>"; };
+		6921E1211FECF99500048246 /* food@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "food@2x.png"; sourceTree = "<group>"; };
 		6938F8A01F84AA120079C555 /* ShowItemsTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShowItemsTableViewController.h; sourceTree = "<group>"; };
 		6938F8A11F84AA120079C555 /* ShowItemsTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShowItemsTableViewController.m; sourceTree = "<group>"; };
 		6938F8A31F877AAE0079C555 /* rcShowItemsTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rcShowItemsTableViewCell.h; sourceTree = "<group>"; };
@@ -320,6 +338,22 @@
 			name = SearchTable;
 			sourceTree = "<group>";
 		};
+		6921E1251FECF9A800048246 /* MainView */ = {
+			isa = PBXGroup;
+			children = (
+				6921E1141FECF1EF00048246 /* store.png */,
+				6921E1131FECF1EF00048246 /* store@2x.png */,
+				6921E1151FECF1F000048246 /* store@3x.png */,
+				6921E11A1FECF69D00048246 /* users.png */,
+				6921E11B1FECF69E00048246 /* users@2x.png */,
+				6921E1191FECF69C00048246 /* users@3x.png */,
+				6921E11F1FECF99400048246 /* food.png */,
+				6921E1211FECF99500048246 /* food@2x.png */,
+				6921E1201FECF99500048246 /* food@3x.png */,
+			);
+			path = MainView;
+			sourceTree = "<group>";
+		};
 		696F15131FD1804F001300C6 /* UserProfileVC */ = {
 			isa = PBXGroup;
 			children = (
@@ -419,6 +453,7 @@
 		69A080021F5E2AD900651946 /* ImagesResource */ = {
 			isa = PBXGroup;
 			children = (
+				6921E1251FECF9A800048246 /* MainView */,
 				69FFDD071FE8CA47006BA988 /* Food Type */,
 				69FFDCF91FE5DB81006BA988 /* SearchTable */,
 				69FFDCED1FDE4671006BA988 /* DataInsert */,
@@ -750,6 +785,7 @@
 				696F15111FD17FB3001300C6 /* user_profile.png in Resources */,
 				696F150E1FD16CE2001300C6 /* restaurant.png in Resources */,
 				696F151F1FD55990001300C6 /* login@2x.png in Resources */,
+				6921E1181FECF1F000048246 /* store@3x.png in Resources */,
 				696F15271FD5664E001300C6 /* list@2x.png in Resources */,
 				6921E10F1FEA5ABB00048246 /* noodles@3x.png in Resources */,
 				696F15341FD5682B001300C6 /* list-white.png in Resources */,
@@ -757,6 +793,7 @@
 				69FFDD351FE8FF22006BA988 /* info@2x.png in Resources */,
 				69FFDD361FE8FF22006BA988 /* water.png in Resources */,
 				696F15221FD559B1001300C6 /* add-friend@2x.png in Resources */,
+				6921E1221FECF99600048246 /* food.png in Resources */,
 				696F151A1FD55861001300C6 /* add-button.png in Resources */,
 				696F151E1FD55990001300C6 /* login.png in Resources */,
 				6921E1111FEA5ABB00048246 /* rice@3x.png in Resources */,
@@ -769,9 +806,11 @@
 				69F39F4F1FBFED1100362888 /* GMapSearch.storyboard in Resources */,
 				69FFDD341FE8FF22006BA988 /* info.png in Resources */,
 				696F15371FD5682B001300C6 /* login-white@2x.png in Resources */,
+				6921E1231FECF99600048246 /* food@3x.png in Resources */,
 				698A0E031FA1B07800915313 /* slideMenu.storyboard in Resources */,
 				696F15091FD16535001300C6 /* contract.png in Resources */,
 				696F14FA1FD13804001300C6 /* stew.png in Resources */,
+				6921E1241FECF99600048246 /* food@2x.png in Resources */,
 				6921E1121FEA5ABB00048246 /* info@3x.png in Resources */,
 				6921E10E1FEA5ABB00048246 /* water@3x.png in Resources */,
 				698A0E001FA1AFF800915313 /* searchTable.storyboard in Resources */,
@@ -780,6 +819,7 @@
 				69162CCB1FB01CC100B7E853 /* GreenCheck.png in Resources */,
 				69FFDD001FE5DC47006BA988 /* star.png in Resources */,
 				69F39F3D1FBEDC6500362888 /* GoogleMaps.bundle in Resources */,
+				6921E1171FECF1F000048246 /* store.png in Resources */,
 				696F15261FD5664E001300C6 /* list.png in Resources */,
 				696F15331FD5682B001300C6 /* add-friend-white@2x.png in Resources */,
 				69C9316B1F502006007696BA /* LaunchScreen.storyboard in Resources */,
@@ -796,6 +836,7 @@
 				696F14F81FCFF328001300C6 /* menu.png in Resources */,
 				69FFDD231FE8FE40006BA988 /* rice.png in Resources */,
 				696F14F61FCFECF9001300C6 /* menu_icon-01.png in Resources */,
+				6921E11E1FECF69E00048246 /* users@2x.png in Resources */,
 				696F150D1FD16CE2001300C6 /* restaurant@2x.png in Resources */,
 				69C931631F502006007696BA /* Main.storyboard in Resources */,
 				698A0E061FA1B17F00915313 /* insertToDatabase.storyboard in Resources */,
@@ -806,11 +847,14 @@
 				69FFDCF81FDEA3E5006BA988 /* UserProfile.storyboard in Resources */,
 				69FFDD311FE8FF22006BA988 /* doughnut@2x.png in Resources */,
 				69FFDCF41FDE4722006BA988 /* checked@2x.png in Resources */,
+				6921E11C1FECF69E00048246 /* users@3x.png in Resources */,
 				69FFDD2F1FE8FF22006BA988 /* noodles.png in Resources */,
 				69FFDD321FE8FF22006BA988 /* noodles@2x.png in Resources */,
 				69FFDD301FE8FF22006BA988 /* water@2x.png in Resources */,
 				69FFDCFF1FE5DC47006BA988 /* SearchTableUser@2x.png in Resources */,
 				696F15051FD1625D001300C6 /* user@2x.png in Resources */,
+				6921E1161FECF1F000048246 /* store@2x.png in Resources */,
+				6921E11D1FECF69E00048246 /* users.png in Resources */,
 				69FFDD2E1FE8FF22006BA988 /* doughnut.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -37,7 +37,7 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     if ([username isEqualToString:AZURE_USER_GUEST]){
         // Username invalid
-        usernameLabel.text = [NSString stringWithFormat:@"Hi, Guest"];
+        usernameLabel.text = [NSString stringWithFormat:@"Please Login"];
         
         // Allow user to log in
         [LoginLogoutLabel setText:@"Login"];

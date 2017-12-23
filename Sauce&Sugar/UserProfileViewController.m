@@ -18,7 +18,6 @@
 @property (strong, nonatomic) IBOutlet UILabel *rcUsernameLabel;
 @property (strong, nonatomic) IBOutlet UILabel *rcUploadCount;
 @property (strong, nonatomic) IBOutlet UICollectionViewFlowLayout *rcCollectionViewLayout;
-@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *rcIndicator;
 
 // Singleton instance of table data management
 @property (strong, nonatomic) rcAzureDataTable *rcDataConnection;
@@ -76,17 +75,21 @@
     
     // Get sequence number
     [self.rcDataConnection getUniqueNumber_WithUsername:currentUser Callback:^(NSDictionary *callbackItem) {
+        NSNumber *tempSequence;
+        // if nil is returned, show X for total count.
+        if (callbackItem == nil){
+            tempSequence = @0;
+        } else {
+            // Retreive sequence number
+            tempSequence = [callbackItem objectForKey:AZURE_USER_TABLE_SEQUENCE];
+        }
         // Deduct 1 from sequence number to get total counts of entries
-        NSNumber *tempSequence = [callbackItem objectForKey:AZURE_USER_TABLE_SEQUENCE];
         NSNumber *totalCount = [NSNumber numberWithInt:(tempSequence.intValue) - 1];
         // Update Sequence label UI in main thread
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.rcUploadCount setText:[NSString stringWithFormat:@"User upload count: %@", totalCount]];
-            
-            // Stop animation
-            //[self.rcIndicator stopAnimating];
         }); // End of dispatch to main thread
-    }];
+    }]; // End of getUniqueNumber_WithUsername
     
     // Request all photos that current user had uploaded
     // Get current user's data from the cloub
@@ -118,7 +121,7 @@
             // Store result items into cell array.
             for (NSDictionary* returnDict in callbackItem){
                 // Get sequence number and minus the value by 1 to get total count of entries
-                NSNumber *sequenceTemp = [returnDict objectForKey:@"sequence"];
+                NSNumber *sequenceTemp = [returnDict objectForKey:AZURE_DATA_TABLE_SEQUENCE];
                 // Get sequence number
                 NSString *sequenceNum = [sequenceTemp stringValue];
                 NSLog(@"Requesting image at sequence number %@", sequenceNum);

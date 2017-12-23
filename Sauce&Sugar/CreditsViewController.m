@@ -45,6 +45,13 @@
     [self.creditsTextView insertText:@"Water icon: Icon made by Freepik from www.flaticon.com\n"];
     // https://www.flaticon.com/free-icon/info_148769#term=question&page=1&position=3
     [self.creditsTextView insertText:@"Info icon: Icon made by Smashicons from www.flaticon.com\n"];
+    
+    // https://www.flaticon.com/free-icon/store_123403#term=restaurant&page=1&position=6
+    [self.creditsTextView insertText:@"Store icon: Icon made by Freepik from www.flaticon.com\n"];
+    // https://www.flaticon.com/free-icon/users_149066#term=users&page=1&position=19
+    [self.creditsTextView insertText:@"Users icon: Icon made by Smashicons from www.flaticon.com\n"];
+    // https://www.flaticon.com/free-icon/food_608857#term=food&page=1&position=53
+    [self.creditsTextView insertText:@"Food icon: Icon made by Smashicons from www.flaticon.com\n"];
 }
 
 - (void)didReceiveMemoryWarning {

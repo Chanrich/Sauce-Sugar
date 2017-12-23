@@ -19,6 +19,21 @@
     IBOutlet UICollectionView *typeSelectCollectView;
     // Initialize singleton instances
     rcAzureDataTable *rcDataConnection;
+
+    // UI elements
+    IBOutlet UIView *rcAroundContainerView;
+    IBOutlet UILabel *rcRestaurantNumLabel;
+    IBOutlet UILabel *rcUsersNumLabel;
+    IBOutlet UILabel *rcFoodNumLabel;
+    
+    // Declare private variables
+    NSString *gUsername;
+    
+    // Last loaded counts by <setupDataCountContainerView>
+    NSNumber *lastLoadedFoodCount;
+    NSNumber *lastLoadedRestaurantCount;
+    NSNumber *lastLoadedUsersCount;
+    
 }
 
 - (void)viewDidLoad {
@@ -32,6 +47,19 @@
     
     // Hide navigation bar's shadow line
     [self.navigationController.navigationBar setValue:@(YES) forKey:@"hidesShadow"];
+    
+    // Hide the container view
+    rcAroundContainerView.alpha = 0;
+    
+    // Initialize last counts
+    lastLoadedFoodCount = @(-1);
+    lastLoadedRestaurantCount = @(-1);
+    lastLoadedUsersCount = @(-1);
+    
+    // Clear all text labels in What's Around Me container as the function <setupDataCountContainerView> should update these text
+    [rcRestaurantNumLabel setText:@""];
+    [rcUsersNumLabel setText:@""];
+    [rcFoodNumLabel setText:@""];
     
     // Listen for button click event in slide-out menu to return panel to original position
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slideSuperViewToOriginal) name:@"slideSuperViewBack" object:nil];
@@ -57,15 +85,30 @@
     // Request current GPS location
     [rcDataConnection requestLocationData];
     
-    // Request for sequence number to speed up process.
-    NSString *username = [(AppDelegate*)[[UIApplication sharedApplication] delegate] getUsername];
-    [rcDataConnection getUniqueNumber_WithUsername:username Callback:^(NSDictionary *callbackItem) {
-        // Do nothing with the returned data. Data should already be stored locally within the class
-        NSNumber* numSeq = [callbackItem objectForKey:AZURE_USER_TABLE_SEQUENCE];
-        NSLog(@"Sequence number is pre-loaded: %@", numSeq);
+    // Pre-call for sequence number to speed up process.
+    gUsername = [(AppDelegate*)[[UIApplication sharedApplication] delegate] getUsername];
+    
+    NSLog(@"Make contact with server...");
+    [rcDataConnection getUniqueNumber_WithUsername:gUsername Callback:^(NSDictionary *callbackItem) {
+        // Contact is created with the server, this should allow faster connection at next contact
+        NSLog(@"<getUniqueNumber_WithUsername> Contacted the server");
     }];
     
     typeSelectCollectView.delegate = self;
+}
+
+// Every time the view appear, refresh data
+- (void) viewDidAppear:(BOOL)animated{
+    // Update username
+    gUsername = [(AppDelegate*)[[UIApplication sharedApplication] delegate] getUsername];
+    
+    // Wait for a small delay to let GPS find current location
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        // Perform What's Around Me Section
+        NSLog(@"<setupDataCountContainerView>");
+        [self setupDataCountContainerView];
+    });
 }
 
 - (void)didReceiveMemoryWarning {
@@ -83,62 +126,9 @@
     return 1;
 }
 
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
-    
-    // Configure the cell...
-    
-    return cell;
-}
-*/
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 
 #pragma mark - Camera
+
 // Bring up the camera and then add to database view
 - (void) startCamera{
     // If camera module is not available, show alert message
@@ -378,12 +368,6 @@
     return blockingView;
 }
 
-#pragma mark - UI Touch Events
-/* ================ UI Touch Events ================ */
-
-
-
-
 #pragma mark - Create View Controllers for slide-out menu
 
 // This private method will be called by each filter button to create data display view controller with filter pre-selected in parameter type
@@ -443,21 +427,20 @@
 #pragma mark User logout
 // SlideOutMenuView will call this method when sign pu button is clicked
 - (void) userLogout{
-    // Request username
-    NSString *username = [(AppDelegate*)[[UIApplication sharedApplication] delegate] getUsername];
     // Show log out message
-    NSString *sLogoutBody = [NSString stringWithFormat:@"%@ is logged out", username];
+    NSString *sLogoutBody = [NSString stringWithFormat:@"%@ is logged out", gUsername];
     // Log out current user
     [(AppDelegate*)[[UIApplication sharedApplication] delegate] logoutUser];
     // ========= Create Alert =========
     // Create a UI AlertController to show warning message
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:username message:sLogoutBody preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:gUsername message:sLogoutBody preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:NULL];
     [alert addAction:okAction];
     // Show alert
     [self presentViewController:alert animated:YES completion:NULL];
     // ================================
 }
+#pragma mark - Collection View Delegate
 
 // Collection view should read icon names from rcDataConnection
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
@@ -481,18 +464,92 @@
     return cell;
 }
 
+// Load all food types from rcDataConnection
 - (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    NSLog(@"numberOfItemsInSection SET TO: %lu", (unsigned long)[rcDataConnection getTotalNumberOfType]);
     return [rcDataConnection getTotalNumberOfType];
 }
 
-#pragma mark - Collection View Delegate
+
 // When user tap on any item in the collectino view, push a view controller to show search result for that item
 - (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     NSUInteger selectedIndex = indexPath.row;
-    NSLog(@"selected : %lu", selectedIndex);
+    NSLog(@"selected : %ld", (long)selectedIndex);
     NSNumber *foodEnum = [rcDataConnection getFoodTypeEnumWithIndex:indexPath.row];
     NSLog(@"\t Enum: %@", foodEnum);
     [self pushShowItemsViewControllerWithType:(enum FoodTypesEnum)[foodEnum intValue]];
 }
+
+#pragma mark - Data Count Setup
+// This function will retrieve all data for the region around the user and count/sort the returned data
+- (void) setupDataCountContainerView{
+    // Get all food type and from all users so pass in nil to user name field
+    [rcDataConnection getDatafromUser:nil FoodType:FOODTYPE_ALL Callback:^(NSArray *callbackItem) {
+        // Data returned
+        if (callbackItem == nil){
+            // Nothing is performed
+            NSLog(@"Abort, nothing is returned for <setupDataCountContainerView>");
+        } else {
+            NSNumber *totalCount = [NSNumber numberWithUnsignedLong:[callbackItem count]];
+
+            NSLog(@"Total number of entries retrieved %@", totalCount);
+            NSCountedSet *ResNameCSet = [NSCountedSet new];
+            NSCountedSet *UserNameCSet = [NSCountedSet new];
+            NSCountedSet *FoodTypeCSet = [NSCountedSet new];
+            // Loop through each entry and count
+            for (NSDictionary* oneDictionaryEntry in callbackItem){
+                NSLog(@"Print out dictionary in callbackItem: %@", oneDictionaryEntry);
+                NSString *currentResName = [oneDictionaryEntry objectForKey:AZURE_DATA_TABLE_RESTAURANT_NAME];
+                NSString *currentUserName = [oneDictionaryEntry objectForKey:AZURE_DATA_TABLE_USERNAME];
+                NSNumber *currentFoodType = [oneDictionaryEntry objectForKey:AZURE_DATA_TABLE_FOODTYPE];
+                // Check for repeats
+                [ResNameCSet addObject:currentResName];
+                [UserNameCSet addObject:currentUserName];
+                [FoodTypeCSet addObject:currentFoodType];
+            };
+            // Get main queue
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (![lastLoadedUsersCount isEqualToNumber:@([UserNameCSet count])]){
+                    NSLog(@"lastLoadedUsersCount changed");
+                    // Fade out and then fade in if there is a value change
+                    [rcUsersNumLabel viewFadeOutWithCompletion:^(BOOL rcFinished) {
+                        // Update text
+                        [rcUsersNumLabel setText:[NSString stringWithFormat:@"Users: %lu", [UserNameCSet count]]];
+                        // Fade in
+                        [rcUsersNumLabel viewFadeInWithCompletion:nil];
+                    }];
+                }
+                
+                if (![lastLoadedRestaurantCount isEqualToNumber:@([ResNameCSet count])]){
+                    NSLog(@"lastLoadedRestaurantCount changed");
+                    // Fade out and then fade in if there is a value change
+                    [rcRestaurantNumLabel viewFadeOutWithCompletion:^(BOOL rcFinished) {
+                        // Update text
+                        [rcRestaurantNumLabel setText:[NSString stringWithFormat:@"Restaurants: %lu", [ResNameCSet count]]];
+                        // Fade in
+                        [rcRestaurantNumLabel viewFadeInWithCompletion:nil];
+                    }];
+                }
+                NSLog(@"lastLoadedFoodCount: %@\t totalCount:%@",lastLoadedFoodCount, totalCount);
+                if (![lastLoadedFoodCount isEqualToNumber:totalCount]){
+                    NSLog(@"lastLoadedFoodCount changed");
+                    // Fade out and then fade in if there is a value change
+                    [rcFoodNumLabel viewFadeOutWithCompletion:^(BOOL rcFinished) {
+                        // Update text
+                        [rcFoodNumLabel setText:[NSString stringWithFormat:@"Foods: %@", totalCount]];
+                        // Fade in
+                        [rcFoodNumLabel viewFadeInWithCompletion:nil];
+                    }];
+                }
+                // Fade in the main view container that hold all these UIs
+                [rcAroundContainerView viewFadeInWithCompletion:nil];
+                
+                // Store last counts
+                lastLoadedRestaurantCount = [NSNumber numberWithUnsignedLong:[ResNameCSet count]];
+                lastLoadedUsersCount = [NSNumber numberWithUnsignedLong:[UserNameCSet count]];
+                lastLoadedFoodCount = totalCount;
+            }); // End of dispatch to main queue
+        } // End of callbackItem not nil, something is returned
+    }]; // End of rcDataConnection getDatafromUser
+}
+
 @end

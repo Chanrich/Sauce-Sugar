@@ -65,7 +65,7 @@ typedef enum FoodTypesEnum {
 - (void) insertSequenceNumber:(NSString*)sequenceNumber username:(NSString*)username;
 - (void) insertTypeData:(FoodTypes)foodType;
 - (void) insertResNameData:(NSString*)resName;
-- (void) InsertIntoUserTableWithUsername:(NSString*)username Password:(NSString*)password Callback:(void(^)(NSNumber* completeFlag))returnCallback;
+- (void) InsertIntoUserTableWithUsername:(NSString*)username Password:(NSString*)password Callback:(void(^)(NSDictionary* returnedDictionary))returnCallback;
 // Request location data
 - (void) requestLocationData;
 
@@ -76,8 +76,6 @@ typedef enum FoodTypesEnum {
 - (void) getUniqueNumber_WithUsername:(NSString*)rcUsername  Callback:(void(^)(NSDictionary *callbackItem)) returnCallback;
 // Update an entry into the table, retrieve the information first and then update that entry//
 - (void) incrementSequenceNumberWithDictionary:(NSDictionary*)myDict Callback:(void(^)(NSNumber* completeFlag)) returnCallback;
-// This function should be called after new user is logged in
-- (void) invalidateSequenceNumber;
 // ==============================================
 
 // ======= Delete Functions  ==========

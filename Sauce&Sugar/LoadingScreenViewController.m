@@ -150,11 +150,16 @@
                             [self.rcDataConnection deleteEntry:[self.rcDataConnection getCurrentDictionaryData]];
                             // Update UI in main thread and return to main menu
                             dispatch_async(dispatch_get_main_queue(), ^{
+                                // Set image to failed icon and fade it in
+                                self.checkedImage.image = [UIImage imageNamed:@"error"];
+                                [self.checkedImage viewFadeInWithCompletion:nil];
+                                
+                                // Stop indicator
+                                [self.statusIndicator stopAnimating];
+                                
                                 [self.progressBar setProgress:0 animated:YES];
                                 self.statusLabel.text = @"Upload image failed";
                                 
-                                // Wait for few seconds and then return to main menu
-                                [self performSelector:@selector(returnToMainMenu) withObject:nil afterDelay:2];
                             });
                             
                         }

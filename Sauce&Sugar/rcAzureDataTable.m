@@ -12,8 +12,6 @@
 #define AZURE_USER_DATA_TABLE_NAME @"rcUserDataInfo"
 #define AZURE_MAIN_DATA_TABLE_NAME @"rcMainDataTable"
 @implementation rcAzureDataTable {
-    // Private variables
-    NSNumber *rcCurrentSequenceNumber;
     // Store references to table datas
     MSTable *MainData_MSTable;
     MSTable *UserData_MSTable;
@@ -25,7 +23,7 @@
     // An Array to translate from 0 index to food Enum index
     NSMutableArray *foodIndexToEnum;
     // Store pre-loaded user data table returned dictionary
-    NSDictionary *preloadedUserDataTable;
+    NSMutableDictionary *preloadedUserDataTable;
 }
 
 // Create a singleton
@@ -51,10 +49,12 @@
         // Initialize food data array
         foodData = [[NSMutableDictionary alloc] init];
         foodIndexToEnum = [[NSMutableArray alloc] init];
+        // ====== GPS ======
         // GPS Location mangager
         self.rcLocationManager = [[CLLocationManager alloc] init];
-        // Initialized sequence number to invalid
-        rcCurrentSequenceNumber = @(-1);
+        // Set initial location to nil
+        self.currentGPSLocation = nil;
+        // =================
         // Initialize all data table
         MainData_MSTable = [self.client tableWithName:AZURE_MAIN_DATA_TABLE_NAME];
         UserData_MSTable = [self.client tableWithName:AZURE_USER_DATA_TABLE_NAME];
@@ -89,9 +89,12 @@
 #pragma mark User Table
 
 // Create a new user and set its seqNum to 1
-- (void) InsertIntoUserTableWithUsername:(NSString*)username Password:(NSString*)password Callback:(void(^)(NSNumber* completeFlag))returnCallback{
+- (void) InsertIntoUserTableWithUsername:(NSString*)username Password:(NSString*)password Callback:(void(^)(NSDictionary* returnedDictionary))returnCallback{
     // Prepare object for integer since NSDictioanry only accepts object
     NSNumber *seqNum = [NSNumber numberWithInt:1];
+    
+    // Clean dictionary
+    [self.rcDataDictionaryForUserTable removeAllObjects];
     
     // Insert data to dictionary object
     [self.rcDataDictionaryForUserTable setObject:username forKey:AZURE_USER_TABLE_USERNAME];
@@ -102,10 +105,10 @@
     [UserData_MSTable insert:self.rcDataDictionaryForUserTable completion:^(NSDictionary *InsertedItem, NSError *error) {
         if (error){
             NSLog(@"error: %@", error);
-            returnCallback(@NO);
+            returnCallback(nil);
         } else {
             NSLog(@"User %@ added", username);
-            returnCallback(@YES);
+            returnCallback(InsertedItem);
         }
     }];
 }
@@ -114,23 +117,23 @@
 // Update an entry into the table, retrieve the information first and then update that entry
 - (void) incrementSequenceNumberWithDictionary:(NSDictionary*)myDict Callback:(void(^)(NSNumber* completeFlag)) returnCallback{
     // Increment the retrieved sequence number by 1
-    NSNumber *newValue = [NSNumber numberWithInt:[[myDict objectForKey:AZURE_USER_TABLE_SEQUENCE] intValue] + 1];
+    NSNumber *newValue = [NSNumber numberWithInt:(int)[[myDict objectForKey:AZURE_USER_TABLE_SEQUENCE] intValue] + 1];
     NSLog(@"Incrementing Sequence number to %@", newValue);
     // Update the newly incremented number into the key
     [myDict setValue:newValue forKey:AZURE_USER_TABLE_SEQUENCE];
     
+    // Grab sequence from dictionary
+    NSNumber *nsNumSeq = [myDict objectForKey:AZURE_USER_TABLE_SEQUENCE];
+    NSLog(@"New value extracted from myDict :%@", nsNumSeq);
     // Push it to Azure table
     [UserData_MSTable update:myDict completion:^(NSDictionary * _Nullable item, NSError * _Nullable error) {
         if (error){
             NSLog(@"Error when updating dictionary");
+            NSLog(@"%@", [error localizedDescription]);
             returnCallback(@NO);
         } else {
             NSLog(@"Successfully updated dictionary");
             returnCallback(@YES);
-            
-            // Save the new value to local copy
-            rcCurrentSequenceNumber = newValue;
-            NSLog(@"Local copy of sequence number update to: %d", [newValue intValue]);
         }
     }];
 }
@@ -149,82 +152,84 @@
 
 // getUniqueID_WithCallback will make the request and return the unique serial number in a NSArray* to the callback function. Caller will have to create a block to catch the return value
 - (void) getUniqueNumber_WithUsername:(NSString*)rcUsername  Callback:(void(^)(NSDictionary *callbackItem)) returnCallback {
-    // Download sequence number from server only if sequence number is invalid, meaning never been downloaded before.
-    if (![rcCurrentSequenceNumber isEqualToNumber:@(-1)]){
-        // If sequence number is valid, get it from local copy
-        NSLog(@"Returning sequence number from local copy");
-        // Return the local copy
-        returnCallback(preloadedUserDataTable);
-    } else {
-        NSLog(@"Requesting sequence number from server");
-        
-        // Data filter
-        NSPredicate *dataFilter;
-        
-        // Filter for username
-        dataFilter = [NSPredicate predicateWithFormat:@"USERNAME == %@", rcUsername];
-        
-        // Prepare a MSQuery object with filter dataFilter
-        NSLog(@"Query filter: %@", [dataFilter predicateFormat]);
-        MSQuery *rcQuery = [UserData_MSTable queryWithPredicate:dataFilter];
-        
-        // Query database with dataFilter
-        [rcQuery readWithCompletion:^(MSQueryResult * _Nullable result, NSError * _Nullable error) {
-            if (error){
-                NSLog(@"Cannot get unique sequence number from server... Abort!");
+    NSLog(@"<getUniqueNumber_WithUsername>: Requesting sequence number from server");
+    
+    // Data filter
+    NSPredicate *dataFilter;
+    
+    // Filter for username
+    dataFilter = [NSPredicate predicateWithFormat:@"USERNAME == %@", rcUsername];
+    
+    // Prepare a MSQuery object on the main user data table
+    NSLog(@"Query filter: %@", [dataFilter predicateFormat]);
+    MSQuery *rcQuery = [UserData_MSTable queryWithPredicate:dataFilter];
+    
+    // Query database with dataFilter
+    [rcQuery readWithCompletion:^(MSQueryResult * _Nullable result, NSError * _Nullable error) {
+        if (error){
+            NSLog(@"Cannot get unique sequence number from server... Abort!");
+            returnCallback(nil);
+        } else { // No error is returned from readWithCompletion
+            NSLog(@"Number of results returned from rcQuery readWithCompletion:%lu", (unsigned long)[result.items count]);
+            
+            // Only return valid data back when just 1 entry is found.
+            if ([result.items count] == 1){
+                // Store the sequence number into local copy
+                NSDictionary *returnedData = [result.items objectAtIndex:0];
+                // Store the returned dictionary to a local copy
+                preloadedUserDataTable = [[NSMutableDictionary alloc] initWithDictionary:returnedData];
+                
+                // Print received dictionary out
+                NSLog(@"Print out selected user info:\n%@", preloadedUserDataTable);
+                
+                // Pass dictionary data back to caller function
+                returnCallback(preloadedUserDataTable);
+            } else if ([result.items count] > 1){
+                // More than one entry is downloaded, something must be wrong as there shouldn't have two exact same user
+                NSLog(@"More than one user info is received, returning nil to callback");
                 returnCallback(nil);
-            } else {
-                NSNumber *itemCount = [NSNumber numberWithUnsignedLong:[result.items count]];
-                NSLog(@"Entries returned from rcQuery readWithCompletion:%@", itemCount);
-                if ([result.items count] == 1){
-                    // Store the sequence number into local copy
-                    NSDictionary *returnedData = [result.items objectAtIndex:0];
-                    // Store the returned dictionary to a local copy
-                    preloadedUserDataTable = returnedData;
-                    rcCurrentSequenceNumber = [returnedData objectForKey:AZURE_USER_TABLE_SEQUENCE];
+            } else if ([result.items count] == 0){
+                // No user is found
+                // If current user is guest, create a guest account
+                if ([rcUsername isEqualToString:AZURE_USER_GUEST]){
+                    NSLog(@"Creating Guest account");
+                    // Create a guest user account with sequence number 1
+                    [self InsertIntoUserTableWithUsername:AZURE_USER_GUEST Password:AZURE_USER_GUEST_PASSWORD Callback:^(NSDictionary* returnedDictionary) {
+                        if (returnedDictionary != nil){
+                            NSLog(@"Guest account is created");
+                            NSMutableDictionary *newMutableTempDictionary = [[NSMutableDictionary alloc] initWithDictionary:returnedDictionary];
+                            preloadedUserDataTable = newMutableTempDictionary;
+                            
+                            // Print received dictionary
+                            NSLog(@"Print out newly created guest info:\n%@", preloadedUserDataTable);
+                            
+                            // Return valid data dictionary back to caller
+                            returnCallback(newMutableTempDictionary);
+                        } else {
+                            // returnedDictionary is nil then error occured
+                            NSLog(@"Creating guest account failed");
+                            returnCallback(nil);
+                        }
                     
-                    // Pass the NSDictionary* stored in NSArray back to callback function
-                    returnCallback([result.items objectAtIndex:0]);
-                } else if ([result.items count] > 1){
-                    // More than one entry is downloaded, something must be wrong as there shouldn't have two exact same user
-                    NSLog(@"More than one user is selected, task aborting");
-                } else if ([result.items count] == 0){
-                    // No user is found
-                    // If current user is guest, create a guest account and re-run
-                    if ([rcUsername isEqualToString:AZURE_USER_GUEST]){
-                        // Create a guest user account with sequence number 1 and return a pre-built dictionary containing sequence number 1
-                        [self InsertIntoUserTableWithUsername:AZURE_USER_GUEST Password:AZURE_USER_GUEST_PASSWORD Callback:^(NSNumber *completeFlag) {
-                            if ([completeFlag isEqual:@YES]){
-                                NSLog(@"Guest account is created");
-                                // Return sequence number 1 in a dictionary
-                                NSNumber *numberWithOne = [NSNumber numberWithInt:1];
-                                NSDictionary *tempReturnDic = @{AZURE_USER_TABLE_SEQUENCE : numberWithOne};
-                                returnCallback(tempReturnDic);
-                            } else {
-                                // Return nil if error occured
-                                NSLog(@"Creating guest account failed");
-                                returnCallback(nil);
-                            }
-                        
-                        }];
-                    } else {
-                        // If username is not guest, then it doesn't exist
-                        NSLog(@"If username is not guest, then it doesn't exist, task aborting");
-                        returnCallback(nil);
-                    }
+                    }];
                 } else {
-                    // Error
-                    NSLog(@"No user is selected, task aborting");
+                    // If username is not guest, then it doesn't exist
+                    NSLog(@"No data received and username is not guest, returning nil");
                     returnCallback(nil);
                 }
+            } else {
+                // Error
+                NSLog(@"No user is selected, task aborting");
+                returnCallback(nil);
             }
-        }]; // End of query read
-    } // End of if sequence number is invalid
+        }
+    }]; // End of query read
     
 }
 
 // Make a query request for a single user, returns a NSArray of dictionaries in callback
 - (void) getDatafromUser:(NSString*)rcUsername FoodType:(FoodTypes)foodType Callback:(void(^)(NSArray *callbackItem)) returnCallback{
+    NSLog(@"<getDatafromUser>");
     // Create a filter for
     // 1. Username
     // 2. Foodtype
@@ -244,6 +249,7 @@
     }
     
     // Filter for food type
+    NSLog(@"Creating food type filter");
     if (foodType == FOODTYPE_ALL){
         // Return all types of food
         dataFilter2 = [NSPredicate predicateWithFormat:@"foodType != NULL"];
@@ -259,6 +265,7 @@
     // ABS(y) < 0.8 (approx.55 miles)
     // Longitudes:
     // ABS(x) < 0.8 (approx.55 miles at equator and gradually to 0 at poles)
+    NSLog(@"Setting GPS Predicates");
     if (self.currentGPSLocation != nil){
         // Need a function to return lower and upper bounds in a array for long/lat, param: current position object
         NSArray *latitudeBounds = [self returnLatitudeBoundsWithCenterLocation:self.currentGPSLocation searchDegree:0.8];
@@ -273,10 +280,10 @@
     NSLog(@"finalAndPredicate:%@\n", [finalAndPredicate predicateFormat]);
     
     // Prepare a MSQuery object with filter dataFilter
-    MSQuery *rcQuery = [MainData_MSTable queryWithPredicate:finalAndPredicate];
+    MSQuery *rcDataTableQuery = [MainData_MSTable queryWithPredicate:finalAndPredicate];
     
     // Perform a read on the MSquery object, the read will return maximum 50 entries
-    [rcQuery readWithCompletion:^(MSQueryResult * _Nullable result, NSError * _Nullable error) {
+    [rcDataTableQuery readWithCompletion:^(MSQueryResult * _Nullable result, NSError * _Nullable error) {
         if (error){
             NSLog(@"<getDatafromUser> Data download error!");
             NSLog(@"%@", [error localizedDescription]);
@@ -293,7 +300,7 @@
                 returnCallback(result.items);
             } else {
                 // Error
-                NSLog(@"<getDatafromUser> No user is selected, task aborting");
+                NSLog(@"<getDatafromUser> No Data is selected, task aborting");
                 returnCallback(nil);
             }
         }
@@ -322,8 +329,6 @@
         } else {
             // Debug
             NSNumber *temp = [NSNumber numberWithUnsignedLong:[result.items count]];
-            NSLog(@"Count of result.item array: %@", temp);
-            
             if ([result.items count] == 0){
                 NSLog(@"No repeated user is found. Username valid!");
                 returnCallback(TRUE);
@@ -375,11 +380,6 @@
     
 }
 
-- (void) invalidateSequenceNumber{
-    rcCurrentSequenceNumber = @(-1);
-}
-
-
 #pragma mark - Insert Data
 
 // Collect data into NSDictionary object.
@@ -410,9 +410,7 @@
 - (void)requestLocationData {
     self.rcLocationManager.delegate = self;
     self.rcLocationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    // Initialize data entries in dictionary
-    [self.rcDataDictionary setObject:@"na" forKey:GPS_LONGITUDE];
-    [self.rcDataDictionary setObject:@"na" forKey:GPS_LATITUDE];
+
     // Start updating, it will call the delegate function when data is returned
     if ([CLLocationManager locationServicesEnabled] == YES){
         NSLog(@"Requesting location data");
@@ -431,19 +429,19 @@
     // Save a copy of the current location for search function to locate nearest places
     self.currentGPSLocation = myLocation;
     
-    // Convert location data from double to string
-    // NSString *longitudeToString = [NSString stringWithFormat:@"%f", myLocation.coordinate.longitude];
-    // NSString *latitudeToString = [NSString stringWithFormat:@"%f", myLocation.coordinate.latitude];
-    
     // Location data should be stored as double to Azure server
     NSNumber *dLong = [NSNumber numberWithDouble:myLocation.coordinate.longitude];
     NSNumber *dLat = [NSNumber numberWithDouble:myLocation.coordinate.latitude];
-    // Debug
-    NSLog(@"Long:%@\tLat:%@", dLong, dLat);
+
     
     // Update data entries in dictionary
     [self.rcDataDictionary setObject:dLong forKey:GPS_LONGITUDE];
     [self.rcDataDictionary setObject:dLat forKey:GPS_LATITUDE];
+    
+    NSNumber *nsNumLong = [self.rcDataDictionary objectForKey:GPS_LONGITUDE];
+    NSNumber *nsNumLat = [self.rcDataDictionary objectForKey:GPS_LATITUDE];
+    // Debug
+    NSLog(@"Set GPS Data to:\nLong:%@\tLat:%@", nsNumLong, nsNumLat);
     
     // Stop location update servie to preserve battery
     [self.rcLocationManager stopUpdatingLocation];

@@ -85,9 +85,6 @@
             // Login successful, set username
             [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUsername:textUsername];
             
-            // Reset sequence number to invalid (-1)
-            [rcDataConnection invalidateSequenceNumber];
-            
             NSString *welcomeMsg = [NSString stringWithFormat:@"User %@ is logged on", textUsername];
             alert = [UIAlertController alertControllerWithTitle:@"Successful" message:welcomeMsg     preferredStyle:UIAlertControllerStyleAlert];
             okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
