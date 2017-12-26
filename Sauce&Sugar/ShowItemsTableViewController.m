@@ -13,7 +13,10 @@
 
 @end
 
-@implementation ShowItemsTableViewController
+@implementation ShowItemsTableViewController {
+    // Store the type name of the enum that current instance will be displaying
+    NSString *fTypename;
+}
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder{
     self = [super initWithCoder:aDecoder];
@@ -56,19 +59,23 @@
     // Initialize cell mutable array
     self.rcCellMutableArray = [[NSMutableArray alloc] init];
     
+    // Get typename from data connection translation method
+    fTypename = [self.rcDataConnection getFoodTypeNameWithEnum:self.searchFoodType];
+    NSLog(@"Performing a search on food type: %@", fTypename);
+    
     // Get all data for the food type from server
     [self.rcDataConnection getDatafromUser:nil FoodType:self.searchFoodType Callback:^(NSArray *callbackItem) {
         // In Callback function
         if (callbackItem == nil){
-            // Handle errors, either no data available or download error
-            NSLog(@"Error occured during loading");
+            // No items are returned
+            
             // Stop the spinner from spinning
             [rcSpinner stopAnimating];
             [self.overlayUIView removeFromSuperview];
             
             // ========= Create Alert =========
             // Create a UI AlertController to show warning message
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:@"Data Download Error" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Oops" message:@"No items are found" preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:NULL];
             [alert addAction:okAction];
             [self presentViewController:alert animated:YES completion:NULL];
@@ -122,7 +129,7 @@
         // Display number of entries in title
         dispatch_async(dispatch_get_main_queue(), ^{
             // Set title
-            self.title = [NSString stringWithFormat:@"Found %lu items", (unsigned long)[callbackItem count]];
+            self.title = [NSString stringWithFormat:@"%@ : %lu items", fTypename, (unsigned long)[callbackItem count]];
         });
         
         // After storing all entries into cell mutable array, ask table to refresh
