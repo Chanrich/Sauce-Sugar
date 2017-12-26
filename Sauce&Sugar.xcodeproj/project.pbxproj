@@ -7,6 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6904475D1FF2077600863F4D /* steak.png in Resources */ = {isa = PBXBuildFile; fileRef = 6904474F1FF2077000863F4D /* steak.png */; };
+		6904475E1FF2077600863F4D /* soup@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 690447501FF2077100863F4D /* soup@2x.png */; };
+		6904475F1FF2077600863F4D /* burger.png in Resources */ = {isa = PBXBuildFile; fileRef = 690447511FF2077200863F4D /* burger.png */; };
+		690447601FF2077600863F4D /* salad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 690447521FF2077200863F4D /* salad@2x.png */; };
+		690447611FF2077600863F4D /* taco.png in Resources */ = {isa = PBXBuildFile; fileRef = 690447531FF2077300863F4D /* taco.png */; };
+		690447621FF2077600863F4D /* fried-egg.png in Resources */ = {isa = PBXBuildFile; fileRef = 690447541FF2077300863F4D /* fried-egg.png */; };
+		690447631FF2077600863F4D /* taco@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 690447551FF2077300863F4D /* taco@2x.png */; };
+		690447641FF2077600863F4D /* burger@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 690447561FF2077400863F4D /* burger@2x.png */; };
+		690447651FF2077600863F4D /* waffle.png in Resources */ = {isa = PBXBuildFile; fileRef = 690447571FF2077400863F4D /* waffle.png */; };
+		690447661FF2077600863F4D /* fried-egg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 690447581FF2077500863F4D /* fried-egg@2x.png */; };
+		690447671FF2077600863F4D /* waffle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 690447591FF2077500863F4D /* waffle@2x.png */; };
+		690447681FF2077600863F4D /* steak@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6904475A1FF2077500863F4D /* steak@2x.png */; };
+		690447691FF2077600863F4D /* soup.png in Resources */ = {isa = PBXBuildFile; fileRef = 6904475B1FF2077600863F4D /* soup.png */; };
+		6904476A1FF2077600863F4D /* salad.png in Resources */ = {isa = PBXBuildFile; fileRef = 6904475C1FF2077600863F4D /* salad.png */; };
 		69162CC71FAF329300B7E853 /* UIView+UIView_ViewAnimations.m in Sources */ = {isa = PBXBuildFile; fileRef = 69162CC61FAF329300B7E853 /* UIView+UIView_ViewAnimations.m */; };
 		69162CCB1FB01CC100B7E853 /* GreenCheck.png in Resources */ = {isa = PBXBuildFile; fileRef = 69162CCA1FB01CC000B7E853 /* GreenCheck.png */; };
 		6921E10D1FEA5ABB00048246 /* doughnut@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6921E1071FEA5AB900048246 /* doughnut@3x.png */; };
@@ -134,6 +148,20 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6904474F1FF2077000863F4D /* steak.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = steak.png; sourceTree = "<group>"; };
+		690447501FF2077100863F4D /* soup@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "soup@2x.png"; sourceTree = "<group>"; };
+		690447511FF2077200863F4D /* burger.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = burger.png; sourceTree = "<group>"; };
+		690447521FF2077200863F4D /* salad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "salad@2x.png"; sourceTree = "<group>"; };
+		690447531FF2077300863F4D /* taco.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = taco.png; sourceTree = "<group>"; };
+		690447541FF2077300863F4D /* fried-egg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fried-egg.png"; sourceTree = "<group>"; };
+		690447551FF2077300863F4D /* taco@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "taco@2x.png"; sourceTree = "<group>"; };
+		690447561FF2077400863F4D /* burger@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "burger@2x.png"; sourceTree = "<group>"; };
+		690447571FF2077400863F4D /* waffle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = waffle.png; sourceTree = "<group>"; };
+		690447581FF2077500863F4D /* fried-egg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fried-egg@2x.png"; sourceTree = "<group>"; };
+		690447591FF2077500863F4D /* waffle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "waffle@2x.png"; sourceTree = "<group>"; };
+		6904475A1FF2077500863F4D /* steak@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "steak@2x.png"; sourceTree = "<group>"; };
+		6904475B1FF2077600863F4D /* soup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = soup.png; sourceTree = "<group>"; };
+		6904475C1FF2077600863F4D /* salad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = salad.png; sourceTree = "<group>"; };
 		69162CC51FAF329300B7E853 /* UIView+UIView_ViewAnimations.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+UIView_ViewAnimations.h"; sourceTree = "<group>"; };
 		69162CC61FAF329300B7E853 /* UIView+UIView_ViewAnimations.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+UIView_ViewAnimations.m"; sourceTree = "<group>"; };
 		69162CCA1FB01CC000B7E853 /* GreenCheck.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GreenCheck.png; sourceTree = "<group>"; };
@@ -648,6 +676,20 @@
 		69FFDD071FE8CA47006BA988 /* Food Type */ = {
 			isa = PBXGroup;
 			children = (
+				690447511FF2077200863F4D /* burger.png */,
+				690447561FF2077400863F4D /* burger@2x.png */,
+				690447541FF2077300863F4D /* fried-egg.png */,
+				690447581FF2077500863F4D /* fried-egg@2x.png */,
+				6904475C1FF2077600863F4D /* salad.png */,
+				690447521FF2077200863F4D /* salad@2x.png */,
+				6904475B1FF2077600863F4D /* soup.png */,
+				690447501FF2077100863F4D /* soup@2x.png */,
+				6904474F1FF2077000863F4D /* steak.png */,
+				6904475A1FF2077500863F4D /* steak@2x.png */,
+				690447531FF2077300863F4D /* taco.png */,
+				690447551FF2077300863F4D /* taco@2x.png */,
+				690447571FF2077400863F4D /* waffle.png */,
+				690447591FF2077500863F4D /* waffle@2x.png */,
 				69FFDD211FE8FE40006BA988 /* rice.png */,
 				69FFDD201FE8FE3F006BA988 /* rice@2x.png */,
 				69FFDD241FE8FF1E006BA988 /* doughnut.png */,
@@ -789,19 +831,25 @@
 				696F15271FD5664E001300C6 /* list@2x.png in Resources */,
 				6921E10F1FEA5ABB00048246 /* noodles@3x.png in Resources */,
 				696F15341FD5682B001300C6 /* list-white.png in Resources */,
+				6904475E1FF2077600863F4D /* soup@2x.png in Resources */,
 				696F15121FD17FB3001300C6 /* user_profile@2x.png in Resources */,
+				690447651FF2077600863F4D /* waffle.png in Resources */,
 				69FFDD351FE8FF22006BA988 /* info@2x.png in Resources */,
+				690447621FF2077600863F4D /* fried-egg.png in Resources */,
 				69FFDD361FE8FF22006BA988 /* water.png in Resources */,
 				696F15221FD559B1001300C6 /* add-friend@2x.png in Resources */,
 				6921E1221FECF99600048246 /* food.png in Resources */,
 				696F151A1FD55861001300C6 /* add-button.png in Resources */,
 				696F151E1FD55990001300C6 /* login.png in Resources */,
+				690447691FF2077600863F4D /* soup.png in Resources */,
 				6921E1111FEA5ABB00048246 /* rice@3x.png in Resources */,
 				6921E1101FEA5ABB00048246 /* ice-cream@3x.png in Resources */,
+				690447681FF2077600863F4D /* steak@2x.png in Resources */,
 				696F150A1FD16535001300C6 /* contract@2x.png in Resources */,
 				696F15351FD5682B001300C6 /* list-white@2x.png in Resources */,
 				69FFDCFE1FE5DC47006BA988 /* SearchTableUser.png in Resources */,
 				696F15231FD559B1001300C6 /* add-friend.png in Resources */,
+				6904476A1FF2077600863F4D /* salad.png in Resources */,
 				696F151B1FD55861001300C6 /* add-button@2x.png in Resources */,
 				69F39F4F1FBFED1100362888 /* GMapSearch.storyboard in Resources */,
 				69FFDD341FE8FF22006BA988 /* info.png in Resources */,
@@ -811,17 +859,22 @@
 				696F15091FD16535001300C6 /* contract.png in Resources */,
 				696F14FA1FD13804001300C6 /* stew.png in Resources */,
 				6921E1241FECF99600048246 /* food@2x.png in Resources */,
+				690447611FF2077600863F4D /* taco.png in Resources */,
 				6921E1121FEA5ABB00048246 /* info@3x.png in Resources */,
 				6921E10E1FEA5ABB00048246 /* water@3x.png in Resources */,
+				690447631FF2077600863F4D /* taco@2x.png in Resources */,
 				698A0E001FA1AFF800915313 /* searchTable.storyboard in Resources */,
 				696F152A1FD56737001300C6 /* add-white.png in Resources */,
 				69FFDD371FE8FF22006BA988 /* ice-cream@2x.png in Resources */,
 				69162CCB1FB01CC100B7E853 /* GreenCheck.png in Resources */,
+				690447641FF2077600863F4D /* burger@2x.png in Resources */,
 				69FFDD001FE5DC47006BA988 /* star.png in Resources */,
 				69F39F3D1FBEDC6500362888 /* GoogleMaps.bundle in Resources */,
+				6904475F1FF2077600863F4D /* burger.png in Resources */,
 				6921E1171FECF1F000048246 /* store.png in Resources */,
 				696F15261FD5664E001300C6 /* list.png in Resources */,
 				696F15331FD5682B001300C6 /* add-friend-white@2x.png in Resources */,
+				690447661FF2077600863F4D /* fried-egg@2x.png in Resources */,
 				69C9316B1F502006007696BA /* LaunchScreen.storyboard in Resources */,
 				696F15361FD5682B001300C6 /* login-white.png in Resources */,
 				696F15041FD1625D001300C6 /* user.png in Resources */,
@@ -832,11 +885,13 @@
 				69C931681F502006007696BA /* Assets.xcassets in Resources */,
 				696F152B1FD56737001300C6 /* add-white@2x.png in Resources */,
 				6921E10D1FEA5ABB00048246 /* doughnut@3x.png in Resources */,
+				690447601FF2077600863F4D /* salad@2x.png in Resources */,
 				696F15321FD5682B001300C6 /* add-friend-white.png in Resources */,
 				696F14F81FCFF328001300C6 /* menu.png in Resources */,
 				69FFDD231FE8FE40006BA988 /* rice.png in Resources */,
 				696F14F61FCFECF9001300C6 /* menu_icon-01.png in Resources */,
 				6921E11E1FECF69E00048246 /* users@2x.png in Resources */,
+				6904475D1FF2077600863F4D /* steak.png in Resources */,
 				696F150D1FD16CE2001300C6 /* restaurant@2x.png in Resources */,
 				69C931631F502006007696BA /* Main.storyboard in Resources */,
 				698A0E061FA1B17F00915313 /* insertToDatabase.storyboard in Resources */,
@@ -846,6 +901,7 @@
 				69FFDD331FE8FF22006BA988 /* ice-cream.png in Resources */,
 				69FFDCF81FDEA3E5006BA988 /* UserProfile.storyboard in Resources */,
 				69FFDD311FE8FF22006BA988 /* doughnut@2x.png in Resources */,
+				690447671FF2077600863F4D /* waffle@2x.png in Resources */,
 				69FFDCF41FDE4722006BA988 /* checked@2x.png in Resources */,
 				6921E11C1FECF69E00048246 /* users@3x.png in Resources */,
 				69FFDD2F1FE8FF22006BA988 /* noodles.png in Resources */,

@@ -59,12 +59,19 @@
         MainData_MSTable = [self.client tableWithName:AZURE_MAIN_DATA_TABLE_NAME];
         UserData_MSTable = [self.client tableWithName:AZURE_USER_DATA_TABLE_NAME];
         // Initialize food data array with icon names and enum number
-        [self insertNewFoodTypeWithIcon:@"info" atKey:FOODTYPE_ALL];
-        [self insertNewFoodTypeWithIcon:@"rice" atKey:RICE];
-        [self insertNewFoodTypeWithIcon:@"noodles" atKey:NOODLES];
-        [self insertNewFoodTypeWithIcon:@"ice-cream" atKey:ICECREAM];
-        [self insertNewFoodTypeWithIcon:@"doughnut" atKey:DESSERT];
-        [self insertNewFoodTypeWithIcon:@"water" atKey:DRINK];
+        [self insertNewFoodTypeWithIcon:@"info" atKey:FOODTYPE_ALL TypeName:@"All"];
+        [self insertNewFoodTypeWithIcon:@"rice" atKey:RICE TypeName:@"Rice"];
+        [self insertNewFoodTypeWithIcon:@"noodles" atKey:NOODLES TypeName:@"Noodles"];
+        [self insertNewFoodTypeWithIcon:@"ice-cream" atKey:ICECREAM TypeName:@"Ice Creams"];
+        [self insertNewFoodTypeWithIcon:@"doughnut" atKey:DESSERT TypeName:@"Doughnut"];
+        [self insertNewFoodTypeWithIcon:@"water" atKey:DRINK TypeName:@"Drinks"];
+        [self insertNewFoodTypeWithIcon:@"soup" atKey:SOUP TypeName:@"Soup"];
+        [self insertNewFoodTypeWithIcon:@"steak" atKey:STEAK TypeName:@"Streak"];
+        [self insertNewFoodTypeWithIcon:@"waffle" atKey:WAFFLE TypeName:@"Waffle"];
+        [self insertNewFoodTypeWithIcon:@"fried-egg" atKey:FRIED_EGG TypeName:@"Eggs"];
+        [self insertNewFoodTypeWithIcon:@"salad" atKey:SALAD TypeName:@"Salad"];
+        [self insertNewFoodTypeWithIcon:@"taco" atKey:TACO TypeName:@"Taco"];
+        [self insertNewFoodTypeWithIcon:@"burger" atKey:BURGER TypeName:@"Burger"];
     }
     return self;
 }
@@ -524,79 +531,57 @@
 }
 
 #pragma mark - Food Type Data Processing
-// Parse the food type enum and return a string describing the type
-- (NSString*) parseFoodType:(FoodTypes)enum_type{
-    NSString *parsedText;
-    switch (enum_type) {
-        case FOODTYPE_ALL:
-            parsedText = @"All";
-            break;
-        case RICE:
-            parsedText = @"Rice";
-            break;
-        case NOODLES:
-            parsedText = @"Noodles";
-            break;
-        case ICECREAM:
-            parsedText = @"Ice Cream";
-            break;
-        case DESSERT:
-            parsedText = @"Dessert";
-            break;
-        case DRINK:
-            parsedText = @"Drink";
-            break;
-        default:
-            parsedText = @"FoodType Invalid";
-            break;
-    }
-    return parsedText;
-}
-
 - (NSUInteger) getTotalNumberOfType{
     return [foodData count];
 }
 
-// This function should store data into a dictionary and then insert it into food data array
-- (void) insertNewFoodTypeWithIcon:(NSString*)icon atKey:(int)enumFood{
+// This function should store data into a dictionary mapped by its Enum defined at 'FoodTypesEnum' and then insert it into foodData array that stores every food types information
+- (void) insertNewFoodTypeWithIcon:(NSString*)icon atKey:(int)enumFood TypeName:(NSString*)typeName{
     static NSUInteger arrayIndex = 0;
-    NSString *tempTypeName = [self parseFoodType:enumFood];
-    NSDictionary *tempStorage = @{FOOD_DATA_KEY_TYPE_NAME: tempTypeName,
+    NSDictionary *tempStorage = @{FOOD_DATA_KEY_TYPE_NAME: typeName,
                                   FOOD_DATA_KEY_ICON: icon,
                                   FOOD_DATA_KEY_ENUM: [NSNumber numberWithInt:enumFood]
                                   };
-    // Add object to the mutable array
+    // Add object to the storage array
     [foodData setObject:tempStorage forKey:[NSNumber numberWithInt:enumFood]];
     
-    // Create an index array to translate normal index (starting from 0) to enum index
+    // Create an index array to translate normal 0-index (starting from 0) to enum index
     [foodIndexToEnum insertObject:[NSNumber numberWithInt:enumFood] atIndex:arrayIndex];
     arrayIndex++;
 }
 
-// This function will return name of the icon associated with the enum type
+// This function will return name of the icon file associated with the enum type
 - (NSString*) getFoodIconNameWithEnum:(int)enumFood{
     NSDictionary *fData = [foodData objectForKey:[NSNumber numberWithInt:enumFood]];
     return [fData objectForKey:FOOD_DATA_KEY_ICON];
 }
 
-// This function will return name of the icon associated with an array index starting from 0
+// This function will return the name of the food type from its enum as index
+- (NSString*) getFoodTypeNameWithEnum:(int)enumFood{
+    NSDictionary *fData = [foodData objectForKey:@(enumFood)];
+    return [fData objectForKey:FOOD_DATA_KEY_TYPE_NAME];
+}
+
+// This function will return name of the icon file associated from 0-index
 - (NSString*) getFoodIconNameWithIndex:(NSInteger)index{
     NSNumber* Enum = [foodIndexToEnum objectAtIndex:index];
     NSDictionary *fData = [foodData objectForKey:Enum];
     return [fData objectForKey:FOOD_DATA_KEY_ICON];
 }
 
-// This function will return the enum of food type
+// This function will return the enum of food type from 0-index
 - (NSNumber*) getFoodTypeEnumWithIndex:(NSInteger)index{
     NSNumber* Enum = [foodIndexToEnum objectAtIndex:index];
     return Enum;
 }
 
-// This function will return the enum of food type
+// This function will return the enum of food type from 0-index
 - (NSString*) getFoodTypeNameWithIndex:(NSInteger)index{
     NSNumber* Enum = [foodIndexToEnum objectAtIndex:index];
     NSDictionary *fData = [foodData objectForKey:Enum];
     return [fData objectForKey:FOOD_DATA_KEY_TYPE_NAME];
 }
+
+
 
 @end

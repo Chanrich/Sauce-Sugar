@@ -56,7 +56,7 @@
     // Initialize cell mutable array
     self.rcCellMutableArray = [[NSMutableArray alloc] init];
     
-    // Get current user's data from the cloub
+    // Get all data for the food type from server
     [self.rcDataConnection getDatafromUser:nil FoodType:self.searchFoodType Callback:^(NSArray *callbackItem) {
         // In Callback function
         if (callbackItem == nil){
@@ -76,9 +76,9 @@
             
         } else {
             // Successful download
-            NSLog(@"Array Data received, storing data self.userDataInfo_NSArray");
+            NSLog(@"Array Data received, storing data self.foodFromMainDataTable_Array");
             // Store the array as class property
-            self.userDataInfo_NSArray = callbackItem;
+            self.foodFromMainDataTable_Array = callbackItem;
             
 
             // Check for first read
@@ -149,13 +149,13 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Store unsigned long into a NSnumber to avoid xcode warning
-    NSNumber *temp = [NSNumber numberWithUnsignedLong:[self.userDataInfo_NSArray count]];
+    NSNumber *temp = [NSNumber numberWithUnsignedLong:[self.foodFromMainDataTable_Array count]];
     
     // Debug
     NSLog(@"Setting number of rows to %@", temp);
     
     // Return number of rows in this table
-    return [self.userDataInfo_NSArray count];
+    return [self.foodFromMainDataTable_Array count];
 }
 
 // This method is called each time row re-appear on the screen!
@@ -218,7 +218,7 @@
         // Get the destination view controller using [segue destinationViewController].
         ShowGMapViewController *destVC = [segue destinationViewController];
         // Pass the array containing all map locations to destination view controller
-        destVC.mapItemsArray = self.userDataInfo_NSArray;
+        destVC.mapItemsArray = self.foodFromMainDataTable_Array;
     }
 }
 

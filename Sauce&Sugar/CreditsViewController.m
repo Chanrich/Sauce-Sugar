@@ -46,6 +46,23 @@
     // https://www.flaticon.com/free-icon/info_148769#term=question&page=1&position=3
     [self.creditsTextView insertText:@"Info icon: Icon made by Smashicons from www.flaticon.com\n"];
     
+    // New
+    
+    // https://www.flaticon.com/free-icon/soup_454570#term=soup&page=1&position=33
+    [self.creditsTextView insertText:@"Soup icon: Icon made by Freepik from www.flaticon.com\n"];
+    // https://www.flaticon.com/free-icon/steak_415686#term=steak&page=1&position=47
+    [self.creditsTextView insertText:@"Steak icon: Icon made by Freepik from www.flaticon.com\n"];
+    // https://www.flaticon.com/free-icon/waffle_454557#term=waffle&page=1&position=11
+    [self.creditsTextView insertText:@"Waffle icon: Icon made by Freepik from www.flaticon.com\n"];
+    // https://www.flaticon.com/free-icon/fried-egg_119500#term=egg&page=1&position=66
+    [self.creditsTextView insertText:@"Fried-Egg icon: Icon made by Freepik from www.flaticon.com\n"];
+    // https://www.flaticon.com/free-icon/salad_579103#term=salad&page=1&position=26
+    [self.creditsTextView insertText:@"Salad icon: Icon made by Twitter from www.flaticon.com\n"];
+    // https://www.flaticon.com/free-icon/taco_579028#term=taco&page=1&position=16
+    [self.creditsTextView insertText:@"Taco icon: Icon made by Twitter from www.flaticon.com\n"];
+    // https://www.flaticon.com/free-icon/burger_199636#term=hamburger&page=1&position=16
+    [self.creditsTextView insertText:@"Burger icon: Icon made by Freepik from www.flaticon.com\n"];
+    
     // https://www.flaticon.com/free-icon/store_123403#term=restaurant&page=1&position=6
     [self.creditsTextView insertText:@"Store icon: Icon made by Freepik from www.flaticon.com\n"];
     // https://www.flaticon.com/free-icon/users_149066#term=users&page=1&position=19

@@ -5,7 +5,7 @@
 //  Created by Richard Chan on 9/9/17.
 //  Copyright © 2017 Sauce&Sugar. All rights reserved.
 //
-
+// ## This class is not currently in use.
 #import "MainMenuButton.h"
 
 @implementation MainMenuButton

@@ -25,7 +25,7 @@
 @property (strong, nonatomic) rcAzureBlobContainer *rcBlobContainer;
 
 // A array to store all data downloaded
-@property NSArray *userDataInfo_NSArray;
+@property NSArray *foodFromMainDataTable_Array;
 @property UIView *overlayUIView;
 @property NSMutableArray<rcShowItemsTableViewCell*> *rcCellMutableArray;
 

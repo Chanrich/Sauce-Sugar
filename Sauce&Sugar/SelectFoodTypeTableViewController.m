@@ -34,28 +34,44 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     // indexPath.row is the currently selected row, use it to access menu items
-    
     FoodTypes typeName;
+    // Typename will be the enum of the food type selected that is inserted to the current data entry.
     switch (indexPath.row) {
         case 0:
-            // Noodle
             typeName = NOODLES;
             break;
         case 1:
-            // Rice
             typeName = RICE;
             break;
         case 2:
-            // Drinks
             typeName = DRINK;
             break;
         case 3:
             typeName = DESSERT;
-            // Desserts
             break;
         case 4:
             typeName = ICECREAM;
-            // Ice Cream
+            break;
+        case 5:
+            typeName = SOUP;
+            break;
+        case 6:
+            typeName = STEAK;
+            break;
+        case 7:
+            typeName = WAFFLE;
+            break;
+        case 8:
+            typeName = FRIED_EGG;
+            break;
+        case 9:
+            typeName = SALAD;
+            break;
+        case 10:
+            typeName = TACO;
+            break;
+        case 11:
+            typeName = BURGER;
             break;
         default:
             // Default
@@ -80,7 +96,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 5;
+    return 12;
 }
 
 /*

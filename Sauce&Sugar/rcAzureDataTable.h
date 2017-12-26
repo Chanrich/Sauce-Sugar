@@ -30,7 +30,14 @@ typedef enum FoodTypesEnum {
     NOODLES = 1,
     ICECREAM = 2,
     DESSERT = 3,
-    DRINK = 4
+    DRINK = 4,
+    SOUP = 5,
+    STEAK = 6,
+    WAFFLE = 7,
+    FRIED_EGG = 8,
+    SALAD = 9,
+    TACO = 10,
+    BURGER = 11
 } FoodTypes;
 
 
@@ -87,13 +94,12 @@ typedef enum FoodTypesEnum {
 - (NSDictionary*) getCurrentDictionaryData;
 
 // ======= Food Type Data Processing ========
-- (NSString*) parseFoodType:(FoodTypes)enum_type;
 - (NSUInteger) getTotalNumberOfType;
 - (NSString*) getFoodIconNameWithEnum:(int)enumFood;
 - (NSString*) getFoodIconNameWithIndex:(NSInteger)index;
 - (NSNumber*) getFoodTypeEnumWithIndex:(NSInteger)index;
 - (NSString*) getFoodTypeNameWithIndex:(NSInteger)index;
-- (void) insertNewFoodTypeWithIcon:(NSString*)icon atKey:(int)enumFood;
+- (NSString*) getFoodTypeNameWithEnum:(int)enumFood;
 
 // ======================================
 // Override init to initialize client

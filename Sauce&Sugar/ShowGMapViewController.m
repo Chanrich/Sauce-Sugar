@@ -97,7 +97,7 @@ static NSString *const HIDE_GMAP_POI_JSON = @"["
         // Get text information for the marker
         FoodTypes foodTypeEnum = [[item objectForKey:AZURE_DATA_TABLE_FOODTYPE] intValue];
         NSLog(@"Print out food type enum:%d", foodTypeEnum);
-        NSString *foodType = [self.rcDataConnection parseFoodType:foodTypeEnum];
+        NSString *foodType = [self.rcDataConnection getFoodTypeNameWithEnum:foodTypeEnum];
         NSString *restaurantName = [item objectForKey:AZURE_DATA_TABLE_RESTAURANT_NAME];
         
         // Setup marker and show it in map
