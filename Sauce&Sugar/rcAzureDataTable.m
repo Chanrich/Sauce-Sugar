@@ -24,6 +24,10 @@
     NSMutableArray *foodIndexToEnum;
     // Store pre-loaded user data table returned dictionary
     NSMutableDictionary *preloadedUserDataTable;
+    // Store inserted food type
+    NSNumber *currentSelectedFoodType;
+    // Store inserted restaurant name
+    NSString *currentRestaurantName;
 }
 
 // Create a singleton
@@ -334,8 +338,6 @@
             // return a NO
             returnCallback(FALSE);
         } else {
-            // Debug
-            NSNumber *temp = [NSNumber numberWithUnsignedLong:[result.items count]];
             if ([result.items count] == 0){
                 NSLog(@"No repeated user is found. Username valid!");
                 returnCallback(TRUE);
@@ -399,11 +401,15 @@
 - (void)insertResNameData:(NSString *)resName {
     // Insert restaurant name into mutable dictionary
     [self.rcDataDictionary setObject:resName forKey:AZURE_DATA_TABLE_RESTAURANT_NAME];
+    // Store restaurant name
+    currentRestaurantName = resName;
 }
 
 - (void)insertTypeData:(FoodTypes)foodType {
     // Convert foodType to NSNumber with @() and store it into mutable dictionary
     [self.rcDataDictionary setObject:@(foodType) forKey:AZURE_DATA_TABLE_FOODTYPE];
+    // Store selected food type
+    currentSelectedFoodType = @(foodType);
 }
 
 - (void)insertSequenceNumber:(NSString *)sequenceNumber username:(NSString *)username { 
@@ -582,6 +588,14 @@
     return [fData objectForKey:FOOD_DATA_KEY_TYPE_NAME];
 }
 
+// This function will return name of the food type that is currently selected (being inserted into database)
+- (NSString*) getCurrentSelectedFoodTypeName{
+    return [self getFoodTypeNameWithEnum:[currentSelectedFoodType intValue]];
+}
+
+- (NSString*) getCurrentRestaurantName{
+    return currentRestaurantName;
+}
 
 
 @end

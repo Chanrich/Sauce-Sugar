@@ -513,7 +513,7 @@
                     // Fade out and then fade in if there is a value change
                     [rcUsersNumLabel viewFadeOutWithCompletion:^(BOOL rcFinished) {
                         // Update text
-                        [rcUsersNumLabel setText:[NSString stringWithFormat:@"Users: %lu", [UserNameCSet count]]];
+                        [rcUsersNumLabel setText:[NSString stringWithFormat:@"Users: %lu", (unsigned long)[UserNameCSet count]]];
                         // Fade in
                         [rcUsersNumLabel viewFadeInWithCompletion:nil];
                     }];
@@ -524,7 +524,7 @@
                     // Fade out and then fade in if there is a value change
                     [rcRestaurantNumLabel viewFadeOutWithCompletion:^(BOOL rcFinished) {
                         // Update text
-                        [rcRestaurantNumLabel setText:[NSString stringWithFormat:@"Restaurants: %lu", [ResNameCSet count]]];
+                        [rcRestaurantNumLabel setText:[NSString stringWithFormat:@"Restaurants: %lu", (unsigned long)[ResNameCSet count]]];
                         // Fade in
                         [rcRestaurantNumLabel viewFadeInWithCompletion:nil];
                     }];

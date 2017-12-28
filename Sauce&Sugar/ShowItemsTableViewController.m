@@ -16,6 +16,9 @@
 @implementation ShowItemsTableViewController {
     // Store the type name of the enum that current instance will be displaying
     NSString *fTypename;
+    
+    // Outlet of map button on right hand side of navigation bar
+    IBOutlet UIButton *rcMapButton;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder{
@@ -27,6 +30,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    // Hide map button and only show it when valid data is returned
+    rcMapButton.hidden = YES;
     
     // Set up overlay UIView
     self.overlayUIView = [[UIView alloc] initWithFrame:self.tabBarController.view.bounds];
@@ -73,6 +79,7 @@
             [rcSpinner stopAnimating];
             [self.overlayUIView removeFromSuperview];
             
+            
             // ========= Create Alert =========
             // Create a UI AlertController to show warning message
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Oops" message:@"No items are found" preferredStyle:UIAlertControllerStyleAlert];
@@ -87,6 +94,8 @@
             // Store the array as class property
             self.foodFromMainDataTable_Array = callbackItem;
             
+            // Show Map button
+            rcMapButton.hidden = NO;
 
             // Check for first read
             static BOOL ImageIsReturned;

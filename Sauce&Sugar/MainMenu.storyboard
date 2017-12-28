@@ -34,7 +34,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Lp8-UB-UIZ">
-                                                    <rect key="frame" x="16" y="6" width="343" height="339"/>
+                                                    <rect key="frame" x="16" y="6" width="343" height="383"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="RKw-K3-agn">
                                                         <size key="itemSize" width="80" height="100"/>
@@ -83,7 +83,7 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="Lp8-UB-UIZ" firstAttribute="top" secondItem="OeS-AL-9Iq" secondAttribute="topMargin" constant="-5" id="UD2-ZY-64j"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="Lp8-UB-UIZ" secondAttribute="bottom" constant="44" id="eLO-Qk-6Tu"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="Lp8-UB-UIZ" secondAttribute="bottom" id="eLO-Qk-6Tu"/>
                                                 <constraint firstItem="Lp8-UB-UIZ" firstAttribute="leading" secondItem="OeS-AL-9Iq" secondAttribute="leadingMargin" id="jqG-Ta-KGI"/>
                                                 <constraint firstItem="Lp8-UB-UIZ" firstAttribute="trailing" secondItem="OeS-AL-9Iq" secondAttribute="trailingMargin" id="yMd-2i-Esq"/>
                                             </constraints>

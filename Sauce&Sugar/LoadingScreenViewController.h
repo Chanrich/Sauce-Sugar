@@ -25,10 +25,6 @@
 @property NSDictionary *rcDownloadedDictionary;
 // Image upload complete flag
 @property NSNumber* rcImageUploadComplete;
-// UI elements
-@property (strong, nonatomic) IBOutlet UILabel *statusLabel;
-@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *statusIndicator;
-@property (strong, nonatomic) IBOutlet UIProgressView *progressBar;
-@property (strong, nonatomic) IBOutlet UIImageView *checkedImage;
+
 
 @end

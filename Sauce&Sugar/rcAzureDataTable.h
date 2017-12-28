@@ -92,6 +92,8 @@ typedef enum FoodTypesEnum {
 
 // ======= Utility Functions =========
 - (NSDictionary*) getCurrentDictionaryData;
+- (NSString*) getCurrentRestaurantName;
+- (NSString*) getCurrentSelectedFoodTypeName;
 
 // ======= Food Type Data Processing ========
 - (NSUInteger) getTotalNumberOfType;
@@ -100,6 +102,7 @@ typedef enum FoodTypesEnum {
 - (NSNumber*) getFoodTypeEnumWithIndex:(NSInteger)index;
 - (NSString*) getFoodTypeNameWithIndex:(NSInteger)index;
 - (NSString*) getFoodTypeNameWithEnum:(int)enumFood;
+
 
 // ======================================
 // Override init to initialize client

@@ -104,7 +104,6 @@
 		69F39F3D1FBEDC6500362888 /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 69F39F3C1FBEDC6400362888 /* GoogleMaps.bundle */; };
 		69F39F461FBEDFF000362888 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 69F39F451FBEDFF000362888 /* libc++.tbd */; };
 		69F39F481FBEDFFA00362888 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 69F39F471FBEDFFA00362888 /* libz.tbd */; };
-		69F39F4F1FBFED1100362888 /* GMapSearch.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69F39F4D1FBFED1100362888 /* GMapSearch.storyboard */; };
 		69F39F561FC0E7C400362888 /* ShowGMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69F39F551FC0E7C400362888 /* ShowGMapViewController.m */; };
 		69FFDCF01FDE46C6006BA988 /* error@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 69FFDCEE1FDE46C6006BA988 /* error@2x.png */; };
 		69FFDCF11FDE46C6006BA988 /* error.png in Resources */ = {isa = PBXBuildFile; fileRef = 69FFDCEF1FDE46C6006BA988 /* error.png */; };
@@ -281,7 +280,6 @@
 		69F39F4A1FBEE00900362888 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		69F39F4B1FBEE01200362888 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		69F39F4C1FBEE01A00362888 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		69F39F4E1FBFED1100362888 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = "Sauce&Sugar/Base.lproj/GMapSearch.storyboard"; sourceTree = "<group>"; };
 		69F39F541FC0E7C400362888 /* ShowGMapViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShowGMapViewController.h; sourceTree = "<group>"; };
 		69F39F551FC0E7C400362888 /* ShowGMapViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShowGMapViewController.m; sourceTree = "<group>"; };
 		69F39F591FC1099600362888 /* GlobalNames.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GlobalNames.h; sourceTree = "<group>"; };
@@ -437,7 +435,6 @@
 		698A0E041FA1B08C00915313 /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
-				69F39F4D1FBFED1100362888 /* GMapSearch.storyboard */,
 				69F39F2C1FB65D2200362888 /* MainMenu.storyboard */,
 				698A0E051FA1B17F00915313 /* insertToDatabase.storyboard */,
 				698A0DFF1FA1AFF800915313 /* searchTable.storyboard */,
@@ -851,7 +848,6 @@
 				696F15231FD559B1001300C6 /* add-friend.png in Resources */,
 				6904476A1FF2077600863F4D /* salad.png in Resources */,
 				696F151B1FD55861001300C6 /* add-button@2x.png in Resources */,
-				69F39F4F1FBFED1100362888 /* GMapSearch.storyboard in Resources */,
 				69FFDD341FE8FF22006BA988 /* info.png in Resources */,
 				696F15371FD5682B001300C6 /* login-white@2x.png in Resources */,
 				6921E1231FECF99600048246 /* food@3x.png in Resources */,
@@ -1013,14 +1009,6 @@
 				69C9316A1F502006007696BA /* Base */,
 			);
 			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-		69F39F4D1FBFED1100362888 /* GMapSearch.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				69F39F4E1FBFED1100362888 /* Base */,
-			);
-			name = GMapSearch.storyboard;
 			sourceTree = "<group>";
 		};
 		69FFDCF61FDEA3E5006BA988 /* UserProfile.storyboard */ = {

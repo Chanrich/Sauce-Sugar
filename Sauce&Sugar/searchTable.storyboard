@@ -125,6 +125,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="rcMapButton" destination="2dK-Id-FXt" id="Yjt-rx-ed2"/>
                         <outlet property="rcTableView" destination="22z-mi-TGy" id="eu2-mw-iWT"/>
                     </connections>
                 </tableViewController>

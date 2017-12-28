@@ -38,7 +38,6 @@ static NSString *const HIDE_GMAP_POI_JSON = @"["
     // current coordinates
     double current_latitude;
     double current_longitude;
-    CLLocationCoordinate2D currentCoordinate;
     
     // Map object
     GMSMapView *mapView;
@@ -60,17 +59,16 @@ static NSString *const HIDE_GMAP_POI_JSON = @"["
     current_latitude = (double)self.rcDataConnection.currentGPSLocation.coordinate.latitude;
     current_longitude = (double)self.rcDataConnection.currentGPSLocation.coordinate.longitude;
     
-    // Create a coordinate at current location
-    currentCoordinate = CLLocationCoordinate2DMake(current_latitude, current_longitude);
-    
+    // Initialize a google map camera position object
     GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:current_latitude
                                                             longitude:current_longitude
                                                                  zoom:7];
     
+    // This path object will be used to zoom to a level that will fit all marks
     GMSMutablePath *pathPoints = [GMSMutablePath path];
     
+    // Build google map view objective with (0, 0, 0, 0) frame
     mapView = [GMSMapView mapWithFrame:CGRectZero camera:camera];
-    
     mapView.myLocationEnabled = YES;
     
     // ======== Hide all POI on map object ==========

@@ -14,62 +14,118 @@
  */
 #import "LoadingScreenViewController.h"
 #import "GlobalNames.h"
-@interface LoadingScreenViewController ()
+#import <GoogleMaps/GoogleMaps.h>
+
+static NSString *const HIDE_GMAP_POI_JSON = @"["
+@"  {"
+@"    \"featureType\": \"poi.business\","
+@"    \"elementType\": \"all\","
+@"    \"stylers\": ["
+@"      {"
+@"        \"visibility\": \"off\""
+@"      }"
+@"    ]"
+@"  },"
+@"  {"
+@"    \"featureType\": \"transit\","
+@"    \"elementType\": \"labels.icon\","
+@"    \"stylers\": ["
+@"      {"
+@"        \"visibility\": \"off\""
+@"      }"
+@"    ]"
+@"  }"
+@"]";
+
+@interface LoadingScreenViewController (){
+
+}
 
 @end
 
 @implementation LoadingScreenViewController {
+    // current coordinates
+    double current_latitude;
+    double current_longitude;
+    
+    // Map object
+    GMSMapView *subMapView;
+    
+    // UI Outlets
+    IBOutlet UIProgressView *progressBar;
+    IBOutlet UIActivityIndicatorView *statusIndicator;
+    // UI Outlet - image
+    IBOutlet UIImageView *checkedImage;
+    // UI Outlets - Labels
+    IBOutlet UILabel *statusLabel;
+    IBOutlet UILabel *rcIDLabel;
+    IBOutlet UILabel *rcTypeLabel;
+    IBOutlet UILabel *rcRestaurantLabel;
+    // UI Outlets - Views
+    IBOutlet UIView *rcStatusView;
+    IBOutlet UIView *rcMapView;
+    IBOutlet UIView *rcUploadInfo;
+
+    // Store centerpositions initialized in storyboard
+    CGPoint statusLabelPos;
+    CGPoint statusViewPos;
+    
+    // Auto layout object to animate move
+    IBOutlet NSLayoutConstraint *tcInfoTopConstraint;
+    float initCons;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    // Hide finished status view
+    [rcStatusView setAlpha:0];
+    // Hide green check image
+    [checkedImage setAlpha:0];
+    // Hide navigation controller's back button
+    self.navigationItem.hidesBackButton = YES;
+    
+    // Store initial auto Layout constant
+    initCons = tcInfoTopConstraint.constant;
+
+    // Move processing view down to center and ask autolayout to update
+    tcInfoTopConstraint.constant = (self.view.bounds.size.height/2) - (rcUploadInfo.bounds.size.height);
+    [self.view layoutIfNeeded];
     
     // get current username
     self.currentUsername = [(AppDelegate*)[[UIApplication sharedApplication] delegate] getUsername];
-    // Hide navigation controller's back button
-    self.navigationItem.hidesBackButton = YES;
-    // Hide green check image
-    [self.checkedImage setAlpha:0];
     
-    // Get singleton files
-    // Initialize a singleton instance for Azure Blob
+    // Initialize a singleton instance
     self.rcBlobstorage = [rcAzureBlobContainer sharedStorageContainer];
-    
-    // Initialize a singleton instance for Azure Data
     self.rcDataConnection = [rcAzureDataTable sharedDataTable];
     
-    // Request for location data
-    [self.rcDataConnection requestLocationData];
+    // Retreive current GPS location
+    current_latitude = (double)self.rcDataConnection.currentGPSLocation.coordinate.latitude;
+    current_longitude = (double)self.rcDataConnection.currentGPSLocation.coordinate.longitude;
+    NSLog(@"<In Load> Lat:%f Long:%f", current_latitude, current_longitude);
+    
+    // Setup map
+    [self setupGoogleMap];
     
     // Reset UI
-    self.statusLabel.text = @"Downloading Sequence Number";
-    self.progressBar.progress = 0;
-    // Start indicator animation
-    [self.statusIndicator startAnimating];
+    statusLabel.text = @"Downloading Sequence Number";
+    progressBar.progress = 0;
+    [statusIndicator startAnimating]; // Start indicator animation
     
     // Request a unique serial number from User Data Table
     [self.rcDataConnection getUniqueNumber_WithUsername:self.currentUsername Callback:^(NSDictionary *callbackItem) {
         // Perform error handling
         if (callbackItem == nil){
-            // If the unique sequence number cannot be retrieved from server. Abort task
-            // Set image to failed icon and fade it in
-            self.checkedImage.image = [UIImage imageNamed:@"error"];
-            [self.checkedImage viewFadeInWithCompletion:nil];
-            
-            // Stop indicator
-            [self.statusIndicator stopAnimating];
-            
-            // Show error message
-            self.statusLabel.text = @"Cannot retrieve an index number from server";
-            
-            // Return to main menu
-            [self performSelector:@selector(returnToMainMenu) withObject:nil afterDelay:2];
+            // Execute in main thread
+            dispatch_async(dispatch_get_main_queue(), ^{
+                // Set failed message
+                [self setFailedMessageAndReturn:@"Cannot retrieve an index number from server"];
+            });
         } else {
             // Set UI Animation in main thread
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.progressBar setProgress:0.2 animated:YES];
-                self.statusLabel.text = @"Uploading to Data Table";
+                [progressBar setProgress:0.2 animated:YES];
+                statusLabel.text = @"Uploading to Data Table";
             });
             
             // Store a copy of the dictioanry entry returned from the callback in order to increment the number by 1
@@ -83,12 +139,20 @@
             // Insert sequence number and username to Azure data table (Only stores local copy, no connection to server is made)
             [self.rcDataConnection insertSequenceNumber:[(NSNumber*)[callbackItem objectForKey:AZURE_USER_TABLE_SEQUENCE] stringValue] username:self.currentUsername];
             
+            // Populate status information
+            NSString *IDtext = [NSString stringWithFormat:@"ID: %@", [(NSNumber*)[callbackItem objectForKey:AZURE_USER_TABLE_SEQUENCE] stringValue]];
+            NSString *Typetext = [NSString stringWithFormat:@"Type: %@", [self.rcDataConnection getCurrentSelectedFoodTypeName]];
+            NSString *Restext = [NSString stringWithFormat:@"Restaurant: %@", [self.rcDataConnection getCurrentRestaurantName]];
+            rcIDLabel.text = IDtext;
+            rcTypeLabel.text = Typetext;
+            rcRestaurantLabel.text = Restext;
+            
             // Upload all data into rcMainDataTable in server
             [self.rcDataConnection InsertDataIntoMainDataTable:^(NSNumber *rcCompleteFlag) {
                 // Set UI Animation in main thread
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.progressBar setProgress:0.5 animated:YES];
-                    self.statusLabel.text = @"Uploading image";
+                    [progressBar setProgress:0.5 animated:YES];
+                    statusLabel.text = @"Uploading image";
                 });
                 // Proceed when uplaod is successful
                 if ([rcCompleteFlag isEqualToNumber:@YES]){
@@ -105,26 +169,38 @@
                             // Upload complete
                             NSLog(@"Insert image into blob storage successful");
                             dispatch_async(dispatch_get_main_queue(), ^{
-                                [self.progressBar setProgress:0.9 animated:YES];
-                                self.statusLabel.text = @"Incrementing sequence ID in user table";
+                                [progressBar setProgress:0.9 animated:YES];
+                                statusLabel.text = @"Incrementing sequence ID in user table";
                             });
                             
                             // Increment the sequence number in rcUserDataInfo
                             [self.rcDataConnection incrementSequenceNumberWithDictionary:self.rcDownloadedDictionary Callback:^(NSNumber *completeFlag) {
                                 // Check status of sequence number update
                                 if ([completeFlag  isEqual: @YES]){
-                                    // Sequence number update completed, push updates to UI view elements and then call uploadCompleted function
+                                    // Sequence number update completed, push updates to UI view elements
                                     dispatch_async(dispatch_get_main_queue(), ^{
                                         // Fade in green check image
-                                        self.checkedImage.image = [UIImage imageNamed:@"checked"];
-                                        [self.checkedImage viewFadeInWithCompletion:nil];
-                                        // Update UI elements
-                                        [self.progressBar setProgress:1.0 animated:YES];
-                                        self.statusLabel.text = @"Done";
-                                        [self.statusIndicator stopAnimating];
+                                        checkedImage.image = [UIImage imageNamed:@"checked"];
+                                        [checkedImage viewFadeInWithCompletion:nil];
                                         
-                                        // Wait for few seconds and then return to main menu
-                                        [self performSelector:@selector(returnToMainMenu) withObject:nil afterDelay:2];
+                                        // Update UI elements, fade out progress bar and indicator
+                                        [progressBar viewFadeOutWithCompletion:nil];
+                                        [statusIndicator stopAnimating];
+                                        statusLabel.text = @"Done";
+                                        
+                                        // Move its location
+                                        tcInfoTopConstraint.constant = initCons;
+                                        
+                                        [UIView animateWithDuration:fadeDuration animations:^{
+                                            // Show it on screen
+                                            rcStatusView.alpha = 1;
+                                            rcMapView.alpha = 1;
+
+                                            [self.view layoutIfNeeded];
+                                        } completion:^(BOOL finished) {
+                                            // Set google map at new location
+                                            //
+                                        }];
                                     });
                                 } else {
                                     // Sequence number update failed
@@ -133,11 +209,7 @@
                                     [self.rcDataConnection deleteEntry:[self.rcDataConnection getCurrentDictionaryData]];
                                     // Update UI in main thread and return to main menu
                                     dispatch_async(dispatch_get_main_queue(), ^{
-                                        [self.progressBar setProgress:0 animated:YES];
-                                        self.statusLabel.text = @"Sequence number update failed";
-                                        
-                                        // Wait for few seconds and then return to main menu
-                                        [self performSelector:@selector(returnToMainMenu) withObject:nil afterDelay:2];
+                                        [self setFailedMessageAndReturn:@"Sequence number update failed"];
                                     });
                                     
                                 }
@@ -150,16 +222,8 @@
                             [self.rcDataConnection deleteEntry:[self.rcDataConnection getCurrentDictionaryData]];
                             // Update UI in main thread and return to main menu
                             dispatch_async(dispatch_get_main_queue(), ^{
-                                // Set image to failed icon and fade it in
-                                self.checkedImage.image = [UIImage imageNamed:@"error"];
-                                [self.checkedImage viewFadeInWithCompletion:nil];
-                                
-                                // Stop indicator
-                                [self.statusIndicator stopAnimating];
-                                
-                                [self.progressBar setProgress:0 animated:YES];
-                                self.statusLabel.text = @"Upload image failed";
-                                
+                                // Set failed message
+                                [self setFailedMessageAndReturn:@"Upload image failed"];
                             });
                             
                         }
@@ -167,14 +231,16 @@
                 } else {
                     // If data not uploaded into Azure Data Table
                     NSLog(@"Cannot upload data to Azure Data Table, Abort!");
-                }
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        // Set failed message
+                        [self setFailedMessageAndReturn:@"Upload to Azure Data Table failed"];
+                    }); // End of dispatch
+                } // End of self.rcDataConnection InsertDataIntoMainDataTable Completeflag failed
                 
             }]; // End of self.rcDataConnection InsertDataIntoMainDataTable call
         }
         
     }]; // End of self.rcDataConnection getUniqueNumber_WithUsername call
-    
-
 }
 
 - (void)didReceiveMemoryWarning {
@@ -196,9 +262,61 @@
 }
 */
 
-// Switch to main thread to update UI
-- (void) setProgressBar:(NSNumber*)nPercentage StatusText:(NSString*)text{
+// If error occured, set failed message
+- (void) setFailedMessageAndReturn:(NSString*)msg{
+    // If the unique sequence number cannot be retrieved from server. Abort task
+    // Set image to failed icon and fade it in
+    checkedImage.image = [UIImage imageNamed:@"error"];
+    [checkedImage viewFadeInWithCompletion:nil];
     
+    // Stop indicator
+    [statusIndicator stopAnimating];
+    
+    // Hide progress bar
+    progressBar.alpha = 0;
+    
+    // Show error message
+    statusLabel.text = msg;
+    
+    // Wait for few seconds and then return to main menu
+    [self performSelector:@selector(returnToMainMenu) withObject:nil afterDelay:2];
+}
+// Dismiss viewcontroller when OK is pressed
+- (IBAction)OKButtonPressed:(id)sender {
+    [self returnToMainMenu];
 }
 
+- (void) setupGoogleMap{
+    // Initialize a google map camera position object
+    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:current_latitude
+                                                            longitude:current_longitude
+                                                                 zoom:10];
+    
+    // Build google map view objective with (0, 0, 0, 0) frame
+    subMapView = [GMSMapView mapWithFrame:rcMapView.bounds camera:camera];
+    subMapView.myLocationEnabled = YES;
+    
+    // ======== Hide all POI on map object ==========
+    NSError *error;
+    GMSMapStyle *style = [GMSMapStyle styleWithJSONString:HIDE_GMAP_POI_JSON error:&error];
+    if (!style){
+        NSLog(@"JSON to hide POI on google map is not initialized");
+    }
+    subMapView.mapStyle = style;
+    // ================================================
+    
+    [rcMapView addSubview:subMapView];
+    
+    // Store location data into coordinate
+    CLLocationCoordinate2D tempCoordinate = CLLocationCoordinate2DMake(current_latitude, current_longitude);
+    
+    subMapView.myLocationEnabled = NO;
+    
+    // Setup marker and show it in map
+    GMSMarker *markerItem = [[GMSMarker alloc] init];
+    markerItem.position = tempCoordinate;
+    markerItem.title = @"New location";
+    // markerItem.snippet = @"New";
+    markerItem.map = subMapView;
+}
 @end
