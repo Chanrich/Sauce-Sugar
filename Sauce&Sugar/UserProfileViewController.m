@@ -93,14 +93,13 @@
     
     // Request all photos that current user had uploaded
     // Get current user's data from the cloub
-    [self.rcDataConnection getDatafromUser:currentUser FoodType:FOODTYPE_ALL Callback:^(NSArray *callbackItem) {
+    [self.rcDataConnection getDatafromUser:currentUser FoodType:FOODTYPE_ALL RangeOfSearch_Lat:(int)0 RangeOfSearch_Long:(int)0 Callback:^(NSArray *callbackItem) {
         // Remove loading screen after a delay
         double delayInSeconds = 1.0;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
             [collectionOverlay removeFromSuperview];
         });
-        
         
         // In Callback function
         if (callbackItem == nil){

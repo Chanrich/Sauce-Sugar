@@ -62,7 +62,7 @@ typedef enum FoodTypesEnum {
 // 2. rcUserDataInfo : Contain all user related information
 - (void) InsertDataIntoMainDataTable:(void(^)(NSNumber *rcCompleteFlag))rcCallback;
 // Request data from table with , return a NSArray of dictionaries in callback
-- (void) getDatafromUser:(NSString*)rcUsername FoodType:(FoodTypes)foodType Callback:(void(^)(NSArray *callbackItem)) returnCallback;
+- (void) getDatafromUser:(NSString*)rcUsername FoodType:(FoodTypes)foodType RangeOfSearch_Lat:(int)nRangeOfSearch_Lat RangeOfSearch_Long:(int)nRangeOfSearch_Long Callback:(void(^)(NSArray *callbackItem)) returnCallback;
 // Request data in rcUserDataInfo table
 - (void) verifyUsername:(NSString*)rcUsername Callback:(void(^)(BOOL callbackItem))returnCallback;
 - (void) verifyUserAccount:(NSString*)rcUsername Password:(NSString*)password Callback:(void(^)(BOOL callbackItem))returnCallback;

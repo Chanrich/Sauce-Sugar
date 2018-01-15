@@ -34,6 +34,11 @@
     NSNumber *lastLoadedRestaurantCount;
     NSNumber *lastLoadedUsersCount;
     
+    // Store camera picture compression that will be send to Insert new data view controller
+    unsigned long orignalImageSize;
+    unsigned long newImageSize;
+    
+    
 }
 
 - (void)viewDidLoad {
@@ -168,6 +173,9 @@
     AddToDatabase_ViewController *vc = [rcStoryBoard instantiateViewControllerWithIdentifier:@"AddToDataBaseViewController"];
     // Load image into the view's property
     vc.rcImageHolder = compressedImage;
+    // Store image size comparisons
+    vc.originalRcImageSize = [NSNumber numberWithUnsignedLong:orignalImageSize];
+    vc.nRcImageSize = [NSNumber numberWithUnsignedLong:newImageSize];
     // Change entry animation
     vc.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     
@@ -217,9 +225,11 @@
     NSData *imageData = UIImageJPEGRepresentation(img, compressionQuality);
     UIGraphicsEndImageContext();
     
+    orignalImageSize = (unsigned long)[originalImageData length];
+    newImageSize = (unsigned long)[imageData length];
     // Debug, print out sizes
-    NSLog(@"Original image size: %lu", (unsigned long)[originalImageData length]);
-    NSLog(@"Compressed image size: %lu", (unsigned long)[imageData length]);
+    NSLog(@"Original image size: %lu", orignalImageSize);
+    NSLog(@"Compressed image size: %lu", newImageSize);
     
     return [UIImage imageWithData:imageData];
     
@@ -483,7 +493,7 @@
 // This function will retrieve all data for the region around the user and count/sort the returned data
 - (void) setupDataCountContainerView{
     // Get all food type and from all users so pass in nil to user name field
-    [rcDataConnection getDatafromUser:nil FoodType:FOODTYPE_ALL Callback:^(NSArray *callbackItem) {
+    [rcDataConnection getDatafromUser:nil FoodType:FOODTYPE_ALL RangeOfSearch_Lat:0.8 RangeOfSearch_Long:0.8 Callback:^(NSArray *callbackItem) {
         // Data returned
         if (callbackItem == nil){
             // Nothing is performed
@@ -497,7 +507,8 @@
             NSCountedSet *FoodTypeCSet = [NSCountedSet new];
             // Loop through each entry and count
             for (NSDictionary* oneDictionaryEntry in callbackItem){
-                NSLog(@"Print out dictionary in callbackItem: %@", oneDictionaryEntry);
+                // Debug
+                // NSLog(@"Print out dictionary in callbackItem: %@", oneDictionaryEntry);
                 NSString *currentResName = [oneDictionaryEntry objectForKey:AZURE_DATA_TABLE_RESTAURANT_NAME];
                 NSString *currentUserName = [oneDictionaryEntry objectForKey:AZURE_DATA_TABLE_USERNAME];
                 NSNumber *currentFoodType = [oneDictionaryEntry objectForKey:AZURE_DATA_TABLE_FOODTYPE];

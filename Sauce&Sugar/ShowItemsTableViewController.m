@@ -70,7 +70,7 @@
     NSLog(@"Performing a search on food type: %@", fTypename);
     
     // Get all data for the food type from server
-    [self.rcDataConnection getDatafromUser:nil FoodType:self.searchFoodType Callback:^(NSArray *callbackItem) {
+    [self.rcDataConnection getDatafromUser:nil FoodType:self.searchFoodType RangeOfSearch_Lat:(int)0.8 RangeOfSearch_Long:(int)0.8 Callback:^(NSArray *callbackItem) {
         // In Callback function
         if (callbackItem == nil){
             // No items are returned

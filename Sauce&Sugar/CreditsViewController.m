@@ -29,6 +29,7 @@
     [self.creditsTextView insertText:@"Credit icon: Icon made by Catalin Fertu from  www.flaticon.com\n"];
     [self.creditsTextView insertText:@"Credit icon: Icon made by Google Material Design from  www.flaticon.com\n"];
     [self.creditsTextView insertText:@"Error icon: Icon made by Smashicons from www.flaticon.com\n"];
+    // https://www.flaticon.com/free-icon/checked_291201#term=check&page=1&position=5
     [self.creditsTextView insertText:@"Green check icon: Icon made by Maxim Basinski from  www.flaticon.com\n"];
     [self.creditsTextView insertText:@"Star icon: Icon made by Freepik from www.flaticon.com\n"];
     [self.creditsTextView insertText:@"Search Table User icon: Icon made by Smashicons from www.flaticon.com\n"];

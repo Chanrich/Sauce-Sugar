@@ -239,7 +239,8 @@
 }
 
 // Make a query request for a single user, returns a NSArray of dictionaries in callback
-- (void) getDatafromUser:(NSString*)rcUsername FoodType:(FoodTypes)foodType Callback:(void(^)(NSArray *callbackItem)) returnCallback{
+// Perform a range search only if a value other than 0 is passed in for both latitude and longitude
+- (void) getDatafromUser:(NSString*)rcUsername FoodType:(FoodTypes)foodType RangeOfSearch_Lat:(int)nRangeOfSearch_Lat RangeOfSearch_Long:(int)nRangeOfSearch_Long Callback:(void(^)(NSArray *callbackItem)) returnCallback{
     NSLog(@"<getDatafromUser>");
     // Create a filter for
     // 1. Username
@@ -268,8 +269,8 @@
         // Select one foodType
         dataFilter2 = [NSPredicate predicateWithFormat:@"foodType == %d", foodType];
     }
-
-    // The filter should use longitude and latitude
+    
+    // This filter should use longitude and latitude
     // Each degree of latitude is approximately 69 miles
     // A degree of longitude is widest at the equator at 69.172 miles (111.321) and gradually shrinks to zero at the poles.
     // Latitude:
@@ -277,17 +278,18 @@
     // Longitudes:
     // ABS(x) < 0.8 (approx.55 miles at equator and gradually to 0 at poles)
     NSLog(@"Setting GPS Predicates");
-    if (self.currentGPSLocation != nil){
+    if (self.currentGPSLocation != nil && nRangeOfSearch_Lat != 0 && nRangeOfSearch_Long != 0){
         // Need a function to return lower and upper bounds in a array for long/lat, param: current position object
-        NSArray *latitudeBounds = [self returnLatitudeBoundsWithCenterLocation:self.currentGPSLocation searchDegree:0.8];
-        NSArray *longitudeBounds = [self returnLongitudeBoundsWithCenterLocation:self.currentGPSLocation searchDegree:0.8];
+        NSArray *latitudeBounds = [self returnLatitudeBoundsWithCenterLocation:self.currentGPSLocation searchDegree:nRangeOfSearch_Lat];
+        NSArray *longitudeBounds = [self returnLongitudeBoundsWithCenterLocation:self.currentGPSLocation searchDegree:nRangeOfSearch_Long];
         dataFilter_latitude = [NSPredicate predicateWithFormat:@"latitude BETWEEN %@", latitudeBounds];
         dataFilter_longitude = [NSPredicate predicateWithFormat:@"longitude BETWEEN %@", longitudeBounds];
+        // AND all data filters together
+        finalAndPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[dataFilter, dataFilter2, dataFilter_latitude, dataFilter_longitude]];
+    } else {
+        finalAndPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[dataFilter, dataFilter2]];
     }
-    
-    // AND all data filters together
-    finalAndPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[dataFilter, dataFilter2, dataFilter_latitude, dataFilter_longitude]];
-    //finalAndPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[dataFilter, dataFilter2]];
+
     NSLog(@"finalAndPredicate:%@\n", [finalAndPredicate predicateFormat]);
     
     // Prepare a MSQuery object with filter dataFilter
