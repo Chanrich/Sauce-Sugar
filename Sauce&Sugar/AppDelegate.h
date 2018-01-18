@@ -28,5 +28,14 @@
 - (NSString*) getUsername;
 - (void) logoutUser;
 
+// Store username and password
+- (void) setUserCredential:(NSURLCredential*)credential;
+
+// Get stored credential
+- (NSURLCredential*) getUserCredentail;
+
+// Clean credential
+- (void) cleanUserCredential;
+
 @end
 

@@ -74,6 +74,7 @@
 		696F153B1FD8DBD2001300C6 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 696F153A1FD8DBD1001300C6 /* LoginViewController.m */; };
 		69782A1B200483DA001DE057 /* YelpAPIConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 69782A1A200483DA001DE057 /* YelpAPIConnection.m */; };
 		69782A1E200C07D1001DE057 /* Yelp_trademark_RGB.png in Resources */ = {isa = PBXBuildFile; fileRef = 69782A1D200C07D0001DE057 /* Yelp_trademark_RGB.png */; };
+		69782A2020106AA3001DE057 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69782A1F20106AA3001DE057 /* Security.framework */; };
 		698A0E001FA1AFF800915313 /* searchTable.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 698A0DFF1FA1AFF800915313 /* searchTable.storyboard */; };
 		698A0E031FA1B07800915313 /* slideMenu.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 698A0E011FA1B07800915313 /* slideMenu.storyboard */; };
 		698A0E061FA1B17F00915313 /* insertToDatabase.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 698A0E051FA1B17F00915313 /* insertToDatabase.storyboard */; };
@@ -223,6 +224,7 @@
 		69782A19200483DA001DE057 /* YelpAPIConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YelpAPIConnection.h; sourceTree = "<group>"; };
 		69782A1A200483DA001DE057 /* YelpAPIConnection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YelpAPIConnection.m; sourceTree = "<group>"; };
 		69782A1D200C07D0001DE057 /* Yelp_trademark_RGB.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Yelp_trademark_RGB.png; sourceTree = "<group>"; };
+		69782A1F20106AA3001DE057 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		698A0DFF1FA1AFF800915313 /* searchTable.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = searchTable.storyboard; sourceTree = "<group>"; };
 		698A0E021FA1B07800915313 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = "Sauce&Sugar/Base.lproj/slideMenu.storyboard"; sourceTree = "<group>"; };
 		698A0E051FA1B17F00915313 /* insertToDatabase.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = insertToDatabase.storyboard; sourceTree = "<group>"; };
@@ -320,6 +322,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				69782A2020106AA3001DE057 /* Security.framework in Frameworks */,
 				69A07FFB1F5D2E0200651946 /* libxml2.2.tbd in Frameworks */,
 				69F39F481FBEDFFA00362888 /* libz.tbd in Frameworks */,
 				69A07FF71F5AA2B100651946 /* WebKit.framework in Frameworks */,
@@ -572,6 +575,7 @@
 		69C931AB1F53788A007696BA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				69782A1F20106AA3001DE057 /* Security.framework */,
 				69F39F4C1FBEE01A00362888 /* SystemConfiguration.framework */,
 				69F39F4B1FBEE01200362888 /* UIKit.framework */,
 				69F39F4A1FBEE00900362888 /* QuartzCore.framework */,

@@ -18,6 +18,12 @@
     rcAzureDataTable *rcDataConnection;
     rcAzureBlobContainer *rcBlobContainer;
     NSString *currentUsername;
+    
+    // Store credential space
+    // Create a protection space
+    NSURL *ssURL;
+    NSURLProtectionSpace *selfProtectionSpace;
+
 }
 
 
@@ -33,6 +39,10 @@
     // Initialize singleton instances
     rcDataConnection = [rcAzureDataTable sharedDataTable];
     rcBlobContainer = [rcAzureBlobContainer sharedStorageContainer];
+    
+    // Create a protection space
+    ssURL = [NSURL URLWithString:@"https://saucensugarmobileapp.azurewebsites.net"];
+    selfProtectionSpace = [[NSURLProtectionSpace alloc] initWithHost:ssURL.host port:[ssURL.port integerValue] protocol:ssURL.scheme realm:nil authenticationMethod:NSURLAuthenticationMethodDefault];
     
     return YES;
 }
@@ -129,6 +139,28 @@
         NSLog(@"Unresolved error %@, %@", error, error.userInfo);
         abort();
     }
+}
+
+#pragma mark - User credentials
+// Store username and password
+- (void) setUserCredential:(NSURLCredential*)credential{
+    [[NSURLCredentialStorage sharedCredentialStorage] setCredential:credential forProtectionSpace:selfProtectionSpace];
+}
+
+// Get stored credential
+- (NSURLCredential*) getUserCredentail{
+    NSDictionary *credentialsDict;
+    credentialsDict = [[NSURLCredentialStorage sharedCredentialStorage] credentialsForProtectionSpace:selfProtectionSpace];
+    return [credentialsDict.objectEnumerator nextObject];
+}
+
+// Clean credential
+- (void) cleanUserCredential{
+    NSDictionary *credentialsDict;
+    NSURLCredential *tempCred;
+    credentialsDict = [[NSURLCredentialStorage sharedCredentialStorage] credentialsForProtectionSpace:selfProtectionSpace];
+    tempCred = [credentialsDict.objectEnumerator nextObject];
+    [[NSURLCredentialStorage sharedCredentialStorage] removeCredential:tempCred forProtectionSpace:selfProtectionSpace];
 }
 
 @end

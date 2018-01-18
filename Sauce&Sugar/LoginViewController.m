@@ -8,7 +8,7 @@
 
 #import "LoginViewController.h"
 #import "rcAzureDataTable.h"
-
+#import "GlobalNames.h"
 @interface LoginViewController () <UITextFieldDelegate, UIGestureRecognizerDelegate>
 
 @end
@@ -16,7 +16,7 @@
 @implementation LoginViewController {
     // Singleton instance of table data management
     rcAzureDataTable *rcDataConnection;
-    
+
 }
 
 - (void)viewDidLoad {
@@ -94,6 +94,16 @@
                     [self performSelector:@selector(returnToMainMenu) withObject:nil afterDelay:0.5];
                 });
             }];
+            
+            // Save username and password into keychain
+            NSURLCredential *credential;
+            
+            // Create a credential object with username name and password, set persistence to NSURLCredentialPersistencePermanent so it will be stored in keychain
+            credential = [NSURLCredential credentialWithUser:textUsername password:textPassword persistence:NSURLCredentialPersistencePermanent];
+            
+            // Call app delegate method to store credential
+            [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCredential:credential];
+            
         } else {
             // Login failed, set username to null
             [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUsername:@""];

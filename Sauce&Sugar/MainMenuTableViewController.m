@@ -25,6 +25,10 @@
     IBOutlet UILabel *rcRestaurantNumLabel;
     IBOutlet UILabel *rcUsersNumLabel;
     IBOutlet UILabel *rcFoodNumLabel;
+    // Activity Indicators
+    IBOutlet UIActivityIndicatorView *resActivityIndicator;
+    IBOutlet UIActivityIndicatorView *userActivityIndicator;
+    IBOutlet UIActivityIndicatorView *foodActivityIndicator;
     
     // Declare private variables
     NSString *gUsername;
@@ -61,10 +65,16 @@
     lastLoadedRestaurantCount = @(-1);
     lastLoadedUsersCount = @(-1);
     
+    // Fade in the rcAroundContainerView that holds What's Around Me UIs
+    [rcAroundContainerView viewFadeInWithCompletion:nil];
+    
     // Clear all text labels in What's Around Me container as the function <setupDataCountContainerView> should update these text
-    [rcRestaurantNumLabel setText:@""];
-    [rcUsersNumLabel setText:@""];
-    [rcFoodNumLabel setText:@""];
+    [rcRestaurantNumLabel setText:@"Restaurant:"];
+    [rcUsersNumLabel setText:@"Users:"];
+    [rcFoodNumLabel setText:@"Food:"];
+    [resActivityIndicator startAnimating];
+    [userActivityIndicator startAnimating];
+    [foodActivityIndicator startAnimating];
     
     // Listen for button click event in slide-out menu to return panel to original position
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(slideSuperViewToOriginal) name:@"slideSuperViewBack" object:nil];
@@ -90,8 +100,26 @@
     // Request current GPS location
     [rcDataConnection requestLocationData];
     
-    // Pre-call for sequence number to speed up process.
-    gUsername = [(AppDelegate*)[[UIApplication sharedApplication] delegate] getUsername];
+    // Verify stored user identification
+    NSURLCredential *userCred = [(AppDelegate*)[[UIApplication sharedApplication] delegate] getUserCredentail];
+    if (userCred == nil){
+        NSLog(@"No Credential is found");
+        gUsername = [(AppDelegate*)[[UIApplication sharedApplication] delegate] getUsername];
+    } else {
+        NSLog(@"User credential retrieved... Username: %@\tPassword:%@", userCred.user, userCred.password);
+        [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUsername:userCred.user];
+        
+        // =========== Show welcome message ============
+        UIAlertController *alert;
+        UIAlertAction *okAction;
+        NSString *welcomeMsg = [NSString stringWithFormat:@"User %@ is logged on", userCred.user];
+        alert = [UIAlertController alertControllerWithTitle:@"WELCOME BACK" message:welcomeMsg     preferredStyle:UIAlertControllerStyleAlert];
+        okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+        [alert addAction:okAction];
+        [self presentViewController:alert animated:YES completion:NULL];
+    }
+    
+
     
     NSLog(@"Make contact with server...");
     [rcDataConnection getUniqueNumber_WithUsername:gUsername Callback:^(NSDictionary *callbackItem) {
@@ -437,6 +465,9 @@
 #pragma mark User logout
 // SlideOutMenuView will call this method when sign pu button is clicked
 - (void) userLogout{
+    // Remove user credential
+    [(AppDelegate*)[[UIApplication sharedApplication] delegate] cleanUserCredential];
+    
     // Show log out message
     NSString *sLogoutBody = [NSString stringWithFormat:@"%@ is logged out", gUsername];
     // Log out current user
@@ -521,6 +552,8 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (![lastLoadedUsersCount isEqualToNumber:@([UserNameCSet count])]){
                     NSLog(@"lastLoadedUsersCount changed");
+                    // Stop spinning
+                    [userActivityIndicator stopAnimating];
                     // Fade out and then fade in if there is a value change
                     [rcUsersNumLabel viewFadeOutWithCompletion:^(BOOL rcFinished) {
                         // Update text
@@ -532,6 +565,8 @@
                 
                 if (![lastLoadedRestaurantCount isEqualToNumber:@([ResNameCSet count])]){
                     NSLog(@"lastLoadedRestaurantCount changed");
+                    // Stop spinning
+                    [resActivityIndicator stopAnimating];
                     // Fade out and then fade in if there is a value change
                     [rcRestaurantNumLabel viewFadeOutWithCompletion:^(BOOL rcFinished) {
                         // Update text
@@ -543,6 +578,8 @@
                 NSLog(@"lastLoadedFoodCount: %@\t totalCount:%@",lastLoadedFoodCount, totalCount);
                 if (![lastLoadedFoodCount isEqualToNumber:totalCount]){
                     NSLog(@"lastLoadedFoodCount changed");
+                    // Stop spinning
+                    [foodActivityIndicator stopAnimating];
                     // Fade out and then fade in if there is a value change
                     [rcFoodNumLabel viewFadeOutWithCompletion:^(BOOL rcFinished) {
                         // Update text
@@ -551,8 +588,6 @@
                         [rcFoodNumLabel viewFadeInWithCompletion:nil];
                     }];
                 }
-                // Fade in the main view container that hold all these UIs
-                [rcAroundContainerView viewFadeInWithCompletion:nil];
                 
                 // Store last counts
                 lastLoadedRestaurantCount = [NSNumber numberWithUnsignedLong:[ResNameCSet count]];

@@ -93,6 +93,17 @@
                     NSString *newUsername = [returnedDictionary objectForKey:AZURE_USER_TABLE_USERNAME];
                     [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUsername:newUsername];
                     
+                    // ============== Store User Credential ===============
+                    // Save username and password into keychain
+                    NSURLCredential *credential;
+                    
+                    // Create a credential object with username name and password, set persistence to NSURLCredentialPersistencePermanent so it will be stored in keychain
+                    credential = [NSURLCredential credentialWithUser:self.rcAddUser.text password:self.rcUserPasswordTextField.text persistence:NSURLCredentialPersistencePermanent];
+                    
+                    // Call app delegate method to store credential
+                    [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUserCredential:credential];
+                    // ========================================================
+                    
                     // Show welcome message
                     NSString *welcomeMsg = [NSString stringWithFormat:@"User %@ is logged in", newUsername];
                     

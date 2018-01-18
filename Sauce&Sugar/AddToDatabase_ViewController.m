@@ -74,8 +74,8 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
     [self.rcUsernameLabel setText:usernameLabel];
     
     // Set image sizes labels
-    NSString *oSizeString = [NSString stringWithFormat:@"Original Size: %luKB", ([self.originalRcImageSize integerValue]/1024)];
-    NSString *nSizeString = [NSString stringWithFormat:@"New Size: %luKB", ([self.nRcImageSize integerValue]/1024)];
+    NSString *oSizeString = [NSString stringWithFormat:@"Original Size: %ldKB", ([self.originalRcImageSize integerValue]/1024)];
+    NSString *nSizeString = [NSString stringWithFormat:@"New Size: %ldKB", ([self.nRcImageSize integerValue]/1024)];
     originalSize_Label.text = oSizeString;
     newSize_Label.text = nSizeString;
     
@@ -227,7 +227,7 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
         NSLog(@"index %d, Business Name:%@", i, [iDict objectForKey:@"name"]);
     }
     
-    NSLog(@"Total cell: %lu", [rcAutoCompleteCells count]);
+    NSLog(@"Total cell: %lu", (unsigned long)[rcAutoCompleteCells count]);
     // Refresh table
     rcAutoCompleteTable.delegate = self;
     rcAutoCompleteTable.dataSource = self;
@@ -273,7 +273,7 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSLog(@"<Reloading cell> at index:%lu", indexPath.row);
+    NSLog(@"<Reloading cell> at index:%lu", (long)indexPath.row);
     // Index starts from 0, so [rcAutoCompleteCells count] should return the last cell
     if (indexPath.row == ([rcAutoCompleteCells count])){
         return yelpCell;
@@ -318,7 +318,7 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
             NSLog(@"index %d, Business Name:%@", i, [iDict objectForKey:@"name"]);
         }
         
-        NSLog(@"Total cell saved: %lu", [rcAutoCompleteCells count]);
+        NSLog(@"Total cell saved: %lu", (unsigned long)[rcAutoCompleteCells count]);
         // Refresh table
         rcAutoCompleteTable.delegate = self;
         rcAutoCompleteTable.dataSource = self;

@@ -9,9 +9,6 @@
 #ifndef GlobalNames_h
 #define GlobalNames_h
 
-
-#endif /* GlobalNames_h */
-
 // Corresponding name in Azure Data Table
 #define GPS_LONGITUDE @"longitude"
 #define GPS_LATITUDE @"latitude"
@@ -42,3 +39,6 @@
 #define FOOD_DATA_KEY_ICON @"ICON"
 #define FOOD_DATA_KEY_ENUM @"ENUM"
 
+
+
+#endif /* GlobalNames_h */

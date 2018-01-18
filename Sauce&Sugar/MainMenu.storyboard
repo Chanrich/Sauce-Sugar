@@ -139,6 +139,18 @@
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
+                                                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="njT-zP-zXU">
+                                                            <rect key="frame" x="169" y="42" width="20" height="20"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        </activityIndicatorView>
+                                                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="bst-Yv-h6G">
+                                                            <rect key="frame" x="131" y="100" width="20" height="20"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        </activityIndicatorView>
+                                                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="8iP-aU-T55">
+                                                            <rect key="frame" x="128" y="162" width="20" height="20"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        </activityIndicatorView>
                                                     </subviews>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
@@ -204,12 +216,15 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="foodActivityIndicator" destination="8iP-aU-T55" id="fxG-Xa-GvM"/>
                         <outlet property="rcAroundContainerView" destination="Ue9-Hu-DnX" id="qb8-v2-tkA"/>
                         <outlet property="rcFoodNumLabel" destination="nLh-y4-9aE" id="3uO-kz-IWJ"/>
                         <outlet property="rcRestaurantNumLabel" destination="HaQ-q3-gTc" id="4tX-ZB-jj2"/>
                         <outlet property="rcSlideOutImage" destination="JJl-H3-wo2" id="44a-T5-2vH"/>
                         <outlet property="rcUsersNumLabel" destination="wBq-Ot-V0Q" id="fK8-Tc-q9q"/>
+                        <outlet property="resActivityIndicator" destination="njT-zP-zXU" id="edT-R2-rQ2"/>
                         <outlet property="typeSelectCollectView" destination="Lp8-UB-UIZ" id="EPA-VS-9z1"/>
+                        <outlet property="userActivityIndicator" destination="bst-Yv-h6G" id="8o1-Gm-BLl"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sUS-ZD-9NS" userLabel="First Responder" sceneMemberID="firstResponder"/>
