@@ -202,4 +202,33 @@
     // Send a message to main view to dismiss the slide-out view
     [[NSNotificationCenter defaultCenter] postNotificationName:@"slideSuperViewBack" object:nil];
 }
+
+
+#pragma mark - Footer
+// Set footer content, there is only 1 section
+- (UIView*) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+    // Create a footer with width of the slideout view minus some margin
+    UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SLIDEMENU_WIDTH - 20, 30)];
+    footer.backgroundColor = [UIColor darkGrayColor];
+    
+    // Extract versioning information
+    NSDictionary *pinfo = [[NSBundle mainBundle] infoDictionary];
+    NSString *versionString = [NSString stringWithFormat:@"v%@(%@)", [pinfo objectForKey:@"CFBundleShortVersionString"], [pinfo objectForKey:@"CFBundleVersion"]];
+    
+    // Configure version label to display current version information
+    UILabel *versionLabel = [[UILabel alloc] initWithFrame:footer.frame];
+    versionLabel.backgroundColor = [UIColor clearColor];
+    versionLabel.text = versionString;
+    versionLabel.textAlignment = NSTextAlignmentRight;
+    
+    [footer addSubview:versionLabel];
+    
+    return footer;
+}
+
+// Set footer height
+- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+    // Just return height of 30 points as there is only 1 section
+    return 30;
+}
 @end
