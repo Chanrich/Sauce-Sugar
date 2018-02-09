@@ -47,8 +47,6 @@
     // https://www.flaticon.com/free-icon/info_148769#term=question&page=1&position=3
     [self.creditsTextView insertText:@"Info icon: Icon made by Smashicons from www.flaticon.com\n"];
     
-    // New
-    
     // https://www.flaticon.com/free-icon/soup_454570#term=soup&page=1&position=33
     [self.creditsTextView insertText:@"Soup icon: Icon made by Freepik from www.flaticon.com\n"];
     // https://www.flaticon.com/free-icon/steak_415686#term=steak&page=1&position=47
@@ -70,6 +68,9 @@
     [self.creditsTextView insertText:@"Users icon: Icon made by Smashicons from www.flaticon.com\n"];
     // https://www.flaticon.com/free-icon/food_608857#term=food&page=1&position=53
     [self.creditsTextView insertText:@"Food icon: Icon made by Smashicons from www.flaticon.com\n"];
+    // Settings icon is used in profile page
+    // https://www.flaticon.com/free-icon/settings_149294#term=setting&page=1&position=17
+    [self.creditsTextView insertText:@"Settings icon: Icon made by Smashicons from www.flaticon.com\n"];
 }
 
 - (void)didReceiveMemoryWarning {

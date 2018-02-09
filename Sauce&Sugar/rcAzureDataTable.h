@@ -62,7 +62,7 @@ typedef enum FoodTypesEnum {
 // 2. rcUserDataInfo : Contain all user related information
 - (void) InsertDataIntoMainDataTable:(void(^)(NSNumber *rcCompleteFlag))rcCallback;
 // Request data from table with , return a NSArray of dictionaries in callback
-- (void) getDatafromUser:(NSString*)rcUsername FoodType:(FoodTypes)foodType RangeOfSearch_Lat:(int)nRangeOfSearch_Lat RangeOfSearch_Long:(int)nRangeOfSearch_Long Callback:(void(^)(NSArray *callbackItem)) returnCallback;
+- (void) getDatafromUser:(NSString*)rcUsername FoodType:(FoodTypes)foodType RangeOfSearch_Lat:(float)nRangeOfSearch_Lat RangeOfSearch_Long:(float)nRangeOfSearch_Long Callback:(void(^)(NSArray *callbackItem)) returnCallback;
 // Request data in rcUserDataInfo table
 - (void) verifyUsername:(NSString*)rcUsername Callback:(void(^)(BOOL callbackItem))returnCallback;
 - (void) verifyUserAccount:(NSString*)rcUsername Password:(NSString*)password Callback:(void(^)(BOOL callbackItem))returnCallback;
@@ -83,15 +83,20 @@ typedef enum FoodTypesEnum {
 - (void) getUniqueNumber_WithUsername:(NSString*)rcUsername  Callback:(void(^)(NSDictionary *callbackItem)) returnCallback;
 // Update an entry into the table, retrieve the information first and then update that entry//
 - (void) incrementSequenceNumberWithDictionary:(NSDictionary*)myDict Callback:(void(^)(NSNumber* completeFlag)) returnCallback;
+// Update user password
+- (void) updateUserPasswordWithDictionary:(NSDictionary*)userDict Callback:(void(^)(NSNumber* completeFlag)) returnCallback;
 // ==============================================
 
 // ======= Delete Functions  ==========
 // Delete an entry from main data table. This function is created to revert the upload of a new entry due to failed sequence number update or failed image upload.
 - (void) deleteEntry:(NSDictionary*)deleteEntry;
+// Delete user account from user table.
+- (void) deleteUserAccount:(NSDictionary*)userInfo Callback:(void(^)(BOOL flag))returnCallback;
 // ==============================================
 
 // ======= Utility Functions =========
 - (NSDictionary*) getCurrentDictionaryData;
+- (NSDictionary*) getCurrentUserDataEntry;
 - (NSString*) getCurrentRestaurantName;
 - (NSString*) getCurrentSelectedFoodTypeName;
 

@@ -100,16 +100,18 @@
     // Request current GPS location
     [rcDataConnection requestLocationData];
     
-    // Verify stored user identification
+    // ======== Verify stored user identification =========
     NSURLCredential *userCred = [(AppDelegate*)[[UIApplication sharedApplication] delegate] getUserCredentail];
     if (userCred == nil){
         NSLog(@"No Credential is found");
         gUsername = [(AppDelegate*)[[UIApplication sharedApplication] delegate] getUsername];
     } else {
         NSLog(@"User credential retrieved... Username: %@\tPassword:%@", userCred.user, userCred.password);
+        // Retrieve current username and password form credential
         [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUsername:userCred.user];
+        [(AppDelegate*)[[UIApplication sharedApplication] delegate] setPassword:userCred.password];
         
-        // =========== Show welcome message ============
+        // Show welcome message
         UIAlertController *alert;
         UIAlertAction *okAction;
         NSString *welcomeMsg = [NSString stringWithFormat:@"User %@ is logged on", userCred.user];
@@ -118,10 +120,7 @@
         [alert addAction:okAction];
         [self presentViewController:alert animated:YES completion:NULL];
     }
-    
-
-    
-    NSLog(@"Make contact with server...");
+    // =====================================================
     [rcDataConnection getUniqueNumber_WithUsername:gUsername Callback:^(NSDictionary *callbackItem) {
         // Contact is created with the server, this should allow faster connection at next contact
         NSLog(@"<getUniqueNumber_WithUsername> Contacted the server");
@@ -132,6 +131,7 @@
 
 // Every time the view appear, refresh data
 - (void) viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:YES];
     // Update username
     gUsername = [(AppDelegate*)[[UIApplication sharedApplication] delegate] getUsername];
     
@@ -139,7 +139,6 @@
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         // Perform What's Around Me Section
-        NSLog(@"<setupDataCountContainerView>");
         [self setupDataCountContainerView];
     });
 }
@@ -529,6 +528,24 @@
         if (callbackItem == nil){
             // Nothing is performed
             NSLog(@"Abort, nothing is returned for <setupDataCountContainerView>");
+            
+            // Reset UI
+            dispatch_async(dispatch_get_main_queue(), ^{
+                // Fix UI setting
+                [userActivityIndicator stopAnimating];
+                [resActivityIndicator stopAnimating];
+                [foodActivityIndicator stopAnimating];
+                
+                // Update text
+                [rcUsersNumLabel setText:[NSString stringWithFormat:@"Users: -"]];
+                [rcRestaurantNumLabel setText:[NSString stringWithFormat:@"Restaurants: -"]];
+                [rcFoodNumLabel setText:[NSString stringWithFormat:@"Foods: -"]];
+                
+                // Fade in
+                [rcUsersNumLabel viewFadeInWithCompletion:nil];
+                [rcRestaurantNumLabel viewFadeInWithCompletion:nil];
+                [rcFoodNumLabel viewFadeInWithCompletion:nil];
+            });
         } else {
             NSNumber *totalCount = [NSNumber numberWithUnsignedLong:[callbackItem count]];
 
@@ -550,6 +567,7 @@
             };
             // Get main queue
             dispatch_async(dispatch_get_main_queue(), ^{
+                // Update UI label with user count when new number is available
                 if (![lastLoadedUsersCount isEqualToNumber:@([UserNameCSet count])]){
                     NSLog(@"lastLoadedUsersCount changed");
                     // Stop spinning
@@ -562,7 +580,7 @@
                         [rcUsersNumLabel viewFadeInWithCompletion:nil];
                     }];
                 }
-                
+                // Update UI label with new restaurant count when new number is available
                 if (![lastLoadedRestaurantCount isEqualToNumber:@([ResNameCSet count])]){
                     NSLog(@"lastLoadedRestaurantCount changed");
                     // Stop spinning
@@ -576,6 +594,7 @@
                     }];
                 }
                 NSLog(@"lastLoadedFoodCount: %@\t totalCount:%@",lastLoadedFoodCount, totalCount);
+                // Update UI label with new food count when new number is available
                 if (![lastLoadedFoodCount isEqualToNumber:totalCount]){
                     NSLog(@"lastLoadedFoodCount changed");
                     // Stop spinning

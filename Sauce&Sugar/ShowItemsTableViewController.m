@@ -70,7 +70,7 @@
     NSLog(@"Performing a search on food type: %@", fTypename);
     
     // Get all data for the food type from server
-    [self.rcDataConnection getDatafromUser:nil FoodType:self.searchFoodType RangeOfSearch_Lat:(int)0.8 RangeOfSearch_Long:(int)0.8 Callback:^(NSArray *callbackItem) {
+    [self.rcDataConnection getDatafromUser:nil FoodType:self.searchFoodType RangeOfSearch_Lat:(float)0.8 RangeOfSearch_Long:(float)0.8 Callback:^(NSArray *callbackItem) {
         // In Callback function
         if (callbackItem == nil){
             // No items are returned
@@ -82,7 +82,7 @@
             
             // ========= Create Alert =========
             // Create a UI AlertController to show warning message
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Oops" message:@"No items are found" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Sorry.." message:@"Nothing can be located" preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:NULL];
             [alert addAction:okAction];
             [self presentViewController:alert animated:YES completion:NULL];

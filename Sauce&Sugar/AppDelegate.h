@@ -24,8 +24,14 @@
 
 - (void)saveContext;
 
+
 - (void) setUsername:(NSString*)username;
+
 - (NSString*) getUsername;
+- (NSString*) getPassword;
+
+// Save a copy of current user password
+- (void) setPassword:(NSString*)password;
 - (void) logoutUser;
 
 // Store username and password

@@ -219,10 +219,10 @@
     UILabel *versionLabel = [[UILabel alloc] initWithFrame:footer.frame];
     versionLabel.backgroundColor = [UIColor clearColor];
     versionLabel.text = versionString;
+    versionLabel.textColor = [UIColor whiteColor];
     versionLabel.textAlignment = NSTextAlignmentRight;
     
     [footer addSubview:versionLabel];
-    
     return footer;
 }
 

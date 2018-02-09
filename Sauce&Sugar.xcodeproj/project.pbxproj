@@ -100,6 +100,9 @@
 		69DE29071F74CA8200B0527E /* rcAzureDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 69DE29061F74CA8200B0527E /* rcAzureDataTable.m */; };
 		69DE290A1F7865D700B0527E /* AddUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69DE29091F7865D700B0527E /* AddUserViewController.m */; };
 		69E3EDBE1F7A2D4E00C0F787 /* rcAzureBlobContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 69E3EDBD1F7A2D4E00C0F787 /* rcAzureBlobContainer.m */; };
+		69E4CE652020715300B53F0F /* settings@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 69E4CE622020715200B53F0F /* settings@2x.png */; };
+		69E4CE662020715300B53F0F /* settings@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 69E4CE632020715300B53F0F /* settings@3x.png */; };
+		69E4CE672020715300B53F0F /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 69E4CE642020715300B53F0F /* settings.png */; };
 		69F39F201FB5280F00362888 /* CreditsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69F39F1F1FB5280F00362888 /* CreditsViewController.m */; };
 		69F39F2D1FB65D2200362888 /* MainMenu.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69F39F2C1FB65D2200362888 /* MainMenu.storyboard */; };
 		69F39F311FB67C5600362888 /* MainMenuTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69F39F301FB67C5600362888 /* MainMenuTableViewController.m */; };
@@ -267,6 +270,9 @@
 		69DE29091F7865D700B0527E /* AddUserViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddUserViewController.m; sourceTree = "<group>"; };
 		69E3EDBC1F7A2D4E00C0F787 /* rcAzureBlobContainer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rcAzureBlobContainer.h; sourceTree = "<group>"; };
 		69E3EDBD1F7A2D4E00C0F787 /* rcAzureBlobContainer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = rcAzureBlobContainer.m; sourceTree = "<group>"; };
+		69E4CE622020715200B53F0F /* settings@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings@2x.png"; sourceTree = "<group>"; };
+		69E4CE632020715300B53F0F /* settings@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings@3x.png"; sourceTree = "<group>"; };
+		69E4CE642020715300B53F0F /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings.png; sourceTree = "<group>"; };
 		69F39F1C1FB40EB100362888 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		69F39F1E1FB5280F00362888 /* CreditsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CreditsViewController.h; sourceTree = "<group>"; };
 		69F39F1F1FB5280F00362888 /* CreditsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CreditsViewController.m; sourceTree = "<group>"; };
@@ -490,6 +496,7 @@
 		69A080021F5E2AD900651946 /* ImagesResource */ = {
 			isa = PBXGroup;
 			children = (
+				69E4CE612020714000B53F0F /* Profile */,
 				6921E1251FECF9A800048246 /* MainView */,
 				69FFDD071FE8CA47006BA988 /* Food Type */,
 				69FFDCF91FE5DB81006BA988 /* SearchTable */,
@@ -613,6 +620,16 @@
 				69162CCC1FB0646D00B7E853 /* SearchTable */,
 			);
 			name = ViewController;
+			sourceTree = "<group>";
+		};
+		69E4CE612020714000B53F0F /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				69E4CE642020715300B53F0F /* settings.png */,
+				69E4CE622020715200B53F0F /* settings@2x.png */,
+				69E4CE632020715300B53F0F /* settings@3x.png */,
+			);
+			path = Profile;
 			sourceTree = "<group>";
 		};
 		69F39F1D1FB527F000362888 /* Credits */ = {
@@ -856,6 +873,7 @@
 				696F151E1FD55990001300C6 /* login.png in Resources */,
 				690447691FF2077600863F4D /* soup.png in Resources */,
 				6921E1111FEA5ABB00048246 /* rice@3x.png in Resources */,
+				69E4CE672020715300B53F0F /* settings.png in Resources */,
 				6921E1101FEA5ABB00048246 /* ice-cream@3x.png in Resources */,
 				690447681FF2077600863F4D /* steak@2x.png in Resources */,
 				696F150A1FD16535001300C6 /* contract@2x.png in Resources */,
@@ -886,11 +904,13 @@
 				69F39F3D1FBEDC6500362888 /* GoogleMaps.bundle in Resources */,
 				6904475F1FF2077600863F4D /* burger.png in Resources */,
 				6921E1171FECF1F000048246 /* store.png in Resources */,
+				69E4CE662020715300B53F0F /* settings@3x.png in Resources */,
 				696F15261FD5664E001300C6 /* list.png in Resources */,
 				696F15331FD5682B001300C6 /* add-friend-white@2x.png in Resources */,
 				690447661FF2077600863F4D /* fried-egg@2x.png in Resources */,
 				69C9316B1F502006007696BA /* LaunchScreen.storyboard in Resources */,
 				696F15361FD5682B001300C6 /* login-white.png in Resources */,
+				69E4CE652020715300B53F0F /* settings@2x.png in Resources */,
 				696F15041FD1625D001300C6 /* user.png in Resources */,
 				69FFDD011FE5DC47006BA988 /* star@2x.png in Resources */,
 				69FFDCF01FDE46C6006BA988 /* error@2x.png in Resources */,

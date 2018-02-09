@@ -25,7 +25,7 @@
     
     // Initialize a singleton instance
     self.rcDataConnection = [rcAzureDataTable sharedDataTable];
-    NSLog(@"Start setting alpha to 0");
+    
     // Set all UI elements alpha to 0 before fading in
     [self.rcPasswordLabel setAlpha:0];
     [self.rcUserPasswordTextField setAlpha:0];
@@ -33,23 +33,17 @@
     [self.rcAddUser setAlpha:0];
     [self.rcButton_Adduser setAlpha:0];
     
-    NSLog(@"Start animation");
     // Fade in UI elements
-    [self.rcPasswordLabel viewFadeInWithCompletion:^(BOOL rcFinished) {
-        [self.rcUserPasswordTextField viewFadeInWithCompletion:^(BOOL rcFinished) {
-            [self.rcButton_Adduser viewFadeInWithCompletion:nil];
-        }];
-    }];
-    [self.rcUsernameLabel viewFadeInWithCompletion:^(BOOL rcFinished) {
-        [self.rcAddUser viewFadeInWithCompletion:nil];
-    }];
+    [self.rcPasswordLabel viewFadeInWithCompletion:nil];
+    [self.rcUserPasswordTextField viewFadeInWithCompletion:nil];
+    [self.rcButton_Adduser viewFadeInWithCompletion:nil];
+    [self.rcAddUser viewFadeInWithCompletion:nil];
+    [self.rcUsernameLabel viewFadeInWithCompletion:nil];
     
     // Tap anywhere on view to remove keyboard
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapping)];
     tap.delegate = self;
     [self.view addGestureRecognizer:tap];
-    
-
 }
 
 - (void)didReceiveMemoryWarning {
@@ -66,6 +60,8 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+#pragma mark - UI Events
 
 // Insert user info into table rcUserDataInfo
 - (IBAction)AddUser_TouchUpInside:(id)sender {

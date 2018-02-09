@@ -9,6 +9,8 @@
 #import "LoginViewController.h"
 #import "rcAzureDataTable.h"
 #import "GlobalNames.h"
+#import "UIView+UIView_ViewAnimations.h"
+
 @interface LoginViewController () <UITextFieldDelegate, UIGestureRecognizerDelegate>
 
 @end
@@ -21,7 +23,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    // Hide all view
+    [self.rcUsernameTextField setAlpha:0];
+    [self.rcPasswordTextField setAlpha:0];
+    [self.rcUsernameLabel setAlpha:0];
+    [self.rcPasswordLabel setAlpha:0];
+    [self.rcLoginButton setAlpha:0];
     
     // Initialize singleton instances
     rcDataConnection = [rcAzureDataTable sharedDataTable];
@@ -29,6 +36,13 @@
     // Set text field delegate
     self.rcUsernameTextField.delegate = self;
     self.rcPasswordTextField.delegate = self;
+    
+    // Fade in all views
+    [self.rcUsernameTextField viewFadeInWithCompletion:nil];
+    [self.rcPasswordTextField viewFadeInWithCompletion:nil];
+    [self.rcUsernameLabel viewFadeInWithCompletion:nil];
+    [self.rcPasswordLabel viewFadeInWithCompletion:nil];
+    [self.rcLoginButton viewFadeInWithCompletion:nil];
     
     // Tap anywhere on view to remove keyboard
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapping)];
@@ -51,6 +65,7 @@
 }
 */
 
+#pragma mark - UI events
 // If the username and password match any entry in the user data base, log in the user.
 - (IBAction)LoginButtonPressed:(id)sender {
     NSString *textUsername = self.rcUsernameTextField.text;
@@ -82,8 +97,9 @@
         
         // User is found if callbackItem is YES
         if (callbackItem == TRUE){
-            // Login successful, set username
+            // Login successful, set username and password
             [(AppDelegate*)[[UIApplication sharedApplication] delegate] setUsername:textUsername];
+            [(AppDelegate*)[[UIApplication sharedApplication] delegate] setPassword:textPassword];
             
             NSString *welcomeMsg = [NSString stringWithFormat:@"User %@ is logged on", textUsername];
             alert = [UIAlertController alertControllerWithTitle:@"Successful" message:welcomeMsg     preferredStyle:UIAlertControllerStyleAlert];
@@ -95,10 +111,9 @@
                 });
             }];
             
-            // Save username and password into keychain
-            NSURLCredential *credential;
             
             // Create a credential object with username name and password, set persistence to NSURLCredentialPersistencePermanent so it will be stored in keychain
+            NSURLCredential *credential;
             credential = [NSURLCredential credentialWithUser:textUsername password:textPassword persistence:NSURLCredentialPersistencePermanent];
             
             // Call app delegate method to store credential

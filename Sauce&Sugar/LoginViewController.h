@@ -13,6 +13,10 @@
 // UI outlets
 @property (strong, nonatomic) IBOutlet UITextField *rcUsernameTextField;
 @property (strong, nonatomic) IBOutlet UITextField *rcPasswordTextField;
+// Label
+@property (strong, nonatomic) IBOutlet UILabel *rcUsernameLabel;
+@property (strong, nonatomic) IBOutlet UILabel *rcPasswordLabel;
+
 @property (strong, nonatomic) IBOutlet UIButton *rcLoginButton;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *rcActivityIndicator;
 

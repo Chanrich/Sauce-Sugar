@@ -28,6 +28,8 @@
     NSNumber *currentSelectedFoodType;
     // Store inserted restaurant name
     NSString *currentRestaurantName;
+    // Store user data
+    NSDictionary *userDataEntry;
 }
 
 // Create a singleton
@@ -149,6 +151,21 @@
     }];
 }
 
+// Update user password
+- (void) updateUserPasswordWithDictionary:(NSDictionary*)userDict Callback:(void(^)(NSNumber* completeFlag)) returnCallback{
+    // Push the update to Azure table
+    [UserData_MSTable update:userDict completion:^(NSDictionary * _Nullable item, NSError * _Nullable error) {
+        if (error){
+            NSLog(@"Error when updating user password");
+            NSLog(@"%@", [error localizedDescription]);
+            returnCallback(@NO);
+        } else {
+            NSLog(@"Successfully updated user password");
+            returnCallback(@YES);
+        }
+    }];
+}
+
 #pragma mark Delete Data
 
 - (void) deleteEntry:(NSDictionary*)deleteEntry{
@@ -158,6 +175,19 @@
         NSLog(@"Delete completed");
     }];
 }
+
+- (void) deleteUserAccount:(NSDictionary*)userInfo Callback:(void(^)(BOOL flag))returnCallback{
+    // Delete current user info
+    [UserData_MSTable delete:userInfo completion:^(id  _Nullable itemId, NSError * _Nullable error) {
+        // Error checking
+        if (error) {
+            returnCallback(FALSE);
+        } else {
+            returnCallback(TRUE);
+        }
+    }];
+}
+
 
 #pragma mark - Download data from server
 
@@ -240,7 +270,7 @@
 
 // Make a query request for a single user, returns a NSArray of dictionaries in callback
 // Perform a range search only if a value other than 0 is passed in for both latitude and longitude
-- (void) getDatafromUser:(NSString*)rcUsername FoodType:(FoodTypes)foodType RangeOfSearch_Lat:(int)nRangeOfSearch_Lat RangeOfSearch_Long:(int)nRangeOfSearch_Long Callback:(void(^)(NSArray *callbackItem)) returnCallback{
+- (void) getDatafromUser:(NSString*)rcUsername FoodType:(FoodTypes)foodType RangeOfSearch_Lat:(float)nRangeOfSearch_Lat RangeOfSearch_Long:(float)nRangeOfSearch_Long Callback:(void(^)(NSArray *callbackItem)) returnCallback{
     NSLog(@"<getDatafromUser>");
     // Create a filter for
     // 1. Username
@@ -277,7 +307,7 @@
     // ABS(y) < 0.8 (approx.55 miles)
     // Longitudes:
     // ABS(x) < 0.8 (approx.55 miles at equator and gradually to 0 at poles)
-    NSLog(@"Setting GPS Predicates");
+    NSLog(@"Setting GPS Predicates:");
     if (self.currentGPSLocation != nil && nRangeOfSearch_Lat != 0 && nRangeOfSearch_Long != 0){
         // Need a function to return lower and upper bounds in a array for long/lat, param: current position object
         NSArray *latitudeBounds = [self returnLatitudeBoundsWithCenterLocation:self.currentGPSLocation searchDegree:nRangeOfSearch_Lat];
@@ -360,6 +390,7 @@
                                @"USERNAME=%@", rcUsername];
     NSPredicate *dataFilter2 = [NSPredicate predicateWithFormat:
                                @"PASSWORD=%@", password];
+    
     // Combine two predicate with and
     NSPredicate *finalPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[dataFilter, dataFilter2]];
     
@@ -375,15 +406,15 @@
             // return a NO
             returnCallback(FALSE);
         } else {
-            // Debug
-            NSNumber *temp = [NSNumber numberWithUnsignedLong:[result.items count]];
-            NSLog(@"Number of entries found with this username and password: %@", temp);
-            
+            // Return success if 1 entry is downloaded
+            // Fail if multiple entries are downloaded
             if ([result.items count] == 1){
                 NSLog(@"Found a matching account!");
+                // Store the account information (format: NSDictionary)
+                userDataEntry = [result.items lastObject];
                 returnCallback(TRUE);
             } else {
-                NSLog(@"Multiple user with same name is found. Username invalid");
+                NSLog(@"Error: %lu users are found", [result.items count]);
                 returnCallback(FALSE);
             }
         }
@@ -536,6 +567,10 @@
 
 - (NSDictionary*) getCurrentDictionaryData{
     return self.rcDataDictionary;
+}
+
+- (NSDictionary*) getCurrentUserDataEntry{
+    return userDataEntry;
 }
 
 #pragma mark - Food Type Data Processing

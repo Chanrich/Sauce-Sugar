@@ -18,7 +18,7 @@
     rcAzureDataTable *rcDataConnection;
     rcAzureBlobContainer *rcBlobContainer;
     NSString *currentUsername;
-    
+    NSString *currentUserPassword;
     // Store credential space
     // Create a protection space
     NSURL *ssURL;
@@ -32,6 +32,7 @@
     
     // Invalidate current user
     currentUsername = @"";
+    currentUserPassword = @"";
     
     // Enable Google API
     [GMSServices provideAPIKey:@"AIzaSyCElpQ25SaS9VxqFsdgR1pRkVYEbspWALI"];
@@ -52,6 +53,11 @@
     currentUsername = username;
 }
 
+// Save a copy of current username
+- (void) setPassword:(NSString*)password{
+    currentUserPassword = password;
+}
+
 // If no user is set return 'Guest' as current username
 - (NSString*) getUsername{
     if ([currentUsername  isEqual: @""]){
@@ -59,6 +65,11 @@
     } else {
         return currentUsername;
     }
+}
+
+// Retrun current user password retrieved from credential
+- (NSString*) getPassword{
+    return currentUserPassword;
 }
 
 // Logout current user
@@ -147,11 +158,15 @@
     [[NSURLCredentialStorage sharedCredentialStorage] setCredential:credential forProtectionSpace:selfProtectionSpace];
 }
 
-// Get stored credential
+// Get stored credential.
 - (NSURLCredential*) getUserCredentail{
     NSDictionary *credentialsDict;
     credentialsDict = [[NSURLCredentialStorage sharedCredentialStorage] credentialsForProtectionSpace:selfProtectionSpace];
-    return [credentialsDict.objectEnumerator nextObject];
+    
+    // Retrieve user credential
+    NSURLCredential *userCredential = [credentialsDict.objectEnumerator nextObject];
+    
+    return userCredential;
 }
 
 // Clean credential
