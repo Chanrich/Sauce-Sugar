@@ -72,6 +72,7 @@
         // Remove all old user data
         [userPhotosMutableArray removeAllObjects];
         downloadedImageCount = 0;
+        [self.rcCollectionView reloadData];
         
         // Create a overlay view to cover up UI collection view during loading
         collectionOverlay = [[UIView alloc] initWithFrame:self.tabBarController.view.bounds];

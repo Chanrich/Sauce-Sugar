@@ -16,6 +16,7 @@
 
 #import "AddToDatabase_ViewController.h"
 #import "YelpAPIConnection.h"
+#import "GlobalNames.h"
 
 @interface AddToDatabase_ViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -45,6 +46,10 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
     // UI labels
     IBOutlet UILabel *originalSize_Label;
     IBOutlet UILabel *newSize_Label;
+    
+    // Constraints
+    IBOutlet NSLayoutConstraint *AutoCompleteHeight;
+    float initTableHeight;
 }
 
 - (void)viewDidLoad {
@@ -57,8 +62,15 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
     [newSize_Label setAlpha:0];
     
     // Hide auto complete table
-
     rcAutoCompleteTable.alpha = 0;
+    
+    // Get auto complete table height
+    // Then set it to 5 to allow other elements to move up
+    // Refresh the layout
+    initTableHeight = AutoCompleteHeight.constant;
+    AutoCompleteHeight.constant = 5;
+    [self.view layoutIfNeeded];
+
 
     // Set shadow to auto complete table - DISABLED
     // Set shadow to auto complete table
@@ -237,21 +249,37 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
 // When textfield come into focus, display autocomplete table
 - (void) textFieldStartEdit:(UITextField*)textField{
     [rcAutoCompleteTable viewFadeInWithCompletion:nil];
+    // Restore height to auto complete table
+    AutoCompleteHeight.constant = initTableHeight;
+    
+    // Show auto complete table
+    [UIView animateWithDuration:fadeDuration animations:^{
+        [self.view layoutIfNeeded];
+    }];
 }
 
 // Hide autocomplete table when text edit ends
 - (void) textFieldEndEdit:(UITextField*)textField{
     //[rcAutoCompleteTable viewFadeOutWithCompletion:nil];
+    // Restore height to auto complete table
+    AutoCompleteHeight.constant = 5;
+    
+    // Animate the change to auto complete table height
+    [UIView animateWithDuration:fadeDuration animations:^{
+        [self.view layoutIfNeeded];
+    }];
 }
 #pragma mark - Auto-complete table
 
-// Replace restaurant name field with currently selected field in tableview
+// When a cell is clocked, replace restaurant name field with currently selected field in tableview
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     self.TextField_RestaurantName.text = cell.textLabel.text;
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [tableView viewFadeOutWithCompletion:nil];
-    NSLog(@"Selected text: %@", cell.textLabel.text);
+    
+    // Hide keyboard
+    [self dismissKeybaord];
 }
 
 // Number of business found
@@ -272,6 +300,7 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
     }
 }
 
+// Load data into table cells
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSLog(@"<Reloading cell> at index:%lu", (long)indexPath.row);
     // Index starts from 0, so [rcAutoCompleteCells count] should return the last cell
