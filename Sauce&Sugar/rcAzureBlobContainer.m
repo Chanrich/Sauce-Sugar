@@ -103,6 +103,8 @@
     [blockblob downloadToDataWithCompletionHandler:^(NSError * _Nullable error, NSData * _Nullable downloadedData) {
         if (error){
             NSLog(@"Error when downloading image at sequence number : %@", sequenceNumber);
+            // Pass nil back to caller function
+            rcCallback(nil);
         } else {
             // Transform from NSData to UIImage type
             UIImage *imagefromdata = [UIImage imageWithData:downloadedData];

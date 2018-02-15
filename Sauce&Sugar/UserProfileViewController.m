@@ -31,6 +31,7 @@
     NSString *currentUser;
     // Store all downloaded image data
     NSMutableArray <NSMutableDictionary*> *userPhotosMutableArray;
+    NSArray *userPhotoSortedArray;
     unsigned long downloadedImageCount;
     // A UIView to cover up collection view during data loading
     UIView *collectionOverlay;
@@ -74,6 +75,7 @@
         downloadedImageCount = 0;
         [self.rcCollectionView reloadData];
         
+        // =========== Overlay ============
         // Create a overlay view to cover up UI collection view during loading
         collectionOverlay = [[UIView alloc] initWithFrame:self.tabBarController.view.bounds];
         collectionOverlay.backgroundColor = [UIColor colorWithWhite:0 alpha:0.3];
@@ -89,8 +91,9 @@
         // Add spinner subview and start spinner
         [rcSpinner startAnimating];
         [self.tabBarController.view addSubview:collectionOverlay];
+        // ===============================
         
-        // Get sequence number
+        // Download total number of images for current user
         [self.rcDataConnection getUniqueNumber_WithUsername:currentUser Callback:^(NSDictionary *callbackItem) {
             // When error occured (nil), show it in text label. Otherwise, show total count.
             if (callbackItem == nil){
@@ -112,7 +115,7 @@
         
         // Request all photos that current user had uploaded
         [self.rcDataConnection getDatafromUser:currentUser FoodType:FOODTYPE_ALL RangeOfSearch_Lat:(int)0 RangeOfSearch_Long:(int)0 Callback:^(NSArray *callbackItem) {
-            // Remove loading screen after a delay
+            // Remove loading screen overlay after a delay
             double delayInSeconds = 1.0;
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
@@ -133,44 +136,64 @@
             } else {
                 // Successful download
                 NSLog(@"Data received from callbackItem %lu", (unsigned long)[callbackItem count]);
+                
                 // Store result items into cell array.
                 for (NSDictionary* returnDict in callbackItem){
                     // Get sequence number and minus the value by 1 to get total count of entries
-                    NSNumber *sequenceTemp = [returnDict objectForKey:AZURE_DATA_TABLE_SEQUENCE];
+                    NSNumber *sequenceNSNumber = [returnDict objectForKey:AZURE_DATA_TABLE_SEQUENCE];
                     // Get sequence number
-                    NSString *sequenceNum = [sequenceTemp stringValue];
-                    NSLog(@"Requesting image at sequence number %@", sequenceNum);
+                    NSString *sequenceNumString = [sequenceNSNumber stringValue];
+                    NSLog(@"Requesting image at sequence number %@", sequenceNumString);
+                    
                     // Request one image with name stored inside dictionary key "sequence"
-                    [self.rcBlobContainer getImagefromBlobFromUser:currentUser sequenceNumber:sequenceNum rcCallback:^(UIImage *rcReturnedImage) {
+                    [self.rcBlobContainer getImagefromBlobFromUser:currentUser sequenceNumber:sequenceNumString rcCallback:^(UIImage *rcReturnedImage) {
+                        
                         // Allocate a mutable dictionary to store image along with its sequence number
+                        // The dictionary should contain following data structure:
+                        // - Key -      : - Value -
+                        // "image"      : user photo
+                        // "sequence"   : sequence number for the photo
                         NSMutableDictionary *imageDictionary = [[NSMutableDictionary alloc] init];
                         
-                        // Pack data into dictionary
-                        [imageDictionary setObject:rcReturnedImage forKey:IMAGEDICTIONARY_IMAGE];
-                        [imageDictionary setObject:sequenceNum forKey:IMAGEDICTIONARY_SEQUENCE];
-                        // Store the dictionary containing following data into array:
-                        // - Key -  : - Value -
-                        // "image"  : user photo
-                        // "seq"    : sequence number for the photo
-                        [userPhotosMutableArray addObject:imageDictionary];
-                        
-                        NSLog(@"User photo array size: %lu/%lu", (unsigned long)[userPhotosMutableArray count], (unsigned long)[callbackItem count]);
-                        
-                        // Increment image count
-                        downloadedImageCount++;
-                        // When all images are downloaded, reload collection view
-                        if (downloadedImageCount == [callbackItem count]){
+                        // If error occured
+                        if (rcReturnedImage == nil){ // Image download error
+                            // Get warning image from file
+                            UIImage *warningImage = [UIImage imageNamed:@"warning"];
+                            // Create a dummy entry to show download incomplete
+                            [imageDictionary setObject:warningImage forKey:IMAGEDICTIONARY_IMAGE];
+                            [imageDictionary setObject:sequenceNSNumber forKey:IMAGEDICTIONARY_SEQUENCE];
+                            
+                            [self retryImageDownloadFor:sequenceNumString];
+                            // TODO: 1. capture a list of all incomplete objects
+                            //  2. create a button to allow user to refresh download of incomplete objects
+                            
+                        } else { // When a valid image is downloaded
+                            // Pack data into dictionary
+                            [imageDictionary setObject:rcReturnedImage forKey:IMAGEDICTIONARY_IMAGE];
+                            [imageDictionary setObject:sequenceNSNumber forKey:IMAGEDICTIONARY_SEQUENCE];
+                            
+                            // Increment image count
+                            downloadedImageCount++;
                             NSLog(@"reloading collection view, download count: %lu", downloadedImageCount);
+                            // Add new entry into the array for collection view
+                            [userPhotosMutableArray addObject:imageDictionary];
+                            
+                            NSLog(@"User photo array size: %lu/%lu", (unsigned long)[userPhotosMutableArray count], (unsigned long)[callbackItem count]);
+                            
+                            // Sort array according to sequence number
+                            NSSortDescriptor *sequenceSort = [NSSortDescriptor sortDescriptorWithKey:IMAGEDICTIONARY_SEQUENCE ascending:YES];
+                            // Descriptor array has only 1 descriptor
+                            NSArray *aSortDescriptors = [NSArray arrayWithObject:sequenceSort];
+                            userPhotoSortedArray = [userPhotosMutableArray sortedArrayUsingDescriptors:aSortDescriptors];
+                            
                             // Reload collection view in main thread
                             dispatch_async(dispatch_get_main_queue(), ^{
                                 [self.rcCollectionView reloadData];
                             });
-                        } else {
-                            // Reload even if not all images are downloaded
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                [self.rcCollectionView reloadData];
-                            });
-                        }
+                        } // End of when a valid image is downloaded
+                        
+
+
                     }]; // End of download image method
                 } // End of for loop, end of processing of one entry
             } // End of callbackItem not nil
@@ -182,6 +205,50 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - Download
+// This method should be called to retry an image's download faliure
+-(void) retryImageDownloadFor:(NSString*)seq{
+    // Request one image with name stored inside dictionary key "sequence"
+    [self.rcBlobContainer getImagefromBlobFromUser:currentUser sequenceNumber:seq rcCallback:^(UIImage *rcReturnedImage) {
+        // Allocate a mutable dictionary to store image along with its sequence number
+        NSMutableDictionary *imageDictionary = [[NSMutableDictionary alloc] init];
+        
+        // Create a NSNumber copy of sequence number
+        NSNumber *sequenceNSNum = [NSNumber numberWithInt:[seq intValue]];
+        // If error occured, create a warning dummy object
+        if (rcReturnedImage == nil){ // Image download error
+            // Get warning image from file
+            UIImage *warningImage = [UIImage imageNamed:@"warning"];
+            // Create a dummy entry to show download incomplete
+            [imageDictionary setObject:warningImage forKey:IMAGEDICTIONARY_IMAGE];
+            [imageDictionary setObject:sequenceNSNum forKey:IMAGEDICTIONARY_SEQUENCE];
+        } else {
+            // Create object with downloaded image and sequence number
+            [imageDictionary setObject:rcReturnedImage forKey:IMAGEDICTIONARY_IMAGE];
+            [imageDictionary setObject:sequenceNSNum forKey:IMAGEDICTIONARY_SEQUENCE];
+        } // End of when a valid image is downloaded
+        
+        // Add new entry into the array for collection view
+        [userPhotosMutableArray addObject:imageDictionary];
+        NSLog(@"<retryImageDownloadFor> User photo array size: %lu", (unsigned long)[userPhotosMutableArray count]);
+        
+        // Increment image count
+        downloadedImageCount++;
+        NSLog(@"<retryImageDownloadFor> reloading collection view, download count: %lu", downloadedImageCount);
+        
+        // Sort array according to sequence number
+        NSSortDescriptor *sequenceSort = [NSSortDescriptor sortDescriptorWithKey:IMAGEDICTIONARY_SEQUENCE ascending:YES];
+        // Descriptor array has only 1 descriptor
+        NSArray *aSortDescriptors = [NSArray arrayWithObject:sequenceSort];
+        userPhotoSortedArray = [userPhotosMutableArray sortedArrayUsingDescriptors:aSortDescriptors];
+        
+        // Reload collection view in main thread
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.rcCollectionView reloadData];
+        });
+        
+    }]; // End of download image method
+}
 /*
 #pragma mark - Navigation
 
@@ -191,7 +258,12 @@
     // Pass the selected object to the new view controller.
 }
 */
-#pragma mark - Layout
+#pragma mark - Collection View
+
+- (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    NSMutableDictionary *returnTempDict = [userPhotoSortedArray objectAtIndex:indexPath.item];
+    NSLog(@"Item in collection view clicked: Seq: %@", [returnTempDict objectForKey:IMAGEDICTIONARY_SEQUENCE]);
+}
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
     return downloadedImageCount;
@@ -199,17 +271,21 @@
 
 // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
+    // Re-use the cell designed in storyboard
     static NSString *cellID = @"userPhotoCell";
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellID forIndexPath:indexPath];
-    // Grab the image using its tag value
-    UIImageView *photoImage = (UIImageView*) [cell viewWithTag:5];
-    // Grab label that is used to store sequence number
-    UILabel *sequenceLabelStorage = (UILabel*) [cell viewWithTag:6];
-    NSMutableDictionary *returnTempDict = [userPhotosMutableArray objectAtIndex:indexPath.item];
     
+    // Grab the image data using its tag value
+    UIImageView *photoImage = (UIImageView*) [cell viewWithTag:5];
+    UILabel *sequenceLabelStorage = (UILabel*) [cell viewWithTag:6];
+    
+    // All image data should already be stored in dictionary, each entry can be retrieved using current index in collection view
+    NSMutableDictionary *returnTempDict = [userPhotoSortedArray objectAtIndex:indexPath.item];
+    
+    // Set UI elements (Label is set to be hidden from view)
     photoImage.image = [returnTempDict objectForKey:IMAGEDICTIONARY_IMAGE];
-    sequenceLabelStorage.text = [returnTempDict objectForKey:IMAGEDICTIONARY_SEQUENCE];
-    // NSLog(@"Setting up cell at indexPath.item: %ld", (long)indexPath.item);
+    sequenceLabelStorage.text = [(NSNumber*)[returnTempDict objectForKey:IMAGEDICTIONARY_SEQUENCE] stringValue];
+    
     return cell;
 }
 

@@ -71,6 +71,9 @@
     // Settings icon is used in profile page
     // https://www.flaticon.com/free-icon/settings_149294#term=setting&page=1&position=17
     [self.creditsTextView insertText:@"Settings icon: Icon made by Smashicons from www.flaticon.com\n"];
+    // Show download error in profile page
+    // https://www.flaticon.com/free-icon/warning_196759#term=warning&page=1&position=9
+    [self.creditsTextView insertText:@"Warning icon: Icon made by Roundicons from www.flaticon.com\n"];
 }
 
 - (void)didReceiveMemoryWarning {

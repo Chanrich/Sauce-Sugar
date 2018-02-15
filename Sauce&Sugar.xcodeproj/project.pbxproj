@@ -26,6 +26,9 @@
 		690447701FF7846800863F4D /* checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 6904476D1FF7846800863F4D /* checked.png */; };
 		69162CC71FAF329300B7E853 /* UIView+UIView_ViewAnimations.m in Sources */ = {isa = PBXBuildFile; fileRef = 69162CC61FAF329300B7E853 /* UIView+UIView_ViewAnimations.m */; };
 		69162CCB1FB01CC100B7E853 /* GreenCheck.png in Resources */ = {isa = PBXBuildFile; fileRef = 69162CCA1FB01CC000B7E853 /* GreenCheck.png */; };
+		6916F4D6203592E700859C2C /* warning.png in Resources */ = {isa = PBXBuildFile; fileRef = 6916F4D3203592E600859C2C /* warning.png */; };
+		6916F4D7203592E700859C2C /* warning@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6916F4D4203592E600859C2C /* warning@2x.png */; };
+		6916F4D8203592E700859C2C /* warning@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6916F4D5203592E700859C2C /* warning@3x.png */; };
 		6921E10D1FEA5ABB00048246 /* doughnut@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6921E1071FEA5AB900048246 /* doughnut@3x.png */; };
 		6921E10E1FEA5ABB00048246 /* water@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6921E1081FEA5AB900048246 /* water@3x.png */; };
 		6921E10F1FEA5ABB00048246 /* noodles@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6921E1091FEA5ABA00048246 /* noodles@3x.png */; };
@@ -174,6 +177,9 @@
 		69162CC51FAF329300B7E853 /* UIView+UIView_ViewAnimations.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+UIView_ViewAnimations.h"; sourceTree = "<group>"; };
 		69162CC61FAF329300B7E853 /* UIView+UIView_ViewAnimations.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+UIView_ViewAnimations.m"; sourceTree = "<group>"; };
 		69162CCA1FB01CC000B7E853 /* GreenCheck.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GreenCheck.png; sourceTree = "<group>"; };
+		6916F4D3203592E600859C2C /* warning.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = warning.png; sourceTree = "<group>"; };
+		6916F4D4203592E600859C2C /* warning@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "warning@2x.png"; sourceTree = "<group>"; };
+		6916F4D5203592E700859C2C /* warning@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "warning@3x.png"; sourceTree = "<group>"; };
 		6921E1071FEA5AB900048246 /* doughnut@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "doughnut@3x.png"; sourceTree = "<group>"; };
 		6921E1081FEA5AB900048246 /* water@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "water@3x.png"; sourceTree = "<group>"; };
 		6921E1091FEA5ABA00048246 /* noodles@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "noodles@3x.png"; sourceTree = "<group>"; };
@@ -628,6 +634,9 @@
 				69E4CE642020715300B53F0F /* settings.png */,
 				69E4CE622020715200B53F0F /* settings@2x.png */,
 				69E4CE632020715300B53F0F /* settings@3x.png */,
+				6916F4D3203592E600859C2C /* warning.png */,
+				6916F4D4203592E600859C2C /* warning@2x.png */,
+				6916F4D5203592E700859C2C /* warning@3x.png */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -874,6 +883,7 @@
 				690447691FF2077600863F4D /* soup.png in Resources */,
 				6921E1111FEA5ABB00048246 /* rice@3x.png in Resources */,
 				69E4CE672020715300B53F0F /* settings.png in Resources */,
+				6916F4D6203592E700859C2C /* warning.png in Resources */,
 				6921E1101FEA5ABB00048246 /* ice-cream@3x.png in Resources */,
 				690447681FF2077600863F4D /* steak@2x.png in Resources */,
 				696F150A1FD16535001300C6 /* contract@2x.png in Resources */,
@@ -903,6 +913,7 @@
 				690447701FF7846800863F4D /* checked.png in Resources */,
 				69F39F3D1FBEDC6500362888 /* GoogleMaps.bundle in Resources */,
 				6904475F1FF2077600863F4D /* burger.png in Resources */,
+				6916F4D8203592E700859C2C /* warning@3x.png in Resources */,
 				6921E1171FECF1F000048246 /* store.png in Resources */,
 				69E4CE662020715300B53F0F /* settings@3x.png in Resources */,
 				696F15261FD5664E001300C6 /* list.png in Resources */,
@@ -937,6 +948,7 @@
 				690447671FF2077600863F4D /* waffle@2x.png in Resources */,
 				6921E11C1FECF69E00048246 /* users@3x.png in Resources */,
 				69FFDD2F1FE8FF22006BA988 /* noodles.png in Resources */,
+				6916F4D7203592E700859C2C /* warning@2x.png in Resources */,
 				69FFDD321FE8FF22006BA988 /* noodles@2x.png in Resources */,
 				69FFDD301FE8FF22006BA988 /* water@2x.png in Resources */,
 				69FFDCFF1FE5DC47006BA988 /* SearchTableUser@2x.png in Resources */,
