@@ -33,12 +33,13 @@
     NSMutableArray <NSMutableDictionary*> *userPhotosMutableArray;
     NSArray *userPhotoSortedArray;
     unsigned long downloadedImageCount;
+    // Total number of data entries returned from selected user
+    NSUInteger userTotalDataCount;
     // A UIView to cover up collection view during data loading
     UIView *collectionOverlay;
     
     // Setting image
     IBOutlet UIImageView *rcSettingsImage;
-    
 }
 
 - (void)viewDidLoad {
@@ -57,6 +58,7 @@
     // Initialize
     userPhotosMutableArray = [[NSMutableArray alloc] init];
     downloadedImageCount = 0;
+    userTotalDataCount = 0;
     currentUser = @"";
 }
 
@@ -135,6 +137,7 @@
                 // ================================
             } else {
                 // Successful download
+                userTotalDataCount = [callbackItem count];
                 NSLog(@"Data received from callbackItem %lu", (unsigned long)[callbackItem count]);
                 
                 // Store result items into cell array.
@@ -295,6 +298,35 @@
     // NSLog(@"Setting cell width to %f", singleCellWidth);
     
     return CGSizeMake(singleCellWidth, singleCellWidth);
+}
+
+#pragma mark Collection Header
+- (UICollectionReusableView*) collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath{
+    UICollectionReusableView *rcell = nil;
+    
+    // Create header view from storyboard
+    if (kind == UICollectionElementKindSectionHeader){
+        UICollectionReusableView *hview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"ProfileHeaderView" forIndexPath:indexPath];
+        
+        // Label is set to tag 9 in storyboard
+        UILabel *headerLabel = [hview viewWithTag:9];
+        UIActivityIndicatorView *headerSpin = [hview viewWithTag:10];
+        
+        // Create a string to be used
+        NSString *headerText = [NSString stringWithFormat:@"Total:%lu", downloadedImageCount];
+        [headerLabel setText:headerText];
+        
+        // Spin indicator when download is still in process
+        if (downloadedImageCount == userTotalDataCount){
+            [headerSpin stopAnimating];
+        } else {
+            [headerSpin startAnimating];
+        }
+        
+        rcell = hview;
+    }
+    
+    return rcell;
 }
 
 #pragma mark - UI events

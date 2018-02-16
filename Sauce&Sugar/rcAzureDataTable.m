@@ -11,6 +11,7 @@
 #define MAX_REQUIREMENT 4
 #define AZURE_USER_DATA_TABLE_NAME @"rcUserDataInfo"
 #define AZURE_MAIN_DATA_TABLE_NAME @"rcMainDataTable"
+#define AZURE_PAGING_SIZE 50
 @implementation rcAzureDataTable {
     // Store references to table datas
     MSTable *MainData_MSTable;
@@ -281,6 +282,10 @@
     NSPredicate *dataFilter_longitude;
     NSPredicate *finalAndPredicate;
     
+    // Array for all data
+    NSMutableArray *finalDataArray;
+    finalDataArray = [[NSMutableArray alloc] init];
+    
     // Filter for username
     if (rcUsername == nil){
         // Return all user data
@@ -324,31 +329,58 @@
     
     // Prepare a MSQuery object with filter dataFilter
     MSQuery *rcDataTableQuery = [MainData_MSTable queryWithPredicate:finalAndPredicate];
+    rcDataTableQuery.fetchOffset = 0;
+    // rcDataTableQuery.fetchLimit = 100;
+    // Read all data from server
+    [self downloadAllFromQuery:rcDataTableQuery dataStorage:finalDataArray callback:returnCallback];
+}
+
+// Recursively read from server
+- (void) downloadAllFromQuery:(MSQuery*)mQuery dataStorage:(NSMutableArray*)dataStorage callback:(void(^)(NSArray *callbackItem)) returnCallback{
     
-    // Perform a read on the MSquery object, the read will return maximum 50 entries
-    [rcDataTableQuery readWithCompletion:^(MSQueryResult * _Nullable result, NSError * _Nullable error) {
+    [mQuery readWithCompletion:^(MSQueryResult * _Nullable result, NSError * _Nullable error) {
+        // Return null if error
         if (error){
-            NSLog(@"<getDatafromUser> Data download error!");
+            NSLog(@"<downloadAllFromQuery> Data download error!");
             NSLog(@"%@", [error localizedDescription]);
             // Pass a null back to callback, callback should check this for error
             returnCallback(nil);
         } else {
+            // If no error
             // Debug
             NSNumber *temp = [NSNumber numberWithUnsignedLong:[result.items count]];
             NSLog(@"Count of result.item array: %@", temp);
             
-            if ([result.items count] > 0){
-                NSLog(@"Returning data to callback function");
-                // Pass the NSDictionary* back to callback function
-                returnCallback(result.items);
+            // Collect array items
+            [dataStorage addObjectsFromArray:result.items];
+            
+            // Debug
+            NSLog(@"TotalDownloadArray Size:%lu", [dataStorage count]);
+            NSLog(@"====Next page data====");
+            NSLog(@"TotalCount:%ld\n nextlink: %@", result.totalCount, result.nextLink);
+            if (result.nextLink != nil){ // Nextlink is not empty, more data need to be downloaded
+                // Increment offset by the paging size (default is 50)
+                mQuery.fetchOffset = mQuery.fetchOffset + AZURE_PAGING_SIZE;
+                NSLog(@"offest:%ld, limit:%ld", mQuery.fetchOffset, mQuery.fetchLimit);
+                
+                // Read next page of data
+                [self downloadAllFromQuery:mQuery dataStorage:dataStorage callback:returnCallback];
+                
             } else {
-                // Error
-                NSLog(@"<getDatafromUser> No Data is selected, task aborting");
-                returnCallback(nil);
-            }
+                // Everything is returned from server
+                if ([dataStorage count] > 0){
+                    NSLog(@"Returning data to callback function");
+                    // Pass the NSDictionary* back to callback function
+                    returnCallback(dataStorage);
+                } else {
+                    // Error
+                    NSLog(@"<getDatafromUser> No Data is selected, task aborting");
+                    returnCallback(nil);
+                }
+            } // End of everything returned from server
         }
     }];
-
+    
 }
 
 #pragma mark Verify Data
