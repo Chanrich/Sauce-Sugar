@@ -29,10 +29,14 @@
 @implementation UserProfileViewController {
     // Name of current user
     NSString *currentUser;
-    // Store all downloaded image data
+    // All downloaded image data
     NSMutableArray <NSMutableDictionary*> *userPhotosMutableArray;
+    // Sorted image data
     NSArray *userPhotoSortedArray;
+    // Number of images downloaded (includes failed image)
     unsigned long downloadedImageCount;
+    // Failed image queue
+    NSMutableArray <NSNumber*> *failedImageIndexQueue;
     // Total number of data entries returned from selected user
     NSUInteger userTotalDataCount;
     // A UIView to cover up collection view during data loading
@@ -40,11 +44,17 @@
     
     // Setting image
     IBOutlet UIImageView *rcSettingsImage;
+    
+    // Refresh control to re-download failed data
+    UIRefreshControl *refreshControl;
+    
+    // Connected with server
+    BOOL connectedFlag;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     // Initialize singleton instances
     self.rcDataConnection = [rcAzureDataTable sharedDataTable];
     self.rcBlobContainer = [rcAzureBlobContainer sharedStorageContainer];
@@ -57,9 +67,19 @@
         
     // Initialize
     userPhotosMutableArray = [[NSMutableArray alloc] init];
+    failedImageIndexQueue = [[NSMutableArray alloc] init];
     downloadedImageCount = 0;
     userTotalDataCount = 0;
     currentUser = @"";
+    connectedFlag = FALSE;
+    
+    // Register refresh control to refresh failed data
+    refreshControl = [[UIRefreshControl alloc] init];
+    refreshControl.backgroundColor = [UIColor grayColor];
+    refreshControl.tintColor = [UIColor whiteColor];
+    [refreshControl addTarget:self action:@selector(refreshFailedData) forControlEvents:UIControlEventValueChanged];
+    [self.rcCollectionView addSubview:refreshControl];
+    self.rcCollectionView.alwaysBounceVertical = YES;
 }
 
 - (void) viewWillAppear:(BOOL)animated{
@@ -124,8 +144,13 @@
                 [collectionOverlay removeFromSuperview];
             });
             
+            // Connection established
+            connectedFlag = YES;
+            
             // In Callback function
             if (callbackItem == nil){
+                // No data available
+                userTotalDataCount = 0;
                 // Handle errors, either no data available or download error
                 NSLog(@"Error occured during loading");
                 // ========= Create Alert =========
@@ -136,6 +161,8 @@
                 [self presentViewController:alert animated:YES completion:NULL];
                 // ================================
             } else {
+
+                
                 // Successful download
                 userTotalDataCount = [callbackItem count];
                 NSLog(@"Data received from callbackItem %lu", (unsigned long)[callbackItem count]);
@@ -160,12 +187,7 @@
                         
                         // If error occured
                         if (rcReturnedImage == nil){ // Image download error
-                            // Get warning image from file
-                            UIImage *warningImage = [UIImage imageNamed:@"warning"];
-                            // Create a dummy entry to show download incomplete
-                            [imageDictionary setObject:warningImage forKey:IMAGEDICTIONARY_IMAGE];
-                            [imageDictionary setObject:sequenceNSNumber forKey:IMAGEDICTIONARY_SEQUENCE];
-                            
+                            // Retry download
                             [self retryImageDownloadFor:sequenceNumString];
                             // TODO: 1. capture a list of all incomplete objects
                             //  2. create a button to allow user to refresh download of incomplete objects
@@ -225,14 +247,28 @@
             // Create a dummy entry to show download incomplete
             [imageDictionary setObject:warningImage forKey:IMAGEDICTIONARY_IMAGE];
             [imageDictionary setObject:sequenceNSNum forKey:IMAGEDICTIONARY_SEQUENCE];
+            
+            // Add new entry into the array for collection view
+            [userPhotosMutableArray addObject:imageDictionary];
+            
+            // Get the index of the failed object
+            NSNumber *fIndex = [NSNumber numberWithUnsignedInteger:[userPhotosMutableArray indexOfObject:imageDictionary]];
+            
+            // Insert current object into failed image index queue if it is not already in the queue
+            if (![failedImageIndexQueue containsObject:fIndex]){
+                [failedImageIndexQueue addObject:fIndex];
+            }
+            
         } else {
             // Create object with downloaded image and sequence number
             [imageDictionary setObject:rcReturnedImage forKey:IMAGEDICTIONARY_IMAGE];
             [imageDictionary setObject:sequenceNSNum forKey:IMAGEDICTIONARY_SEQUENCE];
+            
+            // Add new entry into the array for collection view
+            [userPhotosMutableArray addObject:imageDictionary];
+            
         } // End of when a valid image is downloaded
-        
-        // Add new entry into the array for collection view
-        [userPhotosMutableArray addObject:imageDictionary];
+
         NSLog(@"<retryImageDownloadFor> User photo array size: %lu", (unsigned long)[userPhotosMutableArray count]);
         
         // Increment image count
@@ -252,6 +288,61 @@
         
     }]; // End of download image method
 }
+
+// Download the images that failed to load, this refresh should replace the warning object that is already in the data array
+- (void) refreshFailedData{
+    NSLog(@"Refresh failed Data");
+    
+    // Iterate through failed image queue array
+    for (NSNumber* imageArrayIndex  in failedImageIndexQueue){
+        NSLog(@"Refreshing data at image array index %@", imageArrayIndex);
+        
+        // Get the copy of the failed object
+        NSMutableDictionary *targetObject = [userPhotosMutableArray objectAtIndex:[imageArrayIndex unsignedIntegerValue]];
+        
+        NSNumber *seqNSNumber = [targetObject objectForKey:IMAGEDICTIONARY_SEQUENCE];
+        
+        // Try to download each failed object
+        [self.rcBlobContainer getImagefromBlobFromUser:currentUser sequenceNumber:[seqNSNumber stringValue] rcCallback:^(UIImage *rcReturnedImage) {
+            // Callback
+            // Allocate a mutable dictionary to store image along with its sequence number
+            NSMutableDictionary *reloadDictionary = [[NSMutableDictionary alloc] init];
+            
+            // Replace the image object in data array if this download is valid
+            if (rcReturnedImage != nil){ // Image download error
+                // Create object with downloaded image and sequence number
+                [reloadDictionary setObject:rcReturnedImage forKey:IMAGEDICTIONARY_IMAGE];
+                [reloadDictionary setObject:seqNSNumber forKey:IMAGEDICTIONARY_SEQUENCE];
+                
+                // Replace the failed dummy object in the data array
+                [userPhotosMutableArray replaceObjectAtIndex:[imageArrayIndex unsignedIntegerValue] withObject:reloadDictionary];
+                
+                // Renew failed data queue
+                [failedImageIndexQueue removeObject:imageArrayIndex];
+                
+                // Sort array according to sequence number
+                NSSortDescriptor *sequenceSort = [NSSortDescriptor sortDescriptorWithKey:IMAGEDICTIONARY_SEQUENCE ascending:YES];
+                // Descriptor array has only 1 descriptor
+                NSArray *aSortDescriptors = [NSArray arrayWithObject:sequenceSort];
+                userPhotoSortedArray = [userPhotosMutableArray sortedArrayUsingDescriptors:aSortDescriptors];
+                
+                // Reload collection view in main thread
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.rcCollectionView reloadData];
+                });
+                
+            }
+            
+
+            
+        }];
+    }
+    
+    // End refresh
+    if (refreshControl){
+        [refreshControl endRefreshing];
+    }
+}
 /*
 #pragma mark - Navigation
 
@@ -269,6 +360,21 @@
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
+    if (downloadedImageCount == 0 && connectedFlag){
+        // No data, print a message
+        UILabel *noDataMsg = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
+        noDataMsg.text = @"No image is available, Please upload some images";
+        noDataMsg.textColor = [UIColor blackColor];
+        noDataMsg.numberOfLines = 0;
+        noDataMsg.textAlignment = NSTextAlignmentCenter;
+        noDataMsg.font = [UIFont fontWithName:@"Helvetica Neue" size:17];
+        [noDataMsg sizeToFit];
+        
+        collectionView.backgroundView = noDataMsg;
+    } else {
+        // Remove No data message message
+        collectionView.backgroundView = nil;
+    }
     return downloadedImageCount;
 }
 

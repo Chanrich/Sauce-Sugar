@@ -88,7 +88,7 @@
 }
 
 // Download single image with name sequenceNumber from a User and return the image in the callback function as a UIImage
-- (void)getImagefromBlobFromUser:(NSString*)username sequenceNumber:(NSString*)sequenceNumber rcCallback:(void(^)(UIImage *rcCompleteFlag))rcCallback{
+- (void)getImagefromBlobFromUser:(NSString*)username sequenceNumber:(NSString*)sequenceNumber rcCallback:(void(^)(UIImage *rcReturnedImage))rcCallback{
     
     // Create a blob client object
     self.rcBlobClient = [self.account getBlobClient];
