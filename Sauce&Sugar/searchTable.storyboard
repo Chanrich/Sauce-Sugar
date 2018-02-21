@@ -136,7 +136,7 @@
         <!--Map-->
         <scene sceneID="zvg-JN-b9M">
             <objects>
-                <viewController id="OTH-59-2n0" customClass="ShowGMapViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="showGmapID" id="OTH-59-2n0" customClass="ShowGMapViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jIh-Os-qRl"/>
                         <viewControllerLayoutGuide type="bottom" id="e5H-dS-gdZ"/>

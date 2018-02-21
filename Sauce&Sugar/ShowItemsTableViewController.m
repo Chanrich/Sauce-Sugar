@@ -116,19 +116,34 @@
 
                 // Request one image stored inside dictionary key "sequence"
                 [self.rcBlobContainer getImagefromBlobFromUser:dataOwner sequenceNumber:sequenceNum rcCallback:^(UIImage *rcReturnedImage) {
-                    // Get the returned UIImage into the cell in main thread
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        // Display image in current cell
-                        rcCell.rcCellRightImage.image = rcReturnedImage;
-                        // Remove the overlay view when the first image is loaded
-                        if (ImageIsReturned == NO){
-                            // Stop the spinner from spinning
-                            [rcSpinner stopAnimating];
-                            [self.overlayUIView removeFromSuperview];
-                            // Set flag to Yes
-                            ImageIsReturned = YES;
-                        }
-                    }); // End of dispatch to main thread
+                    // Handle Error
+                    if (rcReturnedImage == nil){
+                        // Re-try download again;
+                        [self retryImageDownloadForUser:dataOwner Sequence:sequenceNum callback:^(UIImage *callbackItem) {
+                            // Assign returned image directly to target cell in main thread
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                // Display image in current cell
+                                rcCell.rcCellRightImage.image = callbackItem;
+                            }); // End of dispatch to main thread
+                        }];
+                    } else {
+                        // Get the returned UIImage into the cell in main thread
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            // Display image in current cell
+                            rcCell.rcCellRightImage.image = rcReturnedImage;
+                            
+                            // Remove the overlay view when the first image is loaded
+                            if (ImageIsReturned == NO){
+                                // Stop the spinner from spinning
+                                [rcSpinner stopAnimating];
+                                [self.overlayUIView removeFromSuperview];
+                                // Set flag to Yes
+                                ImageIsReturned = YES;
+                            }
+                        }); // End of dispatch to main thread
+                    } // End of valid return image
+                    
+
                 }]; // End of download image method
                 
                 // Add cell to the end of the array
@@ -149,6 +164,23 @@
         
     }]; // End of getDatafromUser
 
+}
+
+// Re-download image and return a warning image if redownload failed
+- (void) retryImageDownloadForUser:(NSString*)username Sequence:(NSString*)seq callback:(void(^)(UIImage *callbackItem)) returnCallback{
+    [self.rcBlobContainer getImagefromBlobFromUser:username sequenceNumber:seq rcCallback:^(UIImage *rcReturnedImage) {
+        UIImage *target;
+        // If the image is not valid, return a warning image
+        if (rcReturnedImage == nil){
+            // Get warning image from file
+            target = [UIImage imageNamed:@"warning"];
+        } else {
+            // If imgae is valid, return it to caller function
+            target = rcReturnedImage;
+        }
+        returnCallback(target);
+    }];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -182,15 +214,26 @@
     return rcCell;
 }
 
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+#pragma mark - Table Click Event
+
+// When an entry in the table is selected, present google map view to show its location
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    // Use current index to get selected dictionary object from data array
+    NSDictionary *selectedEntry = [self.foodFromMainDataTable_Array objectAtIndex:indexPath.row];
     
-    // Configure the cell...
+    // Create an array with only the selected item
+    NSArray *singleItemArray = [NSArray arrayWithObject:selectedEntry];
     
-    return cell;
+    // Get storyboard
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"searchTable" bundle:nil];
+    // Get the view controller from storyboard
+    ShowGMapViewController *vc = (ShowGMapViewController*)[sb instantiateViewControllerWithIdentifier:@"showGmapID"];
+    
+    // Send selected item to the vc
+    vc.mapItemsArray = singleItemArray;
+
+    [self.navigationController pushViewController:vc animated:YES];
 }
-*/
 
 /*
 // Override to support conditional editing of the table view.

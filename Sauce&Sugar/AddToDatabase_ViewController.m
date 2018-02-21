@@ -86,8 +86,8 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
     [self.rcUsernameLabel setText:usernameLabel];
     
     // Set image sizes labels
-    NSString *oSizeString = [NSString stringWithFormat:@"Original Size: %ldKB", ([self.originalRcImageSize integerValue]/1024)];
-    NSString *nSizeString = [NSString stringWithFormat:@"New Size: %ldKB", ([self.nRcImageSize integerValue]/1024)];
+    NSString *oSizeString = [NSString stringWithFormat:@"Original Size: %ldKB", (long)([self.originalRcImageSize integerValue]/1024)];
+    NSString *nSizeString = [NSString stringWithFormat:@"New Size: %ldKB", (long)([self.nRcImageSize integerValue]/1024)];
     originalSize_Label.text = oSizeString;
     newSize_Label.text = nSizeString;
     
@@ -284,7 +284,7 @@ void AddImageBlob(NSString *imageName, NSString *blobName, AZSCloudBlobContainer
 
 // Number of business found
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    NSLog(@"<Reloading cell count> : %lu", [rcAutoCompleteCells count] + 1);
+    NSLog(@"<Reloading cell count> : %lu", (unsigned long)[rcAutoCompleteCells count] + 1);
     // Add 1 for displaying of yelp cell
     return ([rcAutoCompleteCells count] + 1);
 }

@@ -64,12 +64,19 @@ static NSString *const HIDE_GMAP_POI_JSON = @"["
                                                             longitude:current_longitude
                                                                  zoom:7];
     
-    // This path object will be used to zoom to a level that will fit all marks
+    // This path object will be used to zoom to a level that will fit all marks and also current location
     GMSMutablePath *pathPoints = [GMSMutablePath path];
+    
+    // Create current location mark and insert it into path object that will be used to adjust the zoom of the camera to appropriate level
+    CLLocationCoordinate2D curCoordinate = CLLocationCoordinate2DMake(current_latitude, current_longitude);
+    [pathPoints addCoordinate:curCoordinate];
     
     // Build google map view objective with (0, 0, 0, 0) frame
     mapView = [GMSMapView mapWithFrame:CGRectZero camera:camera];
     mapView.myLocationEnabled = YES;
+    
+    // Set minimum zoom level
+    [mapView setMinZoom:3 maxZoom:17];
     
     // ======== Hide all POI on map object ==========
     NSError *error;

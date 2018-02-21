@@ -355,13 +355,13 @@
             [dataStorage addObjectsFromArray:result.items];
             
             // Debug
-            NSLog(@"TotalDownloadArray Size:%lu", [dataStorage count]);
+            NSLog(@"TotalDownloadArray Size:%lu", (unsigned long)[dataStorage count]);
             NSLog(@"====Next page data====");
-            NSLog(@"TotalCount:%ld\n nextlink: %@", result.totalCount, result.nextLink);
+            NSLog(@"TotalCount:%d\n nextlink: %@", (int) result.totalCount, result.nextLink);
             if (result.nextLink != nil){ // Nextlink is not empty, more data need to be downloaded
                 // Increment offset by the paging size (default is 50)
                 mQuery.fetchOffset = mQuery.fetchOffset + AZURE_PAGING_SIZE;
-                NSLog(@"offest:%ld, limit:%ld", mQuery.fetchOffset, mQuery.fetchLimit);
+                NSLog(@"offest:%ld, limit:%ld", (long) mQuery.fetchOffset, (long) mQuery.fetchLimit);
                 
                 // Read next page of data
                 [self downloadAllFromQuery:mQuery dataStorage:dataStorage callback:returnCallback];
@@ -446,7 +446,7 @@
                 userDataEntry = [result.items lastObject];
                 returnCallback(TRUE);
             } else {
-                NSLog(@"Error: %lu users are found", [result.items count]);
+                NSLog(@"Error: %lu users are found", (unsigned long) [result.items count]);
                 returnCallback(FALSE);
             }
         }
