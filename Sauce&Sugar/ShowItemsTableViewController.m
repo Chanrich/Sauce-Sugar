@@ -35,16 +35,25 @@
     rcMapButton.hidden = YES;
     
     // Set up overlay UIView
-    self.overlayUIView = [[UIView alloc] initWithFrame:self.tabBarController.view.bounds];
+    self.overlayUIView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 85, 85)];
+    
+    // Get center point for the overlay view
+    CGPoint centerPoint = CGPointMake(CGRectGetMidX(self.tabBarController.view.bounds), CGRectGetMidY(self.tabBarController.view.bounds));
+    
+    // Set overlay view to center and make it transparent
+    self.overlayUIView.center = centerPoint;
     self.overlayUIView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.3];
+    
+    // Round corner
+    self.overlayUIView.layer.cornerRadius = 5;
+    self.overlayUIView.layer.masksToBounds = true;
     
     // Display an activity indicator to alert user that download is in progress
     UIActivityIndicatorView *rcSpinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:(UIActivityIndicatorViewStyle)UIActivityIndicatorViewStyleWhiteLarge];
     
     // Setup spinner
-    [rcSpinner setFrame:self.tabBarController.view.frame];
+    [rcSpinner setFrame:self.overlayUIView.bounds];
     [rcSpinner.layer setBackgroundColor:[[UIColor colorWithWhite:0.0 alpha:0.3] CGColor]];
-    rcSpinner.center = self.overlayUIView.center;
     rcSpinner.hidesWhenStopped = YES;
     
     // Add subview
@@ -164,6 +173,14 @@
         
     }]; // End of getDatafromUser
 
+}
+
+// Before view disappear
+- (void) viewWillDisappear:(BOOL)animated{
+    // Remove the loading overlay view if it is not removed already
+    if (self.overlayUIView){
+        [self.overlayUIView removeFromSuperview];
+    }
 }
 
 // Re-download image and return a warning image if redownload failed
